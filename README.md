@@ -24,6 +24,27 @@ the end of the course it holds the platform your group defends orally:
 
 Technical responsibilities are agreed by the group as the course progresses.
 
+### Review squads
+
+Every pull request is reviewed inside its author's squad.
+
+| Squad | Members | Reviews |
+|---|---|---|
+| A | Anthony ([@anthonyrascle43-stack](https://github.com/anthonyrascle43-stack)), Antoine ([@antorabo75](https://github.com/antorabo75)) | Anthony ↔ Antoine |
+| B | Benjamin ([@BenjaminAHS](https://github.com/BenjaminAHS)), Lenny ([@lsantus-mines](https://github.com/lsantus-mines)) | Benjamin ↔ Lenny |
+| Floating | Colin ([@csb123d](https://github.com/csb123d)) | Joins one squad per lesson, in turn |
+
+| Lesson | L03 | L04 | L05 | L06 | L07 | L08 | L09 | L10 |
+|---|---|---|---|---|---|---|---|---|
+| Colin joins | A | B | A | B | A | B | A | B |
+
+- A pull request is merged after **one approval** from the author's squad.
+  Colin's review, when he is in the squad, is a second review, not a requirement.
+- Colin's own pull requests are reviewed by the squad he joins that lesson.
+- A pull request that changes the other squad's work (for example the
+  architecture diagram or the data dictionary) also asks one member of that squad.
+- Nobody merges their own pull request without an approval.
+
 ## Getting started
 
 Accept the GitHub repository invitation, then follow [CONTRIBUTING.md](CONTRIBUTING.md)
