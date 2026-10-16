@@ -42,7 +42,7 @@ jobs:
       - name: Run repository and workflow checks
         run: pre-commit run --all-files --show-diff-on-failure
 
-      - name: Test contributor policy
+      - name: Run unit tests
         run: python -m unittest discover --start-directory tests --verbose
 
       - name: Require group members as contributors and commit authors
