@@ -29,6 +29,10 @@ Technical responsibilities are agreed by the group as the course progresses.
 Accept the GitHub repository invitation, then follow [CONTRIBUTING.md](CONTRIBUTING.md)
 to clone the project, create a branch and open your first pull request.
 
+Pull requests and pushes to `main` run the repository checks in GitHub Actions.
+See [CI and deployment](docs/ci-cd.md) for the checks, local commands and the
+deployment steps to add when the GCP platform is ready.
+
 ## How this repo grows
 
 | Lesson | What your group adds | Where |
