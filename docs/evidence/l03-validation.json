@@ -1,0 +1,27 @@
+{
+  "run_id": "b7f6755277ed",
+  "verified_at": "2026-10-16T14:26:01.372003+00:00",
+  "bronze_uri": "gs://data-engineering-i1-group6/bronze",
+  "scope": "Synthetic isolated schema and topic; real storage uploads.",
+  "extractor": {
+    "first_run_rows": 2,
+    "same_day_insert_rows": 1,
+    "cursor_after_restart": 3,
+    "update_delete_run_rows": 0,
+    "updates_captured": false,
+    "deletes_captured": false,
+    "persisted_rows": 3,
+    "storage": "gs://data-engineering-i1-group6/bronze/_validation/b7f6755277ed/extractor"
+  },
+  "clickstream": {
+    "accepted": 2,
+    "rejected": 1,
+    "received": 3,
+    "continued_after_rejection": true,
+    "raw_reject_preserved": true,
+    "event_date_utc": "2026-09-16",
+    "dlq_object": "bronze/_dlq/clickstream/dt=2026-10-16/part-fa125b2f4ba74e2e920bd6ec0eaad643.parquet",
+    "accepted_prefix": "_validation/b7f6755277ed/clickstream"
+  },
+  "cleanup": "Temporary PostgreSQL schema, Kafka topic and consumer group removed; proof objects retained."
+}
