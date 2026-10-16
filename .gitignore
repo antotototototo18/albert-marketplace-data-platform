@@ -9,6 +9,10 @@ service-account*.json
 # Local data
 data/
 *.parquet
+*.csv
+*.tar.gz
+# Course stack clone: its legacy CSVs hold passwords and card numbers
+albert-marketplace/
 
 # Python
 __pycache__/
