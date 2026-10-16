@@ -1,0 +1,5 @@
+psycopg[binary]==3.3.6
+pyarrow==26.0.0
+jsonschema==4.26.0
+confluent-kafka==2.16.0
+google-cloud-storage==3.17.1

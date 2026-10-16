@@ -26,8 +26,8 @@ pousse son propre travail sous son compte ; aucun commit n'est créé à sa plac
 
 | Étape | Livrables et emplacements demandés | Preuves pour clôturer | État |
 |---|---|---|---|
-| L02 — Bronze | Bucket GCS en `europe-west1`, `docs/adr/0002-bronze-layout.md`, `docs/data-dictionary.md`, `infra/lifecycle.json`, `infra/iam.md`, `docs/costs.md`, diagramme actualisé | Parquet partitionné ; comparaison mesurée des layouts ; état lifecycle/IAM lu sur le bucket réel ; prix datés | À réaliser pour le groupe ; mesures individuelles disponibles. |
-| L03 — Ingestion | Connecteur et preuve de configuration dans `ingestion/`, extracteur incrémental, consumer, `clickstream.schema.json`, DLQ, `docs/ingestion-failure-modes.md`, ADR-0003, dictionnaire et diagramme | Sept streams requis ; exclusions des secrets à la source ; curseur durable, retries ; schéma validé ; événement invalide retrouvable et flux poursuivi ; limites testées | À réaliser ; scripts individuels et essais de panne disponibles comme références. |
+| L02 — Bronze | Bucket GCS en `europe-west1`, `docs/adr/0002-bronze-layout.md`, `docs/data-dictionary.md`, `infra/lifecycle.json`, `infra/iam.md`, `docs/costs.md`, diagramme actualisé | Parquet partitionné ; comparaison mesurée des layouts ; état lifecycle/IAM lu sur le bucket réel ; prix datés | Fait dans la PR #5 sur `gs://data-engineering-i1-group6`. |
+| L03 — Ingestion | Connecteur et preuve de configuration dans `ingestion/`, extracteur incrémental, consumer, `clickstream.schema.json`, DLQ, `docs/ingestion-failure-modes.md`, ADR-0003, dictionnaire et diagramme | Sept streams requis ; exclusions des secrets à la source ; curseur durable, retries ; schéma validé ; événement invalide retrouvable et flux poursuivi ; limites testées | Fait dans la PR #6, à relire : extracteur, consumer, schéma, DLQ, connecteur et documents. Synchro Airbyte incomplète (mémoire Docker). |
 | L04 — Warehouse | Tables natives BigQuery, SQL dans `warehouse/`, `docs/warehouse-tuning.md`, ADR-0004, `docs/runbooks/slow-query.md`, plafond de requête | Bytes processed avant/après, cache désactivé ; trois requêtes coûtées ; ratio de réduction de la vue ; plafond vu en échec | À réaliser. |
 | L05 — dbt | Projet `transform/`, sources et fraîcheur, staging, marts, packages et lock, `docs/acceptance-criteria.md`, `docs/lineage.md`, ADR-0005 | `dbt build` depuis un clone propre ; grains et relations testés ; jointures sans fan-out ; seuils justifiés | À réaliser après L04. |
 | L06 — Images | Dockerfiles `ingestion/` et `transform/`, `.dockerignore`, images versionnées, `docs/reproduce.md`, installation et ADR-0006 | Bases et dépendances fixées ; non-root ; aucun secret ; image supprimée puis récupérée ; digests concordants ; rétention exécutée | À réaliser après L05. |
@@ -36,21 +36,14 @@ pousse son propre travail sous son compte ; aucun commit n'est créé à sa plac
 | L09 — FinOps | Labels Terraform, budget, coûts par ressource/SKU, optimisation mesurée, `docs/costs.md`, ADR-0009 | Attribution expliquée ; alerte et destinataire ; limites du budget ; optimisation avant/après en unités | À réaliser après L08. |
 | L10 — Gouvernance | `docs/governance.md`, classification et matrice, restrictions Terraform, `docs/runbooks/erasure.md`, ADR-0010 | Deux colonnes protégées avec refus vérifié ; droit réduit ; effacement testé, copies résiduelles et lacunes documentées | À réaliser après inventaire des données et des accès. |
 
-## Prochaine étape concrète : L02
+## Reste à faire pour L03
 
-1. Identifier le projet GCP et le bucket **du groupe** ; confirmer les accès
-   disponibles et la région, sans reprendre le bucket personnel comme preuve.
-2. Confronter les mesures individuelles de chacun pour choisir partition et
-   codec. Les résultats d'Anthony sont dans `Exercise/L02/README.md` :
-   31 objets contre 8 649 pour les deux layouts d'août, à périmètre comparable.
-   Ces résultats sont des observations de l'exercice, pas de nouveaux essais du groupe.
-3. Inventorier les colonnes et les exclusions obligatoires avant toute écriture.
-   Bronze conserve les valeurs autorisées sans nettoyage métier.
-4. Construire le layout du groupe puis relire l'état réel du bucket, son IAM et
-   son lifecycle. Le test IAM du rendu individuel n'a pas été fait faute de
-   droit de création de compte de service : ne pas le déclarer acquis.
-5. Calculer les coûts avec les tarifs publiés vérifiés le jour du calcul, puis
-   mettre à jour le diagramme et faire relire le lot.
+1. Donner au moins 12 Go à Docker, relancer la stack, puis une synchro Airbyte
+   complète ; mettre à jour `docs/evidence/l03-airbyte-sync.json`.
+2. Remplacer la clé HMAC de compte utilisateur par celle d'un compte de service
+   limité au bucket, si l'administrateur du projet en fournit un.
+3. Faire relire la PR par un autre membre ; chaque membre doit avoir poussé au
+   moins un commit.
 
 ## Conventions à conserver
 

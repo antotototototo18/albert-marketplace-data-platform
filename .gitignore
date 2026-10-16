@@ -8,6 +8,8 @@ service-account*.json
 
 # Local data
 data/
+out/
+*.local.json
 *.parquet
 *.csv
 *.tar.gz
