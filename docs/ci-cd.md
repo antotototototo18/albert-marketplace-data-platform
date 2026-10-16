@@ -91,7 +91,7 @@ pre-commit install
 | Modèles dbt (L05) | Compilation puis tests dans un dataset GCP de développement |
 | Images Docker (L06) | Construction et tests des images |
 | DAG Airflow (L07) | Import des DAG et validation de leur structure |
-| Terraform (L08) | Format, validation et plan sur les pull requests |
+| Terraform (L08) | Format, `init -backend=false` et validation sur les pull requests ; plan local selon les consignes L08 |
 
 ## CD à raccorder à GCP
 
