@@ -3,7 +3,7 @@
 ## CI disponible dès maintenant
 
 Le workflow [CI](../.github/workflows/ci.yml) tourne sur chaque pull request vers
-`main`, à chaque push sur `main` et à la demande depuis l'onglet Actions.
+`main`, à chaque push sur `main` ou `antho` et à la demande depuis l'onglet Actions.
 Le contrôle affiché dans les pull requests s'appelle **Repository checks**.
 
 Il vérifie :
@@ -14,6 +14,39 @@ Il vérifie :
 - les signatures de clés privées reconnues par `detect-private-key` ;
 - les fins de fichiers et les espaces superflus ;
 - l'absence de fichiers suivis par Git alors qu'ils sont couverts par `.gitignore`.
+- l'attribution des contributions aux cinq comptes humains du groupe uniquement.
+
+### Requirement : aucun agent contributeur
+
+Le script [check_contributors.py](../scripts/check_contributors.py) interroge
+l'API GitHub avec le jeton temporaire en lecture du workflow. Il contrôle tous
+les contributeurs déclarés (y compris anonymes), puis tous les commits de
+l'historique de la branche vérifiée. Sur une PR, il vérifie le SHA source de
+la PR, avant fusion : la liste des contributeurs GitHub peut être en cache.
+
+Seuls les auteurs liés à `anthonyrascle43-stack`, `antorabo75`, `csb123d`,
+`lsantus-mines` et `BenjaminAHS` sont admis. Les bots, les comptes extérieurs,
+les auteurs sans compte lié et les signatures d'agents IA reconnus sont refusés.
+Les committers doivent aussi appartenir au groupe, avec une exception pour
+`web-flow` lorsque GitHub enregistre un commit web pour un auteur humain autorisé.
+Cette exception ne permet pas à `web-flow` d'être auteur ou contributeur.
+
+Les lignes `Co-authored-by` doivent utiliser une adresse déjà liée à un auteur
+autorisé dans l'historique, ou l'adresse GitHub noreply d'un membre du groupe.
+Une signature d'agent ou une identité non vérifiable fait échouer la CI.
+Les erreurs d'API ou d'authentification font également échouer le contrôle.
+
+Cette politique vérifie les identités et les signatures déclarées ; elle ne
+détermine pas si une personne a utilisé une IA pour rédiger son code. Elle ne
+supprime ni ne réécrit les contributions existantes en cas d'échec.
+
+Les tests de cette politique tournent sans réseau avant le contrôle réel :
+
+```sh
+python -m unittest discover --start-directory tests --verbose
+```
+
+### Portée des autres contrôles
 
 Ces contrôles ne remplacent pas une revue des secrets : ils ne détectent pas
 tous les mots de passe ou jetons API. La CI actuelle n'exécute pas de tests

@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main]
+    branches: [main, antho]
   workflow_dispatch:
 
 permissions:
@@ -41,6 +41,15 @@ jobs:
 
       - name: Run repository and workflow checks
         run: pre-commit run --all-files --show-diff-on-failure
+
+      - name: Test contributor policy
+        run: python -m unittest discover --start-directory tests --verbose
+
+      - name: Require group members as contributors and commit authors
+        env:
+          GH_TOKEN: ${{ github.token }}
+          POLICY_REF: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: python scripts/check_contributors.py
 
       - name: Reject tracked files covered by gitignore
         shell: bash
