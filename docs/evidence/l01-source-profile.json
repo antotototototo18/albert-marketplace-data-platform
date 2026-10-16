@@ -1,0 +1,91 @@
+{
+  "source_archive": "legacy_csv.tar.gz",
+  "archive_sha256": "ac8132d9bb97a43b2c001ad923f7d95d8cd7df76e86e1f402c29c8da4ff3d2ef",
+  "scope": "Static legacy CSV snapshot; not the L01 demonstration database or live OLTP.",
+  "tables": {
+    "customer_shipping.csv": {
+      "row_count": 200001,
+      "columns": [
+        "",
+        "address_id",
+        "c_id",
+        "is_default"
+      ]
+    },
+    "order_items.csv": {
+      "row_count": 408560,
+      "columns": [
+        "order_id",
+        "p_id",
+        "qty",
+        "price_at_purchase"
+      ]
+    },
+    "orders.csv": {
+      "row_count": 222644,
+      "columns": [
+        "",
+        "order_id",
+        "buyer_id",
+        "discount_id",
+        "payment_id",
+        "order_date"
+      ]
+    },
+    "product.csv": {
+      "row_count": 42858,
+      "columns": [
+        "",
+        "p_id",
+        "p_name",
+        "p_desc",
+        "price",
+        "qty",
+        "category_id"
+      ]
+    },
+    "shipping_details.csv": {
+      "row_count": 200001,
+      "columns": [
+        "",
+        "address_id",
+        "street_address",
+        "city",
+        "state",
+        "zip",
+        "country",
+        "phone"
+      ]
+    }
+  },
+  "checks": {
+    "duplicate_order_id_rows": 0,
+    "duplicate_product_id_rows": 0,
+    "duplicate_address_id_rows": 0,
+    "duplicate_order_product_rows": 0,
+    "order_item_rows_without_order": 0,
+    "order_item_rows_without_product": 0,
+    "customers_with_multiple_default_addresses": 0,
+    "orders_without_default_address": 0,
+    "default_address_rows_without_shipping_details": 0,
+    "order_item_rows_with_nonpositive_qty": 0
+  },
+  "order_date_range": {
+    "min": "2023-09-15",
+    "max": "2026-09-14"
+  },
+  "units_ordered": 1386640,
+  "shipping_address_country_counts": {
+    "Belgium": 8290,
+    "France": 47904,
+    "Germany": 57037,
+    "Italy": 40151,
+    "Netherlands": 12630,
+    "Spain": 33989
+  },
+  "limitations": [
+    "Orders have no payment status or historical shipping address/country.",
+    "Current default address can only provide a proxy for country at order time.",
+    "This profile does not validate any deployed cloud resource."
+  ]
+}
