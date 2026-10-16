@@ -1,0 +1,122 @@
+{
+  "verified_at": "2026-10-16T15:28:40.844347+00:00",
+  "connection_id": "eb6b9c14-f38f-4180-9a9c-b337aa7855be",
+  "schedule_type": "basic",
+  "streams": {
+    "customer": {
+      "columns": [
+        "c_id",
+        "email",
+        "fname",
+        "lname",
+        "phone"
+      ],
+      "sync_mode": "incremental",
+      "destination_sync_mode": "append",
+      "cursor_field": [],
+      "source_defined_cursor": true
+    },
+    "customer_shipping": {
+      "columns": [
+        "address_id",
+        "c_id",
+        "is_default"
+      ],
+      "sync_mode": "incremental",
+      "destination_sync_mode": "append",
+      "cursor_field": [],
+      "source_defined_cursor": true
+    },
+    "order_items": {
+      "columns": [
+        "order_id",
+        "p_id",
+        "price_at_purchase",
+        "qty"
+      ],
+      "sync_mode": "incremental",
+      "destination_sync_mode": "append",
+      "cursor_field": [],
+      "source_defined_cursor": true
+    },
+    "orders": {
+      "columns": [
+        "buyer_id",
+        "discount_id",
+        "order_date",
+        "order_id",
+        "payment_id"
+      ],
+      "sync_mode": "incremental",
+      "destination_sync_mode": "append",
+      "cursor_field": [],
+      "source_defined_cursor": true
+    },
+    "payment_details": {
+      "columns": [
+        "billing_address",
+        "expiry_date",
+        "payment_id"
+      ],
+      "sync_mode": "incremental",
+      "destination_sync_mode": "append",
+      "cursor_field": [],
+      "source_defined_cursor": true
+    },
+    "product": {
+      "columns": [
+        "category_id",
+        "p_desc",
+        "p_id",
+        "p_name",
+        "price",
+        "qty"
+      ],
+      "sync_mode": "incremental",
+      "destination_sync_mode": "append",
+      "cursor_field": [],
+      "source_defined_cursor": true
+    },
+    "product_reviews": {
+      "columns": [
+        "p_id",
+        "review_id"
+      ],
+      "sync_mode": "incremental",
+      "destination_sync_mode": "append",
+      "cursor_field": [],
+      "source_defined_cursor": true
+    },
+    "review": {
+      "columns": [
+        "buyer_id",
+        "r_desc",
+        "rating",
+        "review_id",
+        "seller_product_flag",
+        "title"
+      ],
+      "sync_mode": "incremental",
+      "destination_sync_mode": "append",
+      "cursor_field": [],
+      "source_defined_cursor": true
+    },
+    "shipping_details": {
+      "columns": [
+        "address_id",
+        "city",
+        "country",
+        "phone",
+        "state",
+        "street_address",
+        "zip"
+      ],
+      "sync_mode": "incremental",
+      "destination_sync_mode": "append",
+      "cursor_field": [],
+      "source_defined_cursor": true
+    }
+  },
+  "secret_exclusions_verified": true,
+  "scope": "Configured catalog only; source replication method, destination and sync results require separate verification."
+}

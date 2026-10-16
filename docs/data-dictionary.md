@@ -3,8 +3,8 @@
 Version du 16 octobre 2026. Elle couvre les 27 tables de l'export legacy
 chargées dans `gs://data-engineering-i1-group6/bronze/legacy/<table>/ingested_date=2026-10-16/`
 ([ADR-0002](adr/0002-bronze-layout.md), [manifeste](evidence/l02-bronze-legacy-manifest.json)).
-Les flux L03 (`bronze/manual/`, `bronze/clickstream/`) seront ajoutés par
-leurs auteurs.
+Les flux L03 (`bronze/manual/`, `bronze/airbyte/`, `bronze/clickstream/`) sont
+décrits dans la dernière partie, [Flux L03](#flux-l03).
 
 ## Comment lire ce dictionnaire
 
@@ -295,3 +295,113 @@ Une livraison par ligne de commande.
   Ce sont les colonnes à auditer et à masquer en L10.
 - **À ne pas typer en nombre :** `phone`, `zip` et `p_id`, sous peine de
   perdre les zéros initiaux.
+
+## Flux L03
+
+Ajouts de L03 : trois chemins d'ingestion vers le même bucket.
+
+### Chemins et provenance
+
+| Chemin dans le bucket | Producteur | État |
+|---|---|---|
+| `bronze/legacy/<table>/ingested_date=2026-10-16/` | `scripts/land_legacy_bronze.py` (L02) ; 27 tables, toutes les colonnes en texte | Chargé une fois ; décrit dans les sections précédentes. |
+| `bronze/manual/orders/ingested_date=YYYY-MM-DD/` | `extract_orders.py` ; cinq colonnes SQL, sans métadonnées Airbyte | Exécuté, checkpoint dans `bronze/_state/manual/orders.json`. |
+| `bronze/clickstream/v1/dt=YYYY-MM-DD/` | `consume_clickstream.py` ; événement et provenance Kafka | Exécuté ; `dt` est la date UTC de `event_time`. |
+| `bronze/_dlq/clickstream/dt=YYYY-MM-DD/` | Même consumer ; rejets | Rejet volontaire stocké et relu ; `dt` est le jour de quarantaine. |
+| `bronze/airbyte/<stream>/AAAA_MM_JJ_<epoch>_<n>.parquet` | Connecteur Airbyte (Xmin), 9 streams | Chargement partiel : `orders` absent, `product` et `order_items` incomplets (source tuée faute de mémoire). Pas de dossier `dt=` : la date n'est que dans le nom du fichier. |
+| `bronze/_validation/` | Tests d'intégration isolés | Données synthétiques ; à exclure des sources analytiques. |
+
+Les colonnes de partition sont dans les clés des objets. Aucune jointure ni
+déduplication métier n'est faite dans bronze. Les identifiants de produit
+restent des chaînes.
+
+`orders` arrive par trois chemins : `legacy/` (export figé, texte),
+`manual/orders/` (cinq colonnes typées, sans métadonnées) et `airbyte/` (colonnes
+typées plus les quatre `_airbyte_*`). Les tables du connecteur existent aussi
+dans `legacy/`. Silver doit choisir une source par table, ou dédupliquer sur la
+clé en sachant d'où vient chaque ligne.
+
+### Types selon le chemin
+
+Les colonnes ont le même nom, mais pas le même type selon le chemin. Types
+Parquet lus dans les fichiers du bucket le 16/10/2026 :
+
+| Table | `legacy/` (L02) | `manual/` (extracteur) | `airbyte/` (connecteur) |
+|---|---|---|---|
+| `orders` | tout en texte | `order_id`, `discount_id`, `payment_id` int32 ; `buyer_id` string ; `order_date` date32 | pas encore écrit (synchro incomplète) |
+| `order_items` | tout en texte | — | `order_id`, `qty` int64 ; `p_id` string ; `price_at_purchase` **double** |
+| `product` | tout en texte | — | `qty`, `category_id` int64 ; `price` **double** ; `p_id`, `p_name`, `p_desc` string |
+| `review` | tout en texte | — | `review_id`, `rating` int64 ; autres colonnes string |
+| `product_reviews` | tout en texte | — | `review_id` int64 ; `p_id` string |
+| `customer_shipping` | tout en texte | — | `address_id` int64 ; `c_id`, `is_default` string |
+| `shipping_details` | tout en texte | — | `address_id` int64 ; autres colonnes string, dont `zip` et `phone` |
+| `customer` | tout en texte, sans `pwd` | — | 5 colonnes string, sans `pwd` |
+| `payment_details` | tout en texte, sans `card_no` ni `cvv` | — | `payment_id` int64 ; `expiry_date` date32 ; `billing_address` string ; sans `card_no` ni `cvv` |
+
+Airbyte écrit les `NUMERIC` en `double` : les prix, qui ont jusqu'à 20
+décimales dans la source, peuvent perdre en précision par ce chemin. La
+classification des données personnelles est celle des sections précédentes.
+
+### Métadonnées Airbyte
+
+Airbyte ajoute ces quatre colonnes à chaque stream ; les types sont ceux lus
+dans ses fichiers Parquet. L'extracteur n'en écrit aucune : bronze n'a donc pas
+une seule forme, et silver doit savoir de quel chemin vient chaque table.
+
+| Colonne | Type Parquet observé | Sens | Donnée personnelle ? |
+|---|---|---|---|
+| `_airbyte_raw_id` | string (UUID) | Identifiant de ligne produit par Airbyte | Traçabilité indirecte |
+| `_airbyte_extracted_at` | timestamp[ms, UTC] | Heure d'extraction | Pas isolément |
+| `_airbyte_meta` | struct `sync_id` int64, `changes` list de struct (`field`, `change`, `reason`) | Synchro d'origine et colonnes modifiées au chargement | Pas attendu : noms de champs, pas de valeurs |
+| `_airbyte_generation_id` | int64 | Génération du stream, incrémentée à chaque réinitialisation | Non isolément |
+
+### Clickstream v1
+
+Le [JSON Schema](../ingestion/clickstream.schema.json) fait foi à la frontière.
+Les trois types observés sont `product_viewed`, `added_to_cart`, `order_placed`.
+Les champs spécifiques ne sont pas obligatoires pour les autres types.
+
+| Champ | Type JSON / Parquet | Sens | Donnée personnelle ? |
+|---|---|---|---|
+| `schema_version` | integer / int64 | Version du contrat, actuellement 1 | Non |
+| `event_id` | string | Identifiant d'événement, utile au rejeu | Indirectement |
+| `event_type` | string enum | Type d'action | Indirectement avec une session |
+| `event_time` | date-time / string | Moment de l'action ; partition UTC | Indirectement |
+| `emitted_at` | date-time / string | Moment d'émission | Indirectement |
+| `session_id` | string | Session de navigation | Oui, identifiant pseudonyme |
+| `buyer_id` | string ou null | Client, potentiellement absent d'identité connue | Oui lorsqu'il est présent |
+| `p_id` | string ou null | Produit consulté ou ajouté | Non isolément |
+| `price` | number ou null / double | Prix du produit dans l'événement | Non isolément |
+| `qty` | integer ou null / int64 | Quantité ajoutée au panier | Non isolément |
+| `order_id` | integer ou null / int64 | Commande passée | Indirectement |
+| `payment_method` | string ou null | Mode de paiement, pas un numéro de carte | Indirectement |
+| `amount` | number ou null / double | Montant de la commande | Indirectement |
+| `currency` | string ou null | Code monétaire sur trois lettres | Non isolément |
+| `items` | array ou null / list of struct | Lignes de l'événement de commande | Indirectement avec la commande |
+| `items[].p_id` | string | Produit commandé | Non isolément |
+| `items[].qty` | integer / int64 | Quantité, strictement positive | Non isolément |
+| `items[].price` | number / double | Prix de la ligne | Non isolément |
+| `raw_event` | string | JSON reçu, conservé sans nettoyage | Oui, contient les identifiants originaux |
+| `_kafka_topic` | string | Topic source | Non isolément |
+| `_kafka_partition` | integer / int32 | Partition Kafka | Non isolément |
+| `_kafka_offset` | integer / int64 | Position source ; rejouable | Traçabilité indirecte |
+| `_ingested_at` | date-time / string | Moment de réception par le job | Non isolément |
+
+Les champs JSON optionnels absents deviennent null dans la projection Parquet ;
+`raw_event` conserve la distinction et le texte original. Aucune déduplication
+par `event_id` ou offset n'est faite ici.
+
+### DLQ clickstream
+
+| Champ | Type Parquet | Sens | Donnée personnelle ? |
+|---|---|---|---|
+| `raw` | binary, nullable | Octets exacts reçus ; null pour un tombstone | Potentiellement, contenu non classifié |
+| `reason` | string | Motif du rejet, par exemple `/: missing required session_id` | Pas attendu : chemin et nom de champ, sans valeur de l'événement |
+| `quarantined_at` | date-time / string | Heure de quarantaine | Non isolément |
+| `topic` | string | Topic source | Non isolément |
+| `partition` | int32 | Partition Kafka | Non isolément |
+| `offset` | int64 | Position rejetée | Traçabilité indirecte |
+
+La DLQ est soumise aux mêmes restrictions de lecture que les données brutes.
+Son contenu doit être examiné avant rejeu ; une nouvelle version de schéma ne
+rend pas automatiquement tous les rejets valides.
