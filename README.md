@@ -16,10 +16,18 @@ the end of the course it holds the platform your group defends orally:
 
 | Name | GitHub | Role |
 |---|---|---|
-| | | |
-| | | |
-| | | |
-| | | |
+| Anthony Rascle | [@anthonyrascle43-stack](https://github.com/anthonyrascle43-stack) | Group member |
+| Antoine Rabeau | [@antorabo75](https://github.com/antorabo75) | Group member |
+| Colin Sibieude | [@csb123d](https://github.com/csb123d) | Group member |
+| Lenny Santus | [@lsantus-mines](https://github.com/lsantus-mines) | Group member |
+| Benjamin Caujolle | [@BenjaminAHS](https://github.com/BenjaminAHS) | Group member |
+
+Technical responsibilities are agreed by the group as the course progresses.
+
+## Getting started
+
+Accept the GitHub repository invitation, then follow [CONTRIBUTING.md](CONTRIBUTING.md)
+to clone the project, create a branch and open your first pull request.
 
 ## How this repo grows
 
