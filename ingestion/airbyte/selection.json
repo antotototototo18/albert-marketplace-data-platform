@@ -1,0 +1,17 @@
+{
+  "description": "Expected selection; this file is not an export of an applied connection.",
+  "required_streams": {
+    "orders": ["order_id", "buyer_id", "discount_id", "payment_id", "order_date"],
+    "order_items": ["order_id", "p_id", "qty", "price_at_purchase"],
+    "review": ["review_id", "buyer_id", "r_desc", "title", "rating", "seller_product_flag"],
+    "product_reviews": ["p_id", "review_id"],
+    "product": ["p_id", "p_name", "p_desc", "price", "qty", "category_id"],
+    "customer_shipping": ["address_id", "c_id", "is_default"],
+    "shipping_details": ["address_id", "street_address", "city", "state", "zip", "country", "phone"]
+  },
+  "forbidden_columns": ["pwd", "card_no", "cvv"],
+  "optional_safe_streams": {
+    "customer": ["c_id", "fname", "lname", "phone", "email"],
+    "payment_details": ["payment_id", "expiry_date", "billing_address"]
+  }
+}
