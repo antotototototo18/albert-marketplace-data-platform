@@ -27,7 +27,7 @@ pousse son propre travail sous son compte ; aucun commit n'est créé à sa plac
 | Étape | Livrables et emplacements demandés | Preuves pour clôturer | État |
 |---|---|---|---|
 | L02 — Bronze | Bucket GCS en `europe-west1`, `docs/adr/0002-bronze-layout.md`, `docs/data-dictionary.md`, `infra/lifecycle.json`, `infra/iam.md`, `docs/costs.md`, diagramme actualisé | Parquet partitionné ; comparaison mesurée des layouts ; état lifecycle/IAM lu sur le bucket réel ; prix datés | À réaliser pour le groupe ; mesures individuelles disponibles. |
-| L03 — Ingestion | Connecteur et preuve de configuration dans `ingestion/`, extracteur incrémental, consumer, `clickstream.schema.json`, DLQ, `docs/ingestion-failure-modes.md`, ADR-0003, dictionnaire et diagramme | Sept streams requis ; exclusions des secrets à la source ; curseur durable, retries ; schéma validé ; événement invalide retrouvable et flux poursuivi ; limites testées | À réaliser ; scripts individuels et essais de panne disponibles comme références. |
+| L03 — Ingestion | Connecteur et preuve de configuration dans `ingestion/`, extracteur incrémental, consumer, `clickstream.schema.json`, DLQ, `docs/ingestion-failure-modes.md`, ADR-0003, dictionnaire et diagramme | Sept streams requis ; exclusions des secrets à la source ; curseur durable, retries ; schéma validé ; événement invalide retrouvable et flux poursuivi ; limites testées | En cours : extracteur, consumer, schéma, DLQ et documents faits sur `gs://data-engineering-i1-group6` ; connecteur Airbyte et sa preuve à faire ; PR à relire. |
 | L04 — Warehouse | Tables natives BigQuery, SQL dans `warehouse/`, `docs/warehouse-tuning.md`, ADR-0004, `docs/runbooks/slow-query.md`, plafond de requête | Bytes processed avant/après, cache désactivé ; trois requêtes coûtées ; ratio de réduction de la vue ; plafond vu en échec | À réaliser. |
 | L05 — dbt | Projet `transform/`, sources et fraîcheur, staging, marts, packages et lock, `docs/acceptance-criteria.md`, `docs/lineage.md`, ADR-0005 | `dbt build` depuis un clone propre ; grains et relations testés ; jointures sans fan-out ; seuils justifiés | À réaliser après L04. |
 | L06 — Images | Dockerfiles `ingestion/` et `transform/`, `.dockerignore`, images versionnées, `docs/reproduce.md`, installation et ADR-0006 | Bases et dépendances fixées ; non-root ; aucun secret ; image supprimée puis récupérée ; digests concordants ; rétention exécutée | À réaliser après L05. |
@@ -38,8 +38,9 @@ pousse son propre travail sous son compte ; aucun commit n'est créé à sa plac
 
 ## Prochaine étape concrète : L02
 
-1. Identifier le projet GCP et le bucket **du groupe** ; confirmer les accès
-   disponibles et la région, sans reprendre le bucket personnel comme preuve.
+1. Le bucket du groupe existe : `data-engineering-i1-group6`, créé le
+   16/10/2026 en `europe-west1` pour L03. Il reste à y documenter le layout,
+   le lifecycle et l'IAM ; le bucket personnel n'est pas une preuve.
 2. Confronter les mesures individuelles de chacun pour choisir partition et
    codec. Les résultats d'Anthony sont dans `Exercise/L02/README.md` :
    31 objets contre 8 649 pour les deux layouts d'août, à périmètre comparable.

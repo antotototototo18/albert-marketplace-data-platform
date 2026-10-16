@@ -1,0 +1,26 @@
+{
+  "checked_at": "2026-10-16T15:24:00Z",
+  "bucket_prefix": "gs://data-engineering-i1-group6/bronze/airbyte/",
+  "replication_method": "Xmin",
+  "sync_mode": "incremental | append",
+  "jobs": [
+    {"id": 1, "mode": "full_refresh | overwrite (set by mistake)", "status": "cancelled", "attempts": ["failed", "failed"],
+     "outcome": "Source OOMKilled; 11 files with sync_id 1 deleted after check, review held 149179 rows for 111322 in the source."},
+    {"id": 2, "mode": "incremental | append", "status": "cancelled", "attempts": ["failed"],
+     "outcome": "Source OOMKilled (exit code 137) at 15:22:16; files already written are kept."}
+  ],
+  "streams_after_job_2": {
+    "customer": {"rows": 131115, "source_rows": 131116, "complete": true},
+    "customer_shipping": {"rows": 200001, "source_rows": 200001, "complete": true},
+    "payment_details": {"rows": 100000, "source_rows": 100000, "complete": true},
+    "product_reviews": {"rows": 111322, "source_rows": 111322, "complete": true},
+    "review": {"rows": 111322, "source_rows": 111322, "complete": true},
+    "shipping_details": {"rows": 200001, "source_rows": 200001, "complete": true},
+    "product": {"rows": 23012, "source_rows": 42858, "complete": false},
+    "order_items": {"rows": 95379, "source_rows": 418832, "complete": false},
+    "orders": {"rows": 0, "source_rows": 228187, "complete": false}
+  },
+  "forbidden_columns_in_files": [],
+  "airbyte_columns_in_every_stream": ["_airbyte_raw_id", "_airbyte_extracted_at", "_airbyte_meta", "_airbyte_generation_id"],
+  "note": "source_rows read a few minutes after the sync; the load generator keeps adding customers and orders."
+}

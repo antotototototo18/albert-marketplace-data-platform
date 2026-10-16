@@ -1,8 +1,7 @@
 # Architecture d'Albert's Marketplace
 
-Version L01 du 16 octobre 2026. **Cible proposée**, à relire par le groupe.
-Ce diagramme présente les composants à construire au fil du cours ; il ne
-constitue pas un inventaire de ressources cloud déjà déployées.
+Version L03 du 16 octobre 2026, à relire par le groupe. Le diagramme distingue
+ce qui existe (traits pleins) de la cible des leçons suivantes (pointillés).
 
 ## Context
 
@@ -25,39 +24,47 @@ les niveaux de qualité successifs.
 
 ```mermaid
 flowchart LR
-  shop["Clients et vendeurs / boutique"] --> pg[("PostgreSQL operationnel")]
-  pg --> extract["Batch initial et extracteur SQL / L02-L03"]
-  pg --> connector["Connecteur incremental ou CDC / L03"]
-  exports["Exports CSV legacy"] --> extract
-  kafka["Kafka clickstream / JSON"] --> consumer["Consumer et validation du schema / L03"]
-  extract --> contract["Contrat d'entree / exclure les secrets"]
-  connector --> contract
+  shop["Clients et vendeurs / boutique"] --> pg[("PostgreSQL opérationnel")]
+  shop --> kafka["Kafka / topic clickstream, JSON"]
 
-  subgraph gcp["GCP europe-west1 / cible"]
-    bronze[("GCS bronze / Parquet partitionne / L02-L03")]
-    dlq[("GCS bronze/_dlq / rejets et motifs / L03")]
-    subgraph bq["BigQuery / L04-L05"]
-      loaded[("Tables natives / jeu de travail bronze")]
-      silver[("Silver / types, deduplication, jointures")]
-      gold[("Gold / faits, dimensions, demande quotidienne")]
-      loaded -->|"dbt"| silver
-      silver -->|"dbt et tests"| gold
+  pg -->|"1. Xmin, toutes les 24 h"| airbyte["Connecteur Airbyte local / sans pwd, card_no, cvv"]
+  pg -->|"2. order_id > curseur"| extract["extract_orders.py / retries, curseur durable"]
+  kafka -->|"3. au moins une fois"| consumer["consume_clickstream.py / JSON Schema v1"]
+
+  subgraph gcp["GCP europe-west1 / projet data-engineering-i1"]
+    subgraph bronze["gs://data-engineering-i1-group6/bronze"]
+      b_airbyte[("airbyte/ / 9 streams + colonnes _airbyte_*")]
+      b_manual[("manual/orders/ingested_date=…")]
+      b_click[("clickstream/v1/dt=… / date UTC de event_time")]
+      dlq[("_dlq/clickstream/dt=… / ligne, motif, heure")]
+      state[("_state/manual/orders.json")]
     end
-    bronze -->|"Chargement du jeu de travail / L04"| loaded
+    subgraph bq["BigQuery / L04-L05, cible"]
+      loaded[("Tables natives")]
+      silver[("Silver / types, déduplication, jointures")]
+      gold[("Gold / faits, dimensions, demande quotidienne")]
+      loaded -.->|"dbt"| silver
+      silver -.->|"dbt et tests"| gold
+    end
   end
 
-  contract --> bronze
-  consumer -->|"Evenements valides"| bronze
-  consumer -->|"Evenements invalides"| dlq
-  gold --> bi["Analystes et rapports / acces autorises"]
-  gold --> ml["ML / produit, pays, jour"]
+  airbyte --> b_airbyte
+  extract --> b_manual
+  extract --> state
+  consumer -->|"valides"| b_click
+  consumer -->|"rejets"| dlq
+  bronze -.->|"chargement L04"| loaded
+  gold -.-> bi["Analystes et rapports"]
+  gold -.-> ml["ML / produit, pays, jour"]
 ```
 
-L'extraction batch et le connecteur sont des chemins distincts à documenter en
-L03 ; ils ne doivent pas devenir deux producteurs non identifiés d'une même
-table bronze. Le choix des curseurs, la garantie de livraison, le schéma des
-événements et la gestion des rejets feront l'objet de l'ADR-0003 et des essais
-de panne. Les mécanismes décrits dans ce diagramme ne sont pas encore implémentés.
+Trois chemins écrivent dans le bronze, chacun sous son préfixe, sans dépôt
+manuel. Les trois ont écrit le 16 octobre 2026 ; la synchro Airbyte est encore
+incomplète, faute de mémoire dans Docker. `orders` arrive par deux
+chemins, avec des colonnes différentes : le [dictionnaire](data-dictionary.md)
+dit d'où vient chaque table. Les modes, garanties et limites sont dans
+l'[ADR-0003](adr/0003-ingestion-modes.md) et le
+[suivi des pannes](ingestion-failure-modes.md).
 
 ## Layers
 
@@ -80,25 +87,28 @@ pas une zone publique : un événement rejeté peut contenir des données person
 | Dépôt, équipe et CI | En place ; voir [CI](ci-cd.md). |
 | Schéma et profil de l'export legacy | Inspection locale reproductible ; voir [le profil](evidence/l01-source-profile.json). |
 | Architecture, règles et modèle ML | Propositions documentées pour relecture L01. |
-| Bucket du groupe, IAM et lifecycle appliqué | Non vérifiés dans ce lot ; à prouver en L02, sans confondre avec le bucket individuel de l'exercice. |
-| Pipelines, warehouse et transformations | À réaliser de L03 à L05. |
+| Bucket du groupe | `data-engineering-i1-group6`, créé le 16/10/2026 en `europe-west1`, accès uniforme, accès public bloqué. IAM : rôles par défaut du projet seulement. Pas de lifecycle (livrables L02 non traités). |
+| Extracteur `orders` | 228 028 commandes puis 2 à la reprise ; voir [le compte rendu](evidence/l03-live-run.json). |
+| Consumer clickstream et DLQ | 69 335 événements acceptés, 2 rejets volontaires retrouvés en DLQ, flux poursuivi. |
+| Connecteur Airbyte | Connexion créée (Xmin, Incremental \| Append, 24 h) ; `pwd`, `card_no` et `cvv` absents des fichiers. Synchro partielle : 6 streams complets sur 9. Clé HMAC de compte utilisateur, à remplacer. |
+| Warehouse et transformations | À réaliser en L04 et L05. |
 | Docker, orchestration et Terraform | À réaliser de L06 à L08. |
 
-Le dataset BigQuery devra être configuré dans la région choisie pour le bucket.
-La clé de partition et le codec seront décidés dans l'ADR-0002, avec les
-mesures de L02 ; aucun nom de bucket du groupe n'est encore établi ici.
+Le dataset BigQuery devra être créé en `europe-west1`, comme le bucket.
 
 ## Decisions
 
 | ADR | Décision | Statut |
 |---|---|---|
 | [0001](adr/0001-target-architecture.md) | Deux étages GCS et BigQuery, qualité bronze/silver/gold | Proposed |
+| [0003](adr/0003-ingestion-modes.md) | Xmin pour le connecteur, curseur d'ID pour l'extracteur, Kafka au moins une fois | Proposed |
 
 ## Change log
 
 | Date | Leçon | Changement |
 |---|---|---|
 | 2026-10-16 | L01 | Matrice des flux, comparaison des architectures, diagramme cible et limites du modèle quotidien. |
+| 2026-10-16 | L03 | Bucket du groupe, trois chemins d'ingestion vers bronze, DLQ et état de l'extracteur. |
 
 Mettre cette page à jour à la fin de chaque étape, en remplaçant les intentions
 par les ressources et garanties réellement vérifiées. Le [suivi du projet](project-plan.md)

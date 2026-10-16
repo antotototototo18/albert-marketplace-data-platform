@@ -42,6 +42,11 @@ The first L01 deliverables are drafted for group review:
 The [project plan](docs/project-plan.md) tracks the course requirements and the
 evidence still needed. Proposed designs are distinguished from verified resources.
 
+L03 ingestion writes into the group bucket `gs://data-engineering-i1-group6/bronze`:
+see [ingestion/README.md](ingestion/README.md), the
+[ingestion decision](docs/adr/0003-ingestion-modes.md) and the
+[failure modes](docs/ingestion-failure-modes.md).
+
 ## How this repo grows
 
 | Lesson | What your group adds | Where |

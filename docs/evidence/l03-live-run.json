@@ -1,0 +1,56 @@
+{
+  "started_at": "2026-10-16T14:26:11Z",
+  "bronze_uri": "gs://data-engineering-i1-group6/bronze",
+  "extractor_first_run": {
+    "rows_written": 228028,
+    "last_order_id": 228029
+  },
+  "extractor_restart": {
+    "rows_written": 2,
+    "last_order_id": 228031
+  },
+  "orders_storage": {
+    "prefix": "bronze/manual/orders/",
+    "objects": 47,
+    "bytes": 9007781
+  },
+  "clickstream_backlog": {
+    "consumer_group": "group6-bronze-clickstream",
+    "batch_size": 2000,
+    "accepted": 69335,
+    "rejected": 1,
+    "received": 69336
+  },
+  "clickstream_follow_up_runs": [
+    {"batch_size": 200, "accepted": 39, "rejected": 1, "received": 40},
+    {"batch_size": 200, "accepted": 30, "rejected": 0, "received": 30}
+  ],
+  "clickstream_storage": {
+    "prefix": "bronze/clickstream/v1/",
+    "objects": 152,
+    "bytes": 16309976,
+    "event_time_days": 22,
+    "first_partition": "dt=2026-09-15",
+    "last_partition": "dt=2026-10-06"
+  },
+  "deliberate_rejects_in_real_topic": [
+    {
+      "topic": "clickstream",
+      "partition": 0,
+      "offset": 23038,
+      "reason": "/: failed required",
+      "note": "Sent before the reason was made explicit; the payload lacks session_id.",
+      "dlq_object": "bronze/_dlq/clickstream/dt=2026-10-16/part-8fbaf649cb7f476d8682bf45ce4b33c1.parquet",
+      "next_offset_accepted": 23039
+    },
+    {
+      "topic": "clickstream",
+      "partition": 1,
+      "offset": 23012,
+      "reason": "/: missing required session_id",
+      "dlq_object": "bronze/_dlq/clickstream/dt=2026-10-16/part-b6dc3736f0314a97b3ecaf16daaeca1e.parquet",
+      "next_offset_accepted": 23013
+    }
+  ],
+  "completed_at": "2026-10-16T14:36:00Z"
+}
