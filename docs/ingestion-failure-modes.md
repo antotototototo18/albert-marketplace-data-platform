@@ -55,8 +55,10 @@ premier chargement est incomplet (voir la ligne sur la mémoire).
 
 Lecteurs actuels du bucket, lus sur sa politique IAM le 16/10/2026 : seulement
 les rôles par défaut du projet `data-engineering-i1` (propriétaires et éditeurs
-en lecture/écriture, lecteurs du projet en lecture). Aucun binding propre au
-groupe n'existe encore ; c'est un livrable L02 non traité.
+en lecture/écriture, lecteurs du projet en lecture). Aucune liaison propre au
+groupe n'a été ajoutée ; le détail est dans [infra/iam.md](../infra/iam.md).
+Le lifecycle d'[infra/lifecycle.json](../infra/lifecycle.json) ne couvre que
+`bronze/legacy/` : les préfixes L03 restent en classe Standard.
 
 Ne pas publier de fichier `.env`, de fichier TLS/SASL ni d'export complet
 Airbyte : il peut embarquer la configuration des acteurs. Le vérificateur

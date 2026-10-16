@@ -9,9 +9,10 @@
 
 Le bronze du groupe est le bucket `data-engineering-i1-group6`, créé le
 16 octobre 2026 dans `europe-west1`, avec accès uniforme et accès public bloqué.
-Chaque chemin d'ingestion écrit dans son propre préfixe de `bronze/`. Les livrables
-L02 (ADR-0002, lifecycle, IAM, coûts) ne sont pas faits : le bucket n'a ni règle
-de lifecycle ni binding au-delà des rôles par défaut du projet.
+Chaque chemin d'ingestion écrit dans son propre préfixe de `bronze/`, à côté
+de `bronze/legacy/` chargé en L02 ([ADR-0002](0002-bronze-layout.md)). Le
+lifecycle ne couvre que `bronze/legacy/`, et le bucket n'a que les liaisons IAM
+par défaut du projet ([infra/iam.md](../../infra/iam.md)).
 
 Les essais individuels L03 donnent trois éléments : le curseur strict sur
 `order_date` a manqué 12 nouvelles commandes du même jour ; relire la journée
