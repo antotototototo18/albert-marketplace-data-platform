@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:albert-marketplace:clickstream:v1",
+  "title": "Albert's Marketplace clickstream v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_type",
+    "event_time",
+    "emitted_at",
+    "session_id",
+    "buyer_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "event_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_type": {
+      "enum": [
+        "product_viewed",
+        "added_to_cart",
+        "order_placed"
+      ]
+    },
+    "event_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "emitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "session_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "buyer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "p_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "price": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1.7976931348623157e+308
+    },
+    "qty": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    },
+    "order_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    },
+    "payment_method": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "amount": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1.7976931348623157e+308
+    },
+    "currency": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{3}$"
+    },
+    "items": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "p_id",
+          "qty",
+          "price"
+        ],
+        "properties": {
+          "p_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "qty": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9223372036854775807
+          },
+          "price": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1.7976931348623157e+308
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "product_viewed"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "p_id",
+          "price"
+        ],
+        "properties": {
+          "p_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "price": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "added_to_cart"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "p_id",
+          "price",
+          "qty"
+        ],
+        "properties": {
+          "p_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "price": {
+            "type": "number"
+          },
+          "qty": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "event_type": {
+            "const": "order_placed"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "order_id",
+          "items",
+          "amount",
+          "currency",
+          "payment_method"
+        ],
+        "properties": {
+          "order_id": {
+            "type": "integer"
+          },
+          "items": {
+            "type": "array"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "payment_method": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ]
+}
