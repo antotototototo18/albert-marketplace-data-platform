@@ -55,7 +55,7 @@ evidence still needed. Proposed designs are distinguished from verified resource
 | L07 · Airflow | A scheduled DAG | `orchestration/` |
 | L08 · Terraform | The platform as code, format and validation in CI, local plan | `infra/`, `.github/workflows/` |
 | L09 · FinOps | Labels, a budget alert, one measured optimisation | `infra/`, `docs/` |
-| L10 · Security and governance | Least-privilege access, PII redaction, data classification | `infra/`, `dbt/`, `docs/` |
+| L10 · Security and governance | Least-privilege access, PII redaction, data classification | `infra/`, `transform/`, `docs/` |
 
 Starter files for later lessons arrive as **pull requests** opened by the
 teaching team. Review and merge them like any other change.
