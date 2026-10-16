@@ -1,0 +1,421 @@
+{
+  "source_archive": "legacy_csv.tar.gz",
+  "archive_sha256": "ac8132d9bb97a43b2c001ad923f7d95d8cd7df76e86e1f402c29c8da4ff3d2ef",
+  "ingested_date": "2026-10-16",
+  "ingested_at": "2026-10-16T14:48:00+00:00",
+  "layout": "gs://data-engineering-i1-group6/bronze/legacy/<table>/ingested_date=YYYY-MM-DD/part-0.parquet",
+  "format": "Parquet, zstd, every column stored as string",
+  "verification": "each file re-read and compared cell by cell with a pandas parse of its CSV",
+  "totals": {
+    "tables": 27,
+    "rows": 2928485,
+    "csv_bytes": 206290602,
+    "parquet_bytes": 62328870
+  },
+  "tables": {
+    "buyer": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/buyer/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 3488924,
+      "parquet_bytes": 1888579,
+      "rows": 100000,
+      "columns": [
+        "unnamed_0",
+        "buyer_id"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "carrier": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/carrier/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 116,
+      "parquet_bytes": 1730,
+      "rows": 4,
+      "columns": [
+        "unnamed_0",
+        "carrier_id",
+        "carrier_name"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "cart": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/cart/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 40,
+      "parquet_bytes": 1584,
+      "rows": 0,
+      "columns": [
+        "unnamed_0",
+        "cart_id",
+        "buyer_id",
+        "total_qty",
+        "total_price"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "cart_items": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/cart_items/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 18,
+      "parquet_bytes": 1400,
+      "rows": 0,
+      "columns": [
+        "unnamed_0",
+        "cart_id",
+        "p_id",
+        "qty"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "category": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/category/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 89,
+      "parquet_bytes": 1919,
+      "rows": 2,
+      "columns": [
+        "unnamed_0",
+        "category_id",
+        "name",
+        "c_desc"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "customer": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/customer/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 13252341,
+      "parquet_bytes": 5209259,
+      "rows": 130766,
+      "columns": [
+        "unnamed_0",
+        "c_id",
+        "fname",
+        "lname",
+        "phone",
+        "email"
+      ],
+      "excluded_columns": [
+        "pwd"
+      ],
+      "values_with_leading_zero": {
+        "phone": 82203
+      }
+    },
+    "customer_payment": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/customer_payment/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 4277837,
+      "parquet_bytes": 2115146,
+      "rows": 100000,
+      "columns": [
+        "unnamed_0",
+        "payment_id",
+        "c_id",
+        "is_default"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "customer_shipping": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/customer_shipping/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 8777892,
+      "parquet_bytes": 3953614,
+      "rows": 200001,
+      "columns": [
+        "unnamed_0",
+        "address_id",
+        "c_id",
+        "is_default"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "daily_deals": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/daily_deals/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 25,
+      "parquet_bytes": 1435,
+      "rows": 0,
+      "columns": [
+        "unnamed_0",
+        "p_id",
+        "deal_date",
+        "discount"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "discount": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/discount/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 47,
+      "parquet_bytes": 1614,
+      "rows": 0,
+      "columns": [
+        "unnamed_0",
+        "discount_id",
+        "discount_name",
+        "d_desc",
+        "discount_amt"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "order_items": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/order_items/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 10373925,
+      "parquet_bytes": 2397465,
+      "rows": 408560,
+      "columns": [
+        "order_id",
+        "p_id",
+        "qty",
+        "price_at_purchase"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "orders": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/orders/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 13335140,
+      "parquet_bytes": 5162102,
+      "rows": 222644,
+      "columns": [
+        "unnamed_0",
+        "order_id",
+        "buyer_id",
+        "discount_id",
+        "payment_id",
+        "order_date"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "payment": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/payment/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 14976197,
+      "parquet_bytes": 3492244,
+      "rows": 222644,
+      "columns": [
+        "transaction_id",
+        "order_id",
+        "payment_id",
+        "amount",
+        "method",
+        "status",
+        "created_at"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "payment_details": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/payment_details/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 9481730,
+      "parquet_bytes": 3084064,
+      "rows": 100000,
+      "columns": [
+        "unnamed_0",
+        "payment_id",
+        "expiry_date",
+        "billing_address"
+      ],
+      "excluded_columns": [
+        "card_no",
+        "cvv"
+      ],
+      "values_with_leading_zero": {}
+    },
+    "product": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/product/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 16107395,
+      "parquet_bytes": 4798088,
+      "rows": 42858,
+      "columns": [
+        "unnamed_0",
+        "p_id",
+        "p_name",
+        "p_desc",
+        "price",
+        "qty",
+        "category_id"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "product_images": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/product_images/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 14651072,
+      "parquet_bytes": 2290558,
+      "rows": 186837,
+      "columns": [
+        "unnamed_0",
+        "p_id",
+        "p_image"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "product_reviews": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/product_reviews/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 2667957,
+      "parquet_bytes": 1159617,
+      "rows": 111322,
+      "columns": [
+        "unnamed_0",
+        "p_id",
+        "review_id"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "returns": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/returns/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 34,
+      "parquet_bytes": 1575,
+      "rows": 0,
+      "columns": [
+        "unnamed_0",
+        "return_id",
+        "buyer_id",
+        "p_id",
+        "order_id"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "review": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/review/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 27371182,
+      "parquet_bytes": 12076421,
+      "rows": 111322,
+      "columns": [
+        "unnamed_0",
+        "review_id",
+        "buyer_id",
+        "r_desc",
+        "title",
+        "rating",
+        "seller_product_flag"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "review_images": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/review_images/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 9501205,
+      "parquet_bytes": 723263,
+      "rows": 119382,
+      "columns": [
+        "unnamed_0",
+        "review_id",
+        "review_img"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "seller": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/seller/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 1742575,
+      "parquet_bytes": 745818,
+      "rows": 30766,
+      "columns": [
+        "unnamed_0",
+        "seller_id",
+        "seller_type",
+        "seller_name"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "seller_products": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/seller_products/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 2206695,
+      "parquet_bytes": 822788,
+      "rows": 46593,
+      "columns": [
+        "unnamed_0",
+        "seller_id",
+        "p_id"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "seller_reviews": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/seller_reviews/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 4854317,
+      "parquet_bytes": 1221704,
+      "rows": 111322,
+      "columns": [
+        "unnamed_0",
+        "seller_id",
+        "review_id"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "shipment": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/shipment/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 27729597,
+      "parquet_bytes": 3598577,
+      "rows": 408560,
+      "columns": [
+        "unnamed_0",
+        "shipping_id",
+        "order_id",
+        "p_id",
+        "carrier_id",
+        "shipment_type",
+        "status",
+        "est_delivery_date",
+        "actual_delivery_date"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "shipping_details": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/shipping_details/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 17230494,
+      "parquet_bytes": 5773707,
+      "rows": 200001,
+      "columns": [
+        "unnamed_0",
+        "address_id",
+        "street_address",
+        "city",
+        "state",
+        "zip",
+        "country",
+        "phone"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {
+        "phone": 125861
+      }
+    },
+    "subscription": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/subscription/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 3133573,
+      "parquet_bytes": 1220964,
+      "rows": 50091,
+      "columns": [
+        "unnamed_0",
+        "subscription_id",
+        "c_id",
+        "start_date",
+        "end_date"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    },
+    "wishlist_item": {
+      "object": "gs://data-engineering-i1-group6/bronze/legacy/wishlist_item/ingested_date=2026-10-16/part-0.parquet",
+      "csv_bytes": 1130185,
+      "parquet_bytes": 583635,
+      "rows": 24810,
+      "columns": [
+        "unnamed_0",
+        "product_id",
+        "buyer_id"
+      ],
+      "excluded_columns": [],
+      "values_with_leading_zero": {}
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "source_archive": "legacy_csv.tar.gz",
+  "archive_sha256": "ac8132d9bb97a43b2c001ad923f7d95d8cd7df76e86e1f402c29c8da4ff3d2ef",
+  "table": "orders.csv",
+  "rows": 222644,
+  "csv_bytes": 13335140,
+  "query": {
+    "csv_all_text": {
+      "rows": 5386,
+      "median_ms": 38.1
+    },
+    "single_zstd": {
+      "rows": 5386,
+      "median_ms": 0.7
+    },
+    "ingested_date": {
+      "rows": 5386,
+      "median_ms": 0.8
+    },
+    "order_month": {
+      "rows": 5386,
+      "median_ms": 1.7
+    },
+    "order_day": {
+      "rows": 5386,
+      "median_ms": 52.4
+    }
+  },
+  "environment": "pyarrow 26.0.0, duckdb 1.5.6, local SSD; not a GCS or BigQuery timing",
+  "single_file": {
+    "text_none": 13387562,
+    "text_snappy": 9408769,
+    "text_gzip": 6165876,
+    "text_zstd": 5161495,
+    "inferred_types_snappy": 9117126,
+    "inferred_types_zstd": 5478615
+  },
+  "partitioned": {
+    "ingested_date": {
+      "partitions": 1,
+      "objects": 1,
+      "bytes": 5178058,
+      "write_ms": 54.2
+    },
+    "order_month": {
+      "partitions": 37,
+      "objects": 37,
+      "bytes": 5157306,
+      "write_ms": 19.0
+    },
+    "order_day": {
+      "partitions": 1096,
+      "objects": 1727,
+      "bytes": 9787060,
+      "write_ms": 378.3
+    }
+  }
+}
