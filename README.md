@@ -34,6 +34,14 @@ in GitHub Actions, including the group-only contributor policy.
 See [CI and deployment](docs/ci-cd.md) for the checks, local commands and the
 deployment steps to add when the GCP platform is ready.
 
+## Project progress
+
+The first L01 deliverables are drafted for group review:
+[data flows](docs/data-flows.md), [architecture decision](docs/adr/0001-target-architecture.md),
+[target diagram](docs/architecture.md) and [daily-demand model](docs/model/star-daily-demand.md).
+The [project plan](docs/project-plan.md) tracks the course requirements and the
+evidence still needed. Proposed designs are distinguished from verified resources.
+
 ## How this repo grows
 
 | Lesson | What your group adds | Where |
@@ -42,10 +50,10 @@ deployment steps to add when the GCP platform is ready.
 | L02 · Object storage foundations | Bronze layer on Cloud Storage, data dictionary v1 | `docs/` |
 | L03 · Batch, streaming, CDC | Ingestion pipelines | `ingestion/` |
 | L04 · SQL warehouses | Warehouse tables, three costed queries | `docs/` |
-| L05 · dbt and the medallion pattern | Silver and gold models, tests | `dbt/` |
-| L06 · Packaging data jobs | Dockerfiles for the ingestion job and dbt | `ingestion/`, `dbt/` |
+| L05 · dbt and the medallion pattern | Silver and gold models, tests | `transform/` (planned) |
+| L06 · Packaging data jobs | Dockerfiles for the ingestion job and dbt | `ingestion/`, `transform/` (planned) |
 | L07 · Airflow | A scheduled DAG | `orchestration/` |
-| L08 · Terraform | The platform as code, `terraform plan` in CI | `infra/`, `.github/workflows/` |
+| L08 · Terraform | The platform as code, format and validation in CI, local plan | `infra/`, `.github/workflows/` |
 | L09 · FinOps | Labels, a budget alert, one measured optimisation | `infra/`, `docs/` |
 | L10 · Security and governance | Least-privilege access, PII redaction, data classification | `infra/`, `dbt/`, `docs/` |
 
@@ -74,7 +82,8 @@ docs/
   adr/               architecture decision records
   model/             dimensional model sketches
 ingestion/           from L03
-dbt/                 from L05
+transform/           planned for L05, as required by the project steps
+dbt/                 template note pointing to transform/
 orchestration/       from L07
 infra/               from L08
 ```
