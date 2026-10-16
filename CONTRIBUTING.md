@@ -53,6 +53,13 @@ et supprimer la branche distante terminée. Ne pas pousser directement sur `main
 - Conserver les attributions et les restrictions d'utilisation du modèle du cours.
 - Vérifier ensemble les pull requests de l'équipe enseignante avant de les fusionner.
 
+## Vérifications automatiques
+
+Chaque pull request vers `main` déclenche le contrôle **Repository checks**.
+Attendre sa réussite et la relecture d'un autre membre avant de fusionner.
+Les commandes pour reproduire les contrôles en local et les étapes prévues
+pour le déploiement sont décrites dans [docs/ci-cd.md](docs/ci-cd.md).
+
 ## Modèle du cours
 
 Le dépôt d'origine est
