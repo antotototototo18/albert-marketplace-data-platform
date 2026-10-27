@@ -1,0 +1,5 @@
+# Default cap for every query run with the bq CLI on this machine.
+# Copy to ~/.bigqueryrc (Windows: %USERPROFILE%\.bigqueryrc). 1 GiB = 1073741824 bytes.
+[query]
+--maximum_bytes_billed=1073741824
+--nouse_legacy_sql
