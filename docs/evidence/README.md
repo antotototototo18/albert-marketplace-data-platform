@@ -47,3 +47,19 @@ des positions Kafka, sans ligne client.
 - [l03-airbyte-sync.json](l03-airbyte-sync.json) : lignes écrites par Airbyte
   par stream, comparées à la base, et issue des deux jobs. Le catalogue vérifié
   est dans [ingestion/airbyte/connection-evidence.json](../../ingestion/airbyte/connection-evidence.json).
+
+## L04 : warehouse BigQuery
+
+[l04-warehouse-measurements.json](l04-warehouse-measurements.json) : une
+exécution de `scripts/measure_warehouse.py`, le 26 octobre 2026, sur
+`data-engineering-i1.group6_warehouse`. Pour chaque requête : estimation du dry
+run, octets traités et facturés, cache (toujours désactivé), temps de slot,
+durée, nombre de lignes renvoyées et usage éventuel d'une vue matérialisée.
+S'y ajoutent le ratio de réduction de `daily_demand`, les deux refus du plafond
+et la taille de chaque table et de ses partitions. Le fichier ne contient que
+des comptes, des identifiants de job et deux identifiants de produit, sans
+ligne de commande ni identifiant client.
+
+Reproduire : voir [docs/warehouse-tuning.md](../warehouse-tuning.md#reproduire).
+Les octets traités doivent être identiques tant que les tables n'ont pas été
+rechargées ; les durées et les temps de slot varient d'une exécution à l'autre.
