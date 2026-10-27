@@ -1,0 +1,596 @@
+{
+  "measured_at": "2026-10-26T12:41:21+00:00",
+  "project": "data-engineering-i1",
+  "dataset": "group6_warehouse",
+  "location": "europe-west1",
+  "query_cache": "disabled on every job (use_query_cache=False)",
+  "per_query_cap_bytes": 1073741824,
+  "price_per_tib_usd": 7.5,
+  "tuning": [
+    {
+      "table": "orders",
+      "change": "PARTITION BY month",
+      "query": "t_orders_last_28_days",
+      "before": {
+        "job_id": "7a1aa91b-cf05-4fdd-8502-36c30a225ec5",
+        "estimate_bytes": 10242352,
+        "bytes_processed": 10242352,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 21,
+        "elapsed_ms": 125,
+        "rows_returned": 5511,
+        "cost_usd": 6.987e-05,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "a4d35b6b-5ce1-4065-9d0f-6bd1984a2439",
+        "estimate_bytes": 379950,
+        "bytes_processed": 379950,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 16,
+        "elapsed_ms": 111,
+        "rows_returned": 5511,
+        "cost_usd": 2.59e-06,
+        "materialized_view_used": false
+      },
+      "ratio": 26.96
+    },
+    {
+      "table": "order_items",
+      "change": "PARTITION BY month",
+      "query": "q1_monthly_revenue",
+      "before": {
+        "job_id": "feae78e1-48f4-4489-92df-37cf2de50406",
+        "estimate_bytes": 16342400,
+        "bytes_processed": 16342400,
+        "bytes_billed": 16777216,
+        "cache_hit": false,
+        "slot_ms": 142,
+        "elapsed_ms": 137,
+        "rows_returned": 13,
+        "cost_usd": 0.00011147,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "87ff7bc1-b296-4bb4-8365-d78db3e260d7",
+        "estimate_bytes": 5622040,
+        "bytes_processed": 5622040,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 155,
+        "elapsed_ms": 154,
+        "rows_returned": 13,
+        "cost_usd": 3.835e-05,
+        "materialized_view_used": false
+      },
+      "ratio": 2.91
+    },
+    {
+      "table": "order_items",
+      "change": "PARTITION BY month",
+      "query": "t_one_day",
+      "before": {
+        "job_id": "a83474da-6ace-4873-b83c-13d2911d9972",
+        "estimate_bytes": 11439680,
+        "bytes_processed": 11439680,
+        "bytes_billed": 11534336,
+        "cache_hit": false,
+        "slot_ms": 27,
+        "elapsed_ms": 133,
+        "rows_returned": 730,
+        "cost_usd": 7.803e-05,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "7c300289-3962-4596-acc7-5fb38746e326",
+        "estimate_bytes": 145740,
+        "bytes_processed": 145740,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 8,
+        "elapsed_ms": 119,
+        "rows_returned": 730,
+        "cost_usd": 9.9e-07,
+        "materialized_view_used": false
+      },
+      "ratio": 78.49
+    },
+    {
+      "table": "order_items",
+      "change": "PARTITION BY day instead of month",
+      "query": "q1_monthly_revenue",
+      "before": {
+        "job_id": "8a35cad1-2e39-4247-8d94-5707a30cb229",
+        "estimate_bytes": 5622040,
+        "bytes_processed": 5622040,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 137,
+        "elapsed_ms": 126,
+        "rows_returned": 13,
+        "cost_usd": 3.835e-05,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "9a0cc271-6806-40b5-bcb7-7a47fd731727",
+        "estimate_bytes": 5427280,
+        "bytes_processed": 5427280,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 5754,
+        "elapsed_ms": 458,
+        "rows_returned": 13,
+        "cost_usd": 3.702e-05,
+        "materialized_view_used": false
+      },
+      "ratio": 1.04
+    },
+    {
+      "table": "order_items",
+      "change": "PARTITION BY day instead of month",
+      "query": "t_one_day",
+      "before": {
+        "job_id": "1509e72f-7bc2-4131-a68a-1d4311f5eb36",
+        "estimate_bytes": 145740,
+        "bytes_processed": 145740,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 7,
+        "elapsed_ms": 104,
+        "rows_returned": 730,
+        "cost_usd": 9.9e-07,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "9e943be2-680d-4164-a6e7-adbea2f51116",
+        "estimate_bytes": 20440,
+        "bytes_processed": 20440,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 21,
+        "elapsed_ms": 133,
+        "rows_returned": 730,
+        "cost_usd": 1.4e-07,
+        "materialized_view_used": false
+      },
+      "ratio": 7.13
+    },
+    {
+      "table": "order_items",
+      "change": "CLUSTER BY p_id",
+      "query": "t_product_history",
+      "parameter_p_id": "B0CHXWTSM6",
+      "before": {
+        "job_id": "19e6f620-ad77-4aee-8fa6-3131d896ca71",
+        "estimate_bytes": 11439680,
+        "bytes_processed": 11439680,
+        "bytes_billed": 11534336,
+        "cache_hit": false,
+        "slot_ms": 28,
+        "elapsed_ms": 105,
+        "rows_returned": 4,
+        "cost_usd": 7.803e-05,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "aa18806b-e83e-4950-b3fd-1457ed582ddf",
+        "estimate_bytes": 532308,
+        "bytes_processed": 532308,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 16,
+        "elapsed_ms": 137,
+        "rows_returned": 4,
+        "cost_usd": 3.63e-06,
+        "materialized_view_used": false
+      },
+      "ratio": 21.49
+    },
+    {
+      "table": "order_items",
+      "change": "CLUSTER BY p_id",
+      "query": "t_product_history",
+      "parameter_p_id": "B0BM4GX6TT",
+      "before": {
+        "job_id": "a7d203b4-2b5c-4808-8afa-62b63c5ea8ee",
+        "estimate_bytes": 11439680,
+        "bytes_processed": 11439680,
+        "bytes_billed": 11534336,
+        "cache_hit": false,
+        "slot_ms": 27,
+        "elapsed_ms": 104,
+        "rows_returned": 1376,
+        "cost_usd": 7.803e-05,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "d72eaa90-a400-4b05-bc58-342808da1014",
+        "estimate_bytes": 11439624,
+        "bytes_processed": 11439624,
+        "bytes_billed": 11534336,
+        "cache_hit": false,
+        "slot_ms": 203,
+        "elapsed_ms": 119,
+        "rows_returned": 1376,
+        "cost_usd": 7.803e-05,
+        "materialized_view_used": false
+      },
+      "ratio": 1.0
+    },
+    {
+      "table": "review",
+      "change": "CLUSTER BY rating",
+      "query": "t_low_ratings",
+      "before": {
+        "job_id": "e65bd7dc-d9b7-4705-9fe3-8d0a8ff24e61",
+        "estimate_bytes": 24165148,
+        "bytes_processed": 24165148,
+        "bytes_billed": 25165824,
+        "cache_hit": false,
+        "slot_ms": 405,
+        "elapsed_ms": 657,
+        "rows_returned": 23133,
+        "cost_usd": 0.00016484,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "23c95c28-3e73-4576-93ec-9431983fbddf",
+        "estimate_bytes": 24165148,
+        "bytes_processed": 24165148,
+        "bytes_billed": 25165824,
+        "cache_hit": false,
+        "slot_ms": 520,
+        "elapsed_ms": 773,
+        "rows_returned": 23133,
+        "cost_usd": 0.00016484,
+        "materialized_view_used": false
+      },
+      "ratio": 1.0
+    },
+    {
+      "table": "review",
+      "change": "CLUSTER BY rating",
+      "query": "q3_product_ratings",
+      "before": {
+        "job_id": "0da02f58-c667-4324-9975-78a9e91614f0",
+        "estimate_bytes": 4007592,
+        "bytes_processed": 4007592,
+        "bytes_billed": 20971520,
+        "cache_hit": false,
+        "slot_ms": 45,
+        "elapsed_ms": 113,
+        "rows_returned": 124,
+        "cost_usd": 2.734e-05,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "dd2756b1-320f-44e0-86b1-28ef33bcb004",
+        "estimate_bytes": 4007592,
+        "bytes_processed": 4007592,
+        "bytes_billed": 20971520,
+        "cache_hit": false,
+        "slot_ms": 66,
+        "elapsed_ms": 162,
+        "rows_returned": 124,
+        "cost_usd": 2.734e-05,
+        "materialized_view_used": false
+      },
+      "ratio": 1.0
+    },
+    {
+      "table": "product_reviews",
+      "change": "CLUSTER BY p_id",
+      "query": "t_reviews_of_product",
+      "parameter_p_id": "B0CHXWTSM6",
+      "before": {
+        "job_id": "82503a56-f5d1-4378-9ab0-c7e26670fcf5",
+        "estimate_bytes": 2226440,
+        "bytes_processed": 2226440,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 15,
+        "elapsed_ms": 164,
+        "rows_returned": 1,
+        "cost_usd": 1.519e-05,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "075d1556-be8c-441e-874a-4f06cc24b2d1",
+        "estimate_bytes": 2226440,
+        "bytes_processed": 2226440,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 16,
+        "elapsed_ms": 99,
+        "rows_returned": 1,
+        "cost_usd": 1.519e-05,
+        "materialized_view_used": false
+      },
+      "ratio": 1.0
+    },
+    {
+      "table": "product_reviews",
+      "change": "CLUSTER BY p_id",
+      "query": "t_reviews_of_product",
+      "parameter_p_id": "B0BM4GX6TT",
+      "before": {
+        "job_id": "8898eea1-cb33-4376-a633-835fb96be990",
+        "estimate_bytes": 2226440,
+        "bytes_processed": 2226440,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 21,
+        "elapsed_ms": 96,
+        "rows_returned": 376,
+        "cost_usd": 1.519e-05,
+        "materialized_view_used": false
+      },
+      "after": {
+        "job_id": "70ee747f-796e-47ac-9b0d-5a221242fa57",
+        "estimate_bytes": 2226440,
+        "bytes_processed": 2226440,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 18,
+        "elapsed_ms": 105,
+        "rows_returned": 376,
+        "cost_usd": 1.519e-05,
+        "materialized_view_used": false
+      },
+      "ratio": 1.0
+    }
+  ],
+  "analytical": [
+    {
+      "query": "q1_monthly_revenue",
+      "untuned": {
+        "job_id": "ac3c9e44-8a8c-4b25-91db-3f1938f8d084",
+        "estimate_bytes": 16342400,
+        "bytes_processed": 16342400,
+        "bytes_billed": 16777216,
+        "cache_hit": false,
+        "slot_ms": 114,
+        "elapsed_ms": 157,
+        "rows_returned": 13,
+        "cost_usd": 0.00011147,
+        "materialized_view_used": false
+      },
+      "tuned": {
+        "job_id": "e1934706-f8ad-4ccd-962f-e90f219d9973",
+        "estimate_bytes": 5622040,
+        "bytes_processed": 5622040,
+        "bytes_billed": 10485760,
+        "cache_hit": false,
+        "slot_ms": 213,
+        "elapsed_ms": 113,
+        "rows_returned": 13,
+        "cost_usd": 3.835e-05,
+        "materialized_view_used": false
+      },
+      "ratio": 2.91
+    },
+    {
+      "query": "q2_daily_demand_by_country",
+      "untuned": {
+        "job_id": "e00f6a0b-7e3a-4e65-8a46-629583eb8197",
+        "estimate_bytes": 37404945,
+        "bytes_processed": 37404945,
+        "bytes_billed": 41943040,
+        "cache_hit": false,
+        "slot_ms": 139,
+        "elapsed_ms": 175,
+        "rows_returned": 8791,
+        "cost_usd": 0.00025515,
+        "materialized_view_used": false
+      },
+      "tuned": {
+        "job_id": "5d452595-73d9-404d-99ed-51e938e21fd7",
+        "estimate_bytes": 13377983,
+        "bytes_processed": 13377983,
+        "bytes_billed": 41943040,
+        "cache_hit": false,
+        "slot_ms": 123,
+        "elapsed_ms": 148,
+        "rows_returned": 8791,
+        "cost_usd": 9.125e-05,
+        "materialized_view_used": false
+      },
+      "ratio": 2.8
+    },
+    {
+      "query": "q3_product_ratings",
+      "untuned": {
+        "job_id": "4c7d4df2-25fd-4fd3-8b94-82978b8445ee",
+        "estimate_bytes": 4007592,
+        "bytes_processed": 4007592,
+        "bytes_billed": 20971520,
+        "cache_hit": false,
+        "slot_ms": 109,
+        "elapsed_ms": 107,
+        "rows_returned": 124,
+        "cost_usd": 2.734e-05,
+        "materialized_view_used": false
+      },
+      "tuned": {
+        "job_id": "26c98697-5e1d-4687-a1f3-51e48637a551",
+        "estimate_bytes": 4007592,
+        "bytes_processed": 4007592,
+        "bytes_billed": 20971520,
+        "cache_hit": false,
+        "slot_ms": 56,
+        "elapsed_ms": 124,
+        "rows_returned": 124,
+        "cost_usd": 2.734e-05,
+        "materialized_view_used": false
+      },
+      "ratio": 1.0
+    }
+  ],
+  "collapse": {
+    "order_lines": 408560,
+    "product_day": 356981,
+    "product_week": 224752,
+    "product_month": 165141,
+    "product": 41323,
+    "lines_per_row": {
+      "product_day": 1.14,
+      "product_week": 1.82,
+      "product_month": 2.47,
+      "product": 9.89
+    }
+  },
+  "materialized_view": {
+    "from_table": {
+      "job_id": "7c328f4b-b5fe-43dc-a999-2ea5ff7225ea",
+      "estimate_bytes": 422800,
+      "bytes_processed": 422800,
+      "bytes_billed": 10485760,
+      "cache_hit": false,
+      "slot_ms": 41,
+      "elapsed_ms": 117,
+      "rows_returned": 8618,
+      "cost_usd": 2.88e-06,
+      "materialized_view_used": false
+    },
+    "from_view": {
+      "job_id": "e72ed3fe-49fe-49a4-b3da-62ab75caec30",
+      "estimate_bytes": 422800,
+      "bytes_processed": 422800,
+      "bytes_billed": 10485760,
+      "cache_hit": false,
+      "slot_ms": 33,
+      "elapsed_ms": 126,
+      "rows_returned": 8618,
+      "cost_usd": 2.88e-06,
+      "materialized_view_used": false
+    }
+  },
+  "cap": {
+    "own_table": {
+      "query": "q1_monthly_revenue on the tuned tables",
+      "cap": 1000000,
+      "tripped": true,
+      "reason": "bytesBilledLimitExceeded",
+      "error": "Query exceeded limit for bytes billed: 1000000. 10485760 or higher required."
+    },
+    "public_table": {
+      "query": "SELECT * FROM `bigquery-public-data.samples.github_timeline`",
+      "estimate_bytes": 3801936185,
+      "cap": 1073741824,
+      "tripped": true,
+      "reason": "bytesBilledLimitExceeded",
+      "error": "Query exceeded limit for bytes billed: 1073741824. 3802136576 or higher required."
+    }
+  },
+  "tables": {
+    "customer_shipping": {
+      "type": "TABLE",
+      "rows": 200001,
+      "logical_bytes": 10688978,
+      "partitioning": null,
+      "clustering": null
+    },
+    "daily_demand": {
+      "type": "MATERIALIZED_VIEW",
+      "rows": 356981,
+      "logical_bytes": 18563012,
+      "partitioning": "MONTH",
+      "clustering": [
+        "p_id"
+      ]
+    },
+    "order_items": {
+      "type": "TABLE",
+      "rows": 408560,
+      "logical_bytes": 21245120,
+      "partitioning": "MONTH",
+      "clustering": [
+        "p_id"
+      ],
+      "partitions": 37,
+      "avg_partition_bytes": 574192
+    },
+    "order_items_day": {
+      "type": "TABLE",
+      "rows": 408560,
+      "logical_bytes": 21245120,
+      "partitioning": "DAY",
+      "clustering": [
+        "p_id"
+      ],
+      "partitions": 1096,
+      "avg_partition_bytes": 19384
+    },
+    "order_items_untuned": {
+      "type": "TABLE",
+      "rows": 408560,
+      "logical_bytes": 21245120,
+      "partitioning": null,
+      "clustering": null
+    },
+    "orders": {
+      "type": "TABLE",
+      "rows": 222644,
+      "logical_bytes": 14138834,
+      "partitioning": "MONTH",
+      "clustering": null,
+      "partitions": 37,
+      "avg_partition_bytes": 382131
+    },
+    "orders_untuned": {
+      "type": "TABLE",
+      "rows": 222644,
+      "logical_bytes": 14138834,
+      "partitioning": null,
+      "clustering": null
+    },
+    "product": {
+      "type": "TABLE",
+      "rows": 42858,
+      "logical_bytes": 16314622,
+      "partitioning": null,
+      "clustering": null
+    },
+    "product_reviews": {
+      "type": "TABLE",
+      "rows": 111322,
+      "logical_bytes": 3005906,
+      "partitioning": null,
+      "clustering": [
+        "p_id"
+      ]
+    },
+    "product_reviews_untuned": {
+      "type": "TABLE",
+      "rows": 111322,
+      "logical_bytes": 3005906,
+      "partitioning": null,
+      "clustering": null
+    },
+    "review": {
+      "type": "TABLE",
+      "rows": 111322,
+      "logical_bytes": 28618604,
+      "partitioning": null,
+      "clustering": [
+        "rating"
+      ]
+    },
+    "review_untuned": {
+      "type": "TABLE",
+      "rows": 111322,
+      "logical_bytes": 28618604,
+      "partitioning": null,
+      "clustering": null
+    },
+    "shipping_details": {
+      "type": "TABLE",
+      "rows": 200001,
+      "logical_bytes": 18773635,
+      "partitioning": null,
+      "clustering": null
+    }
+  }
+}
