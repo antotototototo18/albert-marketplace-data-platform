@@ -62,6 +62,21 @@ Opérations :
 déjà : les mêmes données en CSV (206 290 602 o) coûteraient 3,3 fois plus cher
 à stocker.
 
+## L04 : warehouse BigQuery
+
+État de `group6_warehouse` le 26 octobre 2026
+([mesures](evidence/l04-warehouse-measurements.json)). Le choix du compteur est
+dans l'[ADR-0004](adr/0004-warehouse-pricing.md).
+
+| Élément | Volume | Coût | Source |
+|---|---|---|---|
+| Tables natives, vue `daily_demand` comprise | 219 602 295 o de stockage logique, dont 88 253 584 o de copies de mesure (`*_untuned`, `order_items_day`) | ~$0.004 par mois à $0.020 par GiB-mois (tarif du cours L04) ; moitié moins après 90 jours sans modification | Tailles lues par l'API BigQuery |
+| Tables externes `group6_bronze` | Aucune ligne stockée | $0 ; chaque requête relit le bucket | |
+| Requête type du projet, à la demande | 4 à 13 Mo traités, 10 à 40 Mio facturés (minimum de 10 Mio par table lue) | $0.00007 à $0.0003 par requête, dans le Tio gratuit mensuel | [warehouse-tuning.md](warehouse-tuning.md) |
+| Plafond par requête | 1 GiB | Au plus $0.0073 par requête avant refus ; un refus ne coûte rien | Jobs refusés, `JOBS_BY_USER` |
+
+Supprimer les copies de mesure après relecture retire 40 % du stockage.
+
 ## Si les données étaient cent fois plus volumineuses
 
 Le legacy passerait à 5,8 GiB, soit environ $0.12 par mois en Standard
