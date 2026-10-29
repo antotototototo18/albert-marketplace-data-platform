@@ -19,7 +19,7 @@ the end of the course it holds the platform your group defends orally:
 | Anthony Rascle | [@anthonyrascle43-stack](https://github.com/anthonyrascle43-stack) | Data Engineer |
 | Antoine Rabeau | [@antorabo75](https://github.com/antorabo75) | Data Engineer |
 | Colin Sibieude | [@csb123d](https://github.com/csb123d) | Data Engineer |
-| Lenny Santus | [@lsantus-mines](https://github.com/lsantus-mines) | Intern Data Analyst |
+| Lenny Santus | [@lsantus-mines](https://github.com/lsantus-mines) | Data Analyst |
 | Benjamin Caujolle | [@BenjaminAHS](https://github.com/BenjaminAHS) | Senior Data Engineer |
 
 Technical responsibilities are agreed by the group as the course progresses.
