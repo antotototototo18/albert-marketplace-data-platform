@@ -68,6 +68,12 @@ see [ingestion/README.md](ingestion/README.md), the
 [ingestion decision](docs/adr/0003-ingestion-modes.md) and the
 [failure modes](docs/ingestion-failure-modes.md).
 
+The L04 warehouse loads the working set into BigQuery (`group6_warehouse`):
+see [warehouse/README.md](warehouse/README.md), the measured
+[tuning and costs](docs/warehouse-tuning.md), the
+[pricing decision](docs/adr/0004-warehouse-pricing.md) and the
+[slow-query runbook](docs/runbooks/slow-query.md).
+
 ## How this repo grows
 
 | Lesson | What your group adds | Where |
