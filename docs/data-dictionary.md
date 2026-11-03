@@ -159,6 +159,13 @@ Tous les comptes : les 100 000 acheteurs de `buyer` et les 30 766 vendeurs de
 
 ### `orders` — 222 644 lignes
 
+**Chaque commande est exportée deux fois** (constaté en L05) : la commande
+`order_id + 111 322` a le même acheteur, le même moyen de paiement et les mêmes
+lignes que `order_id`, datée 0 à 4 jours plus tard. Il y a donc 111 322
+commandes réelles ; les compter toutes double le chiffre d'affaires
+(39 199 900,62 contre 19 599 950,31). Traité dans
+[`int_orders__deduplicated`](../transform/models/intermediate/int_orders__deduplicated.sql).
+
 | Colonne | Type observé | Signification | Donnée personnelle |
 |---|---|---|---|
 | `order_id` | entier | Identifiant de la commande, unique | Non |
@@ -175,8 +182,8 @@ Pas de colonne `unnamed_0`.
 |---|---|---|---|
 | `order_id` | entier | Commande, vers `orders` | Non |
 | `p_id` | texte | Produit | Non |
-| `qty` | entier | Quantité (1 à 9) | Non |
-| `price_at_purchase` | décimal (2 déc.) | Prix unitaire payé | Non |
+| `qty` | entier | Quantité (1 à 12 ; la v1 indiquait 1 à 9, corrigé en L05) | Non |
+| `price_at_purchase` | décimal (2 déc.) | Prix unitaire payé ; 0.00 sur 30 lignes | Non |
 
 ### `payment` — 222 644 lignes
 
