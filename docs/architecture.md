@@ -119,7 +119,8 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | Connecteur Airbyte (L03) | Xmin, Incremental \| Append, 24 h ; `pwd`, `card_no` et `cvv` absents des fichiers. Synchro partielle : 6 streams complets sur 9 ; voir [la preuve](evidence/l03-airbyte-sync.json). Clé HMAC de compte utilisateur, à remplacer. |
 | Warehouse (L04) | `group6_warehouse`, `europe-west1` : 7 tables natives aux comptes du bronze, `orders` et `order_items` partitionnées par mois (37 partitions), vue `daily_demand` ; avant/après mesurés cache désactivé, plafond de 1 GiB vu en échec ; voir [les mesures](evidence/l04-warehouse-measurements.json) et [les réglages](warehouse-tuning.md). |
 | Transformations | À réaliser en L05. |
-| Docker, orchestration et Terraform | À réaliser de L06 à L08. |
+| Docker (L06) | Deux images privées `group6-ingestion` et `group6-transform` dans Artifact Registry `dataeng`, `europe-west1`, base et dépendances fixées, UID 10001. Reproduction d'ingestion après suppression locale réussie ; rétention refusée par IAM, voir [le transcript](reproduce.md). |
+| Orchestration et Terraform | À réaliser de L07 à L08. |
 
 ## Decisions
 
@@ -129,6 +130,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | [0002](adr/0002-bronze-layout.md) | Bronze legacy en Parquet zstd, colonnes texte, partition `ingested_date` | Proposed |
 | [0003](adr/0003-ingestion-modes.md) | Xmin pour le connecteur, curseur d'ID pour l'extracteur, Kafka au moins une fois | Proposed |
 | [0004](adr/0004-warehouse-pricing.md) | BigQuery à la demande, plafonné à 1 GiB par requête | Proposed |
+| [0006](adr/0006-image-tags.md) | Images privées, tags de build datés, rollback par digest et rétention | Proposed ; suppression bloquée par IAM |
 
 ## Change log
 
@@ -138,6 +140,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | 2026-10-16 | L02 | Bucket du groupe, bronze legacy chargé, layout mesuré, lifecycle, IAM et coûts ; diagramme distinguant le construit de la cible. |
 | 2026-10-16 | L03 | Trois chemins d'ingestion vers bronze (connecteur, extracteur, consumer), DLQ et état de l'extracteur. |
 | 2026-10-26 | L04 | Tables externes sur bronze, jeu de travail chargé en tables natives réglées, vue `daily_demand`, plafond par requête. Airbyte et l'extracteur rejoignent silver en L05, pas le chargement natif. |
+| 2026-11-03 | L06 | Deux images construites et publiées, reproduction figée vérifiée après suppression/pull. Rétention tentée mais permission de suppression manquante. |
 
 Mettre cette page à jour à la fin de chaque étape, en remplaçant les intentions
 par les ressources et garanties réellement vérifiées. Le [suivi du projet](project-plan.md)
