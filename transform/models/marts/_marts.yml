@@ -1,0 +1,119 @@
+version: 2
+
+models:
+  - name: fct_order_items
+    description: >
+      One row per product in a real order, export twins removed.
+      GRAIN: (order_id, p_id). line_amount = qty x price_at_purchase, the price
+      paid, never the current catalogue price. country_code is the buyer's current
+      default address, a proxy for the shipping country.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [order_id, p_id]
+    columns:
+      - name: order_id
+        data_tests: [not_null]
+      - name: p_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_product')
+                field: p_id
+      - name: order_date
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_day
+      - name: country_code
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_country')
+                field: country_code
+          # Every order resolves to a country today. UNKNOWN exists so units are
+          # never dropped; the day it appears, someone should look.
+          - accepted_values:
+              arguments:
+                values: [DE, FR, IT, ES, NL, BE]
+              config:
+                severity: warn
+      - name: qty
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+      - name: line_amount
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+  - name: fct_daily_demand
+    description: >
+      One row per product per country per day with at least one order line.
+      GRAIN: (p_id, country_code, order_date). units_sold is units ordered in real
+      orders; the source has no payment or return status, so it is not net sales.
+      Sparse: no row does not prove zero demand.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [p_id, country_code, order_date]
+    columns:
+      - name: p_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_product')
+                field: p_id
+      - name: country_code
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_country')
+                field: country_code
+      - name: order_date
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_day
+      - name: units_sold
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+
+  - name: dim_product
+    description: "One row per product in the catalogue, with its review summary. GRAIN: (p_id)."
+    columns:
+      - name: p_id
+        data_tests: [unique, not_null]
+      - name: avg_rating
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 5
+
+  - name: dim_date
+    description: "One row per calendar day, first to last order date, no gaps. GRAIN: (date_day)."
+    columns:
+      - name: date_day
+        data_tests: [unique, not_null]
+
+  - name: dim_country
+    description: "One row per ISO country code, plus UNKNOWN. GRAIN: (country_code)."
+    columns:
+      - name: country_code
+        data_tests: [unique, not_null]
