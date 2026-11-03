@@ -1,0 +1,31 @@
+uid=10001(job) gid=10001(job) groups=10001(job)
+No broken requirements found.
+usage: extract_orders.py [-h] [--batch-size BATCH_SIZE] [--attempts ATTEMPTS]
+                         [--interval-seconds INTERVAL_SECONDS]
+
+Append new orders, at least once for visible increasing IDs; updates/deletes
+are not captured.
+
+options:
+  -h, --help            show this help message and exit
+  --batch-size BATCH_SIZE
+  --attempts ATTEMPTS
+  --interval-seconds INTERVAL_SECONDS
+usage: consume_clickstream.py [-h] [--max-messages MAX_MESSAGES]
+
+Deliver Kafka events at least once by persisting valid rows and rejects before
+committing offsets.
+
+options:
+  -h, --help            show this help message and exit
+  --max-messages MAX_MESSAGES
+/app/ingestion/export_airbyte_catalog.py
+/app/ingestion/storage.py
+/app/ingestion/check_airbyte_export.py
+/app/ingestion/extract_orders.py
+/app/ingestion/clickstream.schema.json
+/app/ingestion/__init__.py
+/app/ingestion/consume_clickstream.py
+/home/job/.bashrc
+/home/job/.bash_logout
+/home/job/.profile

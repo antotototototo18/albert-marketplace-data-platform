@@ -1,0 +1,27 @@
+# Allowlist: only job sources and their dependency manifests enter the context.
+**
+!ingestion/
+!ingestion/*.py
+!ingestion/clickstream.schema.json
+!ingestion/requirements.lock
+!transform/
+!transform/requirements.lock
+!transform/dbt_project.yml
+!transform/profiles.yml
+!transform/packages.yml
+!transform/package-lock.yml
+!transform/models/
+!transform/models/**
+!transform/macros/
+!transform/macros/**
+!transform/tests/
+!transform/tests/**
+# Explicit defense even if the allowlist is expanded later.
+**/.env
+**/.env.*
+**/.venv/**
+**/venv/**
+**/*credentials*.json
+**/*-key.json
+**/service-account*.json
+**/__pycache__/**
