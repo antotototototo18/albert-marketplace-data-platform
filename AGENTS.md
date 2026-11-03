@@ -10,7 +10,7 @@
 - Ne jamais ajouter de signature d'assistant, de mention de génération par IA ou de ligne `Co-authored-by` attribuée à une IA aux commits ou aux pull requests.
 - Utiliser l'identité Git de l'utilisateur pour ses opérations ; ne jamais utiliser une identité d'assistant comme auteur ou committer.
 - Préserver l'attribution des contributions existantes et ne pas attribuer un travail à un autre membre.
-- Les membres du groupe sont `anthonyrascle43-stack`, `antorabo75`, `csb123d`, `lsantus-mines` et `BenjaminAHS`.
+- Les membres du groupe sont `antotototototo18`, `antorabo75`, `csb123d`, `lsantus-mines` et `BenjaminAHS`.
 - La CI doit refuser les contributeurs et auteurs de commits hors de ces cinq comptes ainsi que les attributions à des agents IA. Ne pas retirer ou contourner ce contrôle.
 
 ## Travail en groupe
