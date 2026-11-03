@@ -16,7 +16,7 @@ the end of the course it holds the platform your group defends orally:
 
 | Name | GitHub | Role |
 |---|---|---|
-| Anthony Rascle | [@anthonyrascle43-stack](https://github.com/anthonyrascle43-stack) | Data Engineer |
+| Anthony Rascle | [@antotototototo18](https://github.com/antotototototo18) | Data Engineer |
 | Antoine Rabeau | [@antorabo75](https://github.com/antorabo75) | Data Engineer |
 | Colin Sibieude | [@csb123d](https://github.com/csb123d) | Data Engineer |
 | Lenny Santus | [@lsantus-mines](https://github.com/lsantus-mines) | Data Analyst |
@@ -30,7 +30,7 @@ Every pull request is reviewed inside its author's squad.
 
 | Squad | Members | Reviews |
 |---|---|---|
-| A | Anthony ([@anthonyrascle43-stack](https://github.com/anthonyrascle43-stack)), Antoine ([@antorabo75](https://github.com/antorabo75)) | Anthony ↔ Antoine |
+| A | Anthony ([@antotototototo18](https://github.com/antotototototo18)), Antoine ([@antorabo75](https://github.com/antorabo75)) | Anthony ↔ Antoine |
 | B | Benjamin ([@BenjaminAHS](https://github.com/BenjaminAHS)), Lenny ([@lsantus-mines](https://github.com/lsantus-mines)) | Benjamin ↔ Lenny |
 | Floating | Colin ([@csb123d](https://github.com/csb123d)) | Joins one squad per lesson, in turn |
 

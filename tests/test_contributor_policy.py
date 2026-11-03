@@ -8,7 +8,7 @@ from urllib.error import HTTPError
 from scripts.check_contributors import ALLOWED_LOGINS, PolicyError, audit, list_pages, main
 
 
-MEMBER = {"login": "anthonyrascle43-stack", "type": "User"}
+MEMBER = {"login": "antotototototo18", "type": "User"}
 
 
 def make_commit():
