@@ -1,0 +1,18 @@
+# No secret in this file: oauth reads the caller's Application Default Credentials
+# (gcloud auth application-default login). DBT_DATASET lets each member build in
+# their own datasets; the default is the group's shared ones.
+albert_marketplace:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT_ID', 'data-engineering-i1') }}"
+      dataset: "{{ env_var('DBT_DATASET', 'group6') }}"
+      location: europe-west1
+      threads: 4
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      priority: interactive
+      # The 1 GiB per-query cap of ADR-0004, applied to every query dbt sends.
+      maximum_bytes_billed: 1073741824
