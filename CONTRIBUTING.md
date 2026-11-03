@@ -6,7 +6,7 @@
 2. Cloner le projet :
 
    ```sh
-   git clone https://github.com/anthonyrascle43-stack/albert-marketplace-data-platform.git
+   git clone https://github.com/antotototototo18/albert-marketplace-data-platform.git
    cd albert-marketplace-data-platform
    ```
 

@@ -12,7 +12,7 @@ from urllib.request import Request, urlopen
 ALLOWED_LOGINS = frozenset(
     login.casefold()
     for login in (
-        "anthonyrascle43-stack",
+        "antotototototo18",
         "antorabo75",
         "csb123d",
         "lsantus-mines",

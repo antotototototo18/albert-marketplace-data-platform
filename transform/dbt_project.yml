@@ -1,0 +1,33 @@
+name: albert_marketplace
+version: "1.0.0"
+config-version: 2
+profile: albert_marketplace
+require-dbt-version: [">=1.10.0", "<2.0.0"]
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  # Clickstream bronze refuses a query without a dt filter
+  # (require_hive_partition_filter). Its first partition is 2026-10.
+  clickstream_start_date: "2026-10-01"
+
+# Silver is views, gold is tables: docs/adr/0005-materialisations.md.
+# Datasets: <target dataset>_silver and <target dataset>_gold, e.g. group6_silver.
+models:
+  albert_marketplace:
+    staging:
+      +materialized: view
+      +schema: silver
+    intermediate:
+      +materialized: view
+      +schema: silver
+    marts:
+      +materialized: table
+      +schema: gold
+
+data_tests:
+  albert_marketplace:
+    +severity: error
