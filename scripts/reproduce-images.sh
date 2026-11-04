@@ -1,9 +1,13 @@
 #!/bin/sh
 # Run from repository root. Only Docker and a POSIX shell are required.
 set -eu
+# Git Bash on Windows rewrites /output and /config into host paths; disable it.
+export MSYS_NO_PATHCONV=1
 IMAGE=${1:?Usage: sh scripts/reproduce-images.sh REGISTRY/ingestion:TAG}
 case "$IMAGE" in *:20*) ;; *) echo 'Expected an explicitly dated image tag' >&2; exit 1;; esac
 RUN_ID="l06-$(date -u +%Y%m%d%H%M%S)-$$"
+# Remove this run's database and network even when a step fails.
+trap 'docker rm -f "$RUN_ID-db" >/dev/null 2>&1 || true; docker network rm "$RUN_ID" >/dev/null 2>&1 || true' EXIT
 PG=postgres:17.6-bookworm@sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3
 set -x
 docker network create "$RUN_ID"
@@ -47,10 +51,12 @@ docker image inspect "$IMAGE" --format 'user={{.Config.User}} id={{.Id}} digests
 run_job "$RUN_ID-before"
 BEFORE=$(check_output "$RUN_ID-before")
 printf '%s\n' "$BEFORE"
+IMAGE_ID=$(docker image inspect "$IMAGE" --format '{{.Id}}')
 docker rmi "$IMAGE"
 docker images "$IMAGE"
-if docker image inspect "$IMAGE"; then
-  echo 'Image still present: reproduction aborted' >&2
+# Check the image ID, not only the tag: with another local tag, rmi only untags.
+if docker image inspect "$IMAGE" || docker image inspect "$IMAGE_ID"; then
+  echo 'Image still present locally (remove its other tags first): reproduction aborted' >&2
   exit 1
 fi
 docker pull --platform linux/amd64 "$IMAGE"
@@ -60,8 +66,5 @@ AFTER=$(check_output "$RUN_ID-after")
 printf '%s\n' "$AFTER"
 test "$BEFORE" = "$AFTER"
 printf '%s\n' 'PASS: identical rows and canonical content hash after image deletion and pull.'
-# Only the resources created by this run are removed; output volumes are retained.
-docker stop "$RUN_ID-db"
-docker rm "$RUN_ID-db"
-docker network rm "$RUN_ID"
+# The exit trap removes only this run's database and network; output volumes are retained.
 printf 'Retained evidence volumes: %s-before %s-after\n' "$RUN_ID" "$RUN_ID"

@@ -78,9 +78,12 @@ see [warehouse/README.md](warehouse/README.md), the measured
 
 You need Docker Desktop (running), a browser, a terminal with a POSIX shell,
 and your own course GCP account with access to the private `dataeng` registry.
-No host Python, dbt, Git or Google SDK is required. In GitHub, select branch
-`Lenny`, choose **Code → Download ZIP**, extract it and open a terminal in the
+No host Python, dbt, Git or Google SDK is required. In GitHub, on branch
+`main`, choose **Code → Download ZIP**, extract it and open a terminal in the
 extracted repository. The course template remains restricted to course use.
+
+On Windows, use Git Bash and run `export MSYS_NO_PATHCONV=1` first: otherwise
+Git Bash rewrites container paths such as `/config` into `C:/Program Files/Git/config`.
 
 Authenticate using the Google CLI inside a pinned container. These commands
 store credentials in a Docker volume, outside the repository and images:
