@@ -180,7 +180,7 @@ group remains to be performed and recorded.
 | L04 · SQL warehouses | Warehouse tables, three costed queries | `docs/` |
 | L05 · dbt and the medallion pattern | Silver and gold models, tests | `transform/` (planned) |
 | L06 · Packaging data jobs | Two published images and ingestion reproduction; retention deletion blocked by IAM | `ingestion/`, `transform/`, [evidence](docs/reproduce.md) |
-| L07 · Airflow | A scheduled DAG | `orchestration/` |
+| L07 · Airflow | A daily DAG: extract a day, merge into bronze, dbt; alert, quality gate, back-fill | `orchestration/`, [docs](docs/orchestration.md) |
 | L08 · Terraform | The platform as code, format and validation in CI, local plan | `infra/`, `.github/workflows/` |
 | L09 · FinOps | Labels, a budget alert, one measured optimisation | `infra/`, `docs/` |
 | L10 · Security and governance | Least-privilege access, PII redaction, data classification | `infra/`, `transform/`, `docs/` |

@@ -23,7 +23,7 @@ Les tests génériques sont déclarés dans les YAML de
 
 | # | Critère | Test | Où |
 |---|---|---|---|
-| C1 | **Le chiffre d'affaires n'est pas compté deux fois.** L'export écrit chaque commande deux fois ; une seule de chaque paire est gardée. | `assert_each_kept_order_has_one_twin` : chaque groupe de commandes identiques (acheteur, paiement, lignes) compte exactement deux fois plus de lignes exportées que de commandes gardées | [tests/](../transform/tests/assert_each_kept_order_has_one_twin.sql) |
+| C1 | **Le chiffre d'affaires n'est pas compté deux fois.** L'export écrit chaque commande deux fois ; une seule de chaque paire est gardée. | `assert_each_kept_order_has_one_twin` : chaque groupe de commandes identiques (acheteur, paiement, lignes) de l'export legacy (lignes avec `unnamed_0`, depuis L07) compte exactement deux fois plus de lignes exportées que de commandes gardées | [tests/](../transform/tests/assert_each_kept_order_has_one_twin.sql) |
 | C2 | **Une ligne de commande n'apparaît qu'une fois** dans le fait. | `unique_combination_of_columns [order_id, p_id]` sur `fct_order_items` | [_marts.yml](../transform/models/marts/_marts.yml) |
 | C3 | **La demande quotidienne n'a qu'une ligne par produit, pays et jour.** | `unique_combination_of_columns [p_id, country_code, order_date]` sur `fct_daily_demand` | [_marts.yml](../transform/models/marts/_marts.yml) |
 | C4 | **Aucune jointure n'ajoute ni ne perd d'unités** entre les lignes des commandes réelles et gold. | `assert_units_conserved_into_gold` : même nombre de lignes et même `SUM(qty)` dans `fct_order_items` et `fct_daily_demand` | [tests/](../transform/tests/assert_units_conserved_into_gold.sql) |
@@ -59,6 +59,15 @@ pas un chargement planifié, et le consumer clickstream ne tourne pas en continu
 quotidienne, ADR-0003) ; ils passeront quand L07 planifiera l'ingestion. Ne pas
 les relâcher pour faire passer le contrôle.
 
+**Depuis L07**, `orders` et `order_items` lisent `_loaded_at`, posé par chaque
+`MERGE` du DAG, mais seulement sur les lignes que la période contient : un jour
+sans commande, le run est vert et `_loaded_at` n'avance pas, donc la fraîcheur
+vieillit. C'est le signal voulu, le seul qui attrape un run « vert qui n'a rien
+fait » (la base source s'arrête au 16 septembre : les runs planifiés de novembre
+n'extraient aucune ligne). Les cinq
+dimensions restent sur l'export legacy et restent donc en erreur de fraîcheur,
+honnêtement : le DAG ne les extrait pas.
+
 ## Critères qui ne sont pas des tests
 
 | Critère | Pourquoi il n'est pas testé |
@@ -68,7 +77,7 @@ les relâcher pour faire passer le contrôle.
 | **Une absence de ligne dans `fct_daily_demand` veut dire « zéro vente ».** | La table est creuse par choix. Un jour sans ligne peut aussi venir d'une partition source manquante ; seule la fraîcheur (C16) couvre une partie de ce cas. Une grille dense avec des zéros serait un autre modèle, à valider avec l'équipe ML. |
 | **Le chiffre d'affaires correspond aux paiements encaissés.** | Le profil L02 montre que `payment.amount` égale `SUM(qty × price_at_purchase)` pour chaque commande, mais `payment` n'est pas déclarée en bronze BigQuery. Le test de réconciliation devient possible dès qu'elle l'est. |
 | **Les 30 lignes à 0,00 € sont légitimes.** | Rien dans la source ne dit si ce sont des cadeaux ou des erreurs. Elles sont gardées, et le test autorise un prix nul (C11) ; la question est à poser au métier, pas à un test. |
-| **La règle des jumeaux reste vraie pour le flux Airbyte.** | C1 décrit l'export legacy. Le jour où le flux Airbyte remplace l'export, si ses commandes ne sont plus doublées, C1 échouera : c'est voulu. Il faudra alors revoir `int_orders__deduplicated` et ce test ensemble, pas supprimer le test seul. |
+| **La règle des jumeaux reste vraie pour les commandes arrivées après l'export.** | Vérifié en L07 sur les 468 commandes live des 15 et 16 septembre 2026, extraites par le DAG : 426 sont seules dans leur groupe et 21 paires sont des doublons du flux live (même acheteur, même paiement, mêmes lignes, même jour, `order_id` séparés de 47). C1 aurait échoué sur des données saines ; il est désormais limité à l'export legacy, et `int_orders__deduplicated`, inchangé, retire bien le second de chaque paire live (447 commandes gardées, prédit et mesuré). Aucun test ne vérifie encore la règle sur le flux live : c'est une lacune assumée, à revoir si le volume live grandit. |
 
 ## Comment les lancer
 
