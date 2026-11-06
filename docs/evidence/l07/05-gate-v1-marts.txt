@@ -1,0 +1,12 @@
+L07 gate drill, v1 (dbt_run >> dbt_test), run backfill__2026-09-17 (period 2026-09-16), 2026-11-06
+Run state: failed. dbt_test failed on its 3 attempts (Airflow try 5, 6, 7), dbt_run had already succeeded.
+Failing tests: dbt_utils_unique_combination_of_columns_stg_order_items_order_id__p_id (FAIL 1)
+               dbt_utils_unique_combination_of_columns_fct_order_items_order_id__p_id (FAIL 1)
+
+Gold for 2026-09-16      clean baseline   after poisoned dbt_run
+units_sold               1201             1211
+fct_order_items lines    364              365
+revenue EUR              32802.35         32890.25
+copies of the line       1                2
+
+Verdict: the bad number reached the marts before any test ran. An alarm, not a lock.

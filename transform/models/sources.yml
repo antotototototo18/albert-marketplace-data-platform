@@ -1,7 +1,9 @@
 version: 2
 
 # Bronze, declared and never built by dbt. The tables are BigQuery external tables
-# over gs://data-engineering-i1-group6/bronze (warehouse/02_bronze_external.sql).
+# over gs://data-engineering-i1-group6/bronze (warehouse/02_bronze_external.sql),
+# except orders and order_items: since L07 they are native tables the Airflow DAG
+# merges into (warehouse/06_bronze_native.sql, ADR-0007), legacy rows included.
 #
 # Freshness: each threshold is answered by "what breaks, and for whom, if this is
 # this old?". The reasons are next to the numbers, and summarised in
@@ -21,8 +23,13 @@ sources:
         TIMESTAMP(PARSE_DATE('%Y-%m-%d', REGEXP_EXTRACT(_FILE_NAME, r'ingested_date=(\d{4}-\d{2}-\d{2})')))
     tables:
       - name: orders
-        description: One row per order as exported. Every order appears twice (see int_orders__deduplicated).
+        identifier: orders_raw
+        description: >
+          One row per order, merged on order_id by the DAG. Every order of the legacy
+          export appears twice (see int_orders__deduplicated); scheduled extracts do not.
         config:
+          # A native table has no _FILE_NAME: the merge stamps each row it writes.
+          loaded_at_field: _loaded_at
           # The ML team trains every morning on fct_daily_demand, and the sync runs
           # every 24 h. One missed sync (24 h + 2 h for the sync itself) is a warning.
           # A second one means the morning's training set has a whole day with zero
@@ -32,8 +39,10 @@ sources:
             error_after: {count: 48, period: hour}
 
       - name: order_items
-        description: One row per product in an order. No unnamed_0 column.
+        identifier: order_items_raw
+        description: One row per product in an order, merged on (order_id, p_id) by the DAG. No unnamed_0 column.
         config:
+          loaded_at_field: _loaded_at
           # Same sync and same consumer as orders, so the same numbers: an order
           # whose lines have not arrived counts zero units, which is worse than a
           # missing order.
