@@ -1,0 +1,14 @@
+Digests:
+- europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-retention-probe@sha256:6c7c0a1e426a85518e42cff23f724c8f457acfe73b61e03c35d3a490fcb48a1a
+
+Tags:
+- europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-retention-probe:20261103-step6-01
+ERROR: (gcloud.artifacts.docker.images.delete) PERMISSION_DENIED: Permission 'artifactregistry.tags.delete' denied on resource '//artifactregistry.googleapis.com/projects/data-engineering-i1/locations/europe-west1/repositories/dataeng/packages/group6-retention-probe/tags/20261103-step6-01' (or it may not exist). Remediate access with this Troubleshooter URL or share it with your administrator - https://console.cloud.google.com/iam-admin/troubleshooter/summary;errorId=CiQwMWExYTI5Mi04NDdlLTcxZTYtOGExYS01ZjIzOWVhOTEzMjQSf3Byb2plY3RzL2RhdGEtZW5naW5lZXJpbmctaTEvbG9jYXRpb25zL2V1cm9wZS13ZXN0MS9yZXBvc2l0b3JpZXMvZGF0YWVuZy9wYWNrYWdlcy9ncm91cDYtcmV0ZW50aW9uLXByb2JlL3RhZ3MvMjAyNjExMDMtc3RlcDYtMDE%3D . This command is authenticated as lsantus@albertschool.com which is the active account specified by the [core/account] property.
+- '@type': type.googleapis.com/google.rpc.ErrorInfo
+  domain: artifactregistry.googleapis.com
+  metadata:
+    error_info_id: CiQwMWExYTI5Mi04NDdlLTcxZTYtOGExYS01ZjIzOWVhOTEzMjQSf3Byb2plY3RzL2RhdGEtZW5naW5lZXJpbmctaTEvbG9jYXRpb25zL2V1cm9wZS13ZXN0MS9yZXBvc2l0b3JpZXMvZGF0YWVuZy9wYWNrYWdlcy9ncm91cDYtcmV0ZW50aW9uLXByb2JlL3RhZ3MvMjAyNjExMDMtc3RlcDYtMDE=
+    permission: artifactregistry.tags.delete
+    resource: projects/data-engineering-i1/locations/europe-west1/repositories/dataeng/packages/group6-retention-probe/tags/20261103-step6-01
+    troubleshooter_url: https://console.cloud.google.com/iam-admin/troubleshooter/summary;errorId=CiQwMWExYTI5Mi04NDdlLTcxZTYtOGExYS01ZjIzOWVhOTEzMjQSf3Byb2plY3RzL2RhdGEtZW5naW5lZXJpbmctaTEvbG9jYXRpb25zL2V1cm9wZS13ZXN0MS9yZXBvc2l0b3JpZXMvZGF0YWVuZy9wYWNrYWdlcy9ncm91cDYtcmV0ZW50aW9uLXByb2JlL3RhZ3MvMjAyNjExMDMtc3RlcDYtMDE%3D
+  reason: IAM_PERMISSION_DENIED
