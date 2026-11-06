@@ -6,7 +6,16 @@
 -- A plain "no two kept orders within 4 days" would be wrong: 4 buyers really
 -- did reorder the same basket within 4 days.
 -- Returns the groups that break the rule; 0 rows = pass.
-with signatures as (
+-- Scope: the legacy export only, the rows carrying its CSV row index (unnamed_0).
+-- Orders extracted by the L07 DAG are not doubled (426 of the 468 orders of
+-- 2026-09-15/16 are alone in their group), so the rule does not describe them.
+with legacy_orders as (
+    select cast(order_id as int64) as order_id
+    from {{ source('bronze_legacy', 'orders') }}
+    where unnamed_0 is not null
+),
+
+signatures as (
     select
         order_id,
         string_agg(
@@ -25,6 +34,7 @@ grouped as (
         count(*)                                         as exported_orders,
         countif(d.order_id is not null)                  as kept_orders
     from {{ ref('stg_orders') }} as o
+    join legacy_orders using (order_id)
     left join signatures as s using (order_id)
     left join {{ ref('int_orders__deduplicated') }} as d using (order_id)
     group by 1, 2, 3
