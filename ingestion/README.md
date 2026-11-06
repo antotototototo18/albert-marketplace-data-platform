@@ -248,5 +248,7 @@ le vrai topic `clickstream`, sans `session_id`. Ils sont dans
 partition a été accepté ; voir [le compte rendu](../docs/evidence/l03-live-run.json).
 
 Pour des tests sur disque, remplacer `BRONZE_URI` par `data/bronze` : mêmes
-formats et mêmes règles, avec un seul writer local. Les images Docker et
-l'orchestration complète seront ajoutées dans les étapes L06 et L07.
+formats et mêmes règles, avec un seul writer local. L'image L06 et sa procédure
+Docker sont dans le [README racine](../README.md#l06--run-the-images-on-a-new-machine).
+La preuve de suppression et téléchargement est dans [docs/reproduce.md](../docs/reproduce.md).
+L'orchestration reste prévue pour L07.

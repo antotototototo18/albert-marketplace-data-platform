@@ -1,5 +1,9 @@
 # transform: dbt, silver et gold (L05)
 
+Pour exécuter dbt sans Python sur l'hôte, utiliser l'image L06 et les commandes
+du [README racine](../README.md#l06--run-the-images-on-a-new-machine).
+Les dépendances Python transitives de l'image sont fixées dans `requirements.lock`.
+
 Le projet dbt du groupe. Il lit bronze (`group6_bronze`, tables externes sur
 GCS), construit silver en vues dans `group6_silver` et gold en tables dans
 `group6_gold` ([ADR-0005](../docs/adr/0005-materialisations.md)).
