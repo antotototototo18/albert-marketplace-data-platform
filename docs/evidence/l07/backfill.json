@@ -1,0 +1,12 @@
+{
+  "dag_id": "group6_marketplace_daily",
+  "date": "2026-11-06",
+  "range": {"from_date": "2026-09-15", "to_date": "2026-09-16", "runs": ["backfill__2026-09-16T00:00:00+00:00", "backfill__2026-09-17T00:00:00+00:00"]},
+  "dry_run_listed_runs": 2,
+  "dbt_target": "group6_l07_bc",
+  "source_counts": {"orders_2026-09-15": 260, "orders_2026-09-16": 208, "order_items_2026-09-15": 492, "order_items_2026-09-16": 364},
+  "before": {"orders_raw": 222644, "order_items_raw": 408560, "orders_raw_from_dag": 0, "fct_daily_demand": 203431},
+  "prediction": {"orders_raw": 223112, "order_items_raw": 409416, "replay": "same counts, only _loaded_at moves"},
+  "after_first_backfill": {"orders_raw": 223112, "order_items_raw": 409416, "orders_raw_from_dag": 468, "fct_daily_demand": 204234, "max_loaded_at": "2026-11-06T12:18:42Z", "state": "success"},
+  "after_replay": {"command": "airflow backfill create ... --reprocess-behavior completed", "orders_raw": 223112, "order_items_raw": 409416, "orders_raw_from_dag": 468, "fct_daily_demand": 204234, "max_loaded_at": "2026-11-06T12:21:54Z", "state": "success"}
+}

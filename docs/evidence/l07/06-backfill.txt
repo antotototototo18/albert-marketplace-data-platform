@@ -1,0 +1,53 @@
+L07 back-fill 2026-09-15..2026-09-16, 2026-11-06 (UTC). Prediction written first in docs/orchestration.md.
+
+== Dry-runs (airflow backfill create ... --dry-run)
+Performing dry run of backfill.
+Printing params:
+    - dag_id = group6_marketplace_daily
+    - from_date = 2026-09-15 00:00:00+00:00
+    - to_date = 2026-09-16 00:00:00+00:00
+    - max_active_runs = None
+    - reverse = False
+    - dag_run_conf = None
+    - reprocess_behavior = None
+    - run_on_latest_version = True
+Runs to be attempted:
+
+Performing dry run of backfill.
+Printing params:
+    - dag_id = group6_marketplace_daily
+    - from_date = 2026-09-15 00:00:00+00:00
+    - to_date = 2026-09-16 00:00:00+00:00
+    - max_active_runs = None
+    - reverse = False
+    - dag_run_conf = None
+    - reprocess_behavior = ReprocessBehavior.COMPLETED
+    - run_on_latest_version = True
+Runs to be attempted:
++---------------------------+-----------------+------------------+
+| logical_date              | partition_key   | partition_date   |
++===========================+=================+==================+
+| 2026-09-15 00:00:00+00:00 |                 |                  |
++---------------------------+-----------------+------------------+
+| 2026-09-16 00:00:00+00:00 |                 |                  |
++---------------------------+-----------------+------------------+
+
+== Before: orders_raw 222644, order_items_raw 408560 (after 03-reset-before-backfill)
+
+== First back-fill (13:34-13:37 UTC), both days, --reprocess-behavior completed
+orders_raw 222852 (+208), order_items_raw 408924 (+364): 15 Sept missing.
+Cause: the logical-date 2026-09-15 run was a manual run made by 'airflow dags test',
+with the manual period 14->15 Sept; the back-fill re-ran it (extract_orders: since 2026-09-14, 402 rows).
+Fix: that manual run deleted from Airflow metadata, then back-fill of 2026-09-15 alone (13:39 UTC):
+extract_orders: since 2026-09-15 until 2026-09-16, rows_written 260.
+
+== After
+--- 1670042 bytes
+{'orders_raw': 223112, 'dag_orders': 468, 'items_raw': 409416}
+--- 27883724 bytes
+{'order_date': datetime.date(2026, 9, 15), 'kept_orders': 239, 'units': 1593}
+{'order_date': datetime.date(2026, 9, 16), 'kept_orders': 208, 'units': 1201}
+
+== Replay of the same back-fill (13:42-13:47 UTC)
+--- 1837216 bytes
+{'orders_raw': 223112, 'items_raw': 409416, 'last_load': datetime.datetime(2026, 11, 6, 13, 42, 37, 790164, tzinfo=datetime.timezone.utc), 'units': 2794}
