@@ -1,9 +1,10 @@
 # Architecture d'Albert's Marketplace
 
-Version L04 du 26 octobre 2026. Le bucket bronze du groupe contient l'export
+Version L07 du 6 novembre 2026. Le bucket bronze du groupe contient l'export
 legacy (L02) et les écritures des trois chemins d'ingestion L03 ; le jeu de
-travail est chargé dans BigQuery (L04) ; le reste du diagramme est la
-**cible proposée** en L01, à relire par le groupe.
+travail est chargé dans BigQuery (L04) ; dbt construit silver et gold (L05) ;
+un DAG Airflow alimente chaque jour les commandes de bronze et relance dbt
+(L07). Le reste du diagramme est la **cible proposée** en L01, à relire par le groupe.
 
 ## Context
 
@@ -34,6 +35,7 @@ flowchart LR
   pg -->|"1. Xmin, toutes les 24 h"| connector["Connecteur Airbyte local / sans pwd, card_no, cvv / L03"]
   pg -->|"2. order_id > curseur"| extract["ingestion/extract_orders.py / retries, curseur durable / L03"]
   kafka -->|"3. au moins une fois"| consumer["ingestion/consume_clickstream.py / JSON Schema v1 / L03"]
+  pg -->|"4. une journee par run, periode du run"| airflow["Airflow local / DAG group6_marketplace_daily, quotidien UTC, alerte e-mail / L07"]
 
   subgraph gcp["Projet data-engineering-i1 / europe-west1"]
     subgraph bucket["gs://data-engineering-i1-group6 / Standard, acces uniforme, public bloque"]
@@ -46,6 +48,7 @@ flowchart LR
     end
     subgraph bq["BigQuery / L04-L05"]
       ext[("group6_bronze / tables externes, aucune ligne stockee / L04")]
+      raw[("group6_bronze.orders_raw, order_items_raw / natives, legacy + extraits du DAG / L07")]
       loaded[("group6_warehouse / 7 tables natives typees, orders et order_items partitionnees par mois / L04")]
       mv[("daily_demand / vue materialisee produit x jour / L04")]
       silver[("Silver / types, deduplication, jointures")]
@@ -53,8 +56,12 @@ flowchart LR
       ext -->|"CREATE TABLE AS SELECT / L04"| loaded
       loaded --> mv
       loaded -.->|"dbt"| silver
-      silver -.->|"dbt et tests"| gold
+      ext -->|"copie initiale du legacy / L07"| raw
+      raw -->|"dbt build, sources orders et order_items / L07"| silver
+      ext -->|"dimensions, legacy / L05"| silver
+      silver -->|"dbt et tests / L05"| gold
     end
+    airflow -->|"MERGE sur la cle / L07"| raw
     legacy -->|"7 tables / L04"| ext
     click -->|"partition dt / L04"| ext
     airbyte -.->|"une source par table, L05"| silver
@@ -79,6 +86,12 @@ Le diagramme montre quatre producteurs du bronze, sans dépôt manuel :
   incomplète, faute de mémoire dans Docker.
 - **L'extracteur SQL**, sous `manual/orders/`, avec son curseur sous `_state/`.
 - **Le consumer Kafka**, sous `clickstream/v1/`, et ses rejets sous `_dlq/`.
+
+Depuis L07, un cinquième producteur écrit directement dans BigQuery : le DAG
+Airflow extrait chaque jour les commandes et leurs lignes de la période du run,
+puis les fusionne par `MERGE` dans `group6_bronze.orders_raw` et
+`order_items_raw`, que lit dbt ([orchestration](orchestration.md),
+[ADR-0007](adr/0007-idempotency.md)).
 
 Chaque préfixe a un seul producteur identifié. `orders` arrive par trois
 chemins, avec des types différents : le [dictionnaire](data-dictionary.md#flux-l03)
@@ -120,7 +133,8 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | Warehouse (L04) | `group6_warehouse`, `europe-west1` : 7 tables natives aux comptes du bronze, `orders` et `order_items` partitionnées par mois (37 partitions), vue `daily_demand` ; avant/après mesurés cache désactivé, plafond de 1 GiB vu en échec ; voir [les mesures](evidence/l04-warehouse-measurements.json) et [les réglages](warehouse-tuning.md). |
 | Transformations | À réaliser en L05. |
 | Docker (L06) | Deux images privées `group6-ingestion` et `group6-transform` dans Artifact Registry `dataeng`, `europe-west1`, base et dépendances fixées, UID 10001. Reproduction d'ingestion après suppression locale réussie ; rétention refusée par IAM, voir [le transcript](reproduce.md). |
-| Orchestration et Terraform | À réaliser de L07 à L08. |
+| Orchestration (L07) | DAG `group6_marketplace_daily` sur Airflow 3.3.2 local : run planifié et back-fill du 15 au 16 septembre réussis, prédiction exacte (+468 commandes, +856 lignes), rejeu sans effet ; alerte e-mail reçue après les retries ; quality gate déclenchée par une ligne dupliquée. Voir [orchestration.md](orchestration.md). |
+| Terraform | À réaliser en L08. |
 
 ## Decisions
 
@@ -141,6 +155,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | 2026-10-16 | L03 | Trois chemins d'ingestion vers bronze (connecteur, extracteur, consumer), DLQ et état de l'extracteur. |
 | 2026-10-26 | L04 | Tables externes sur bronze, jeu de travail chargé en tables natives réglées, vue `daily_demand`, plafond par requête. Airbyte et l'extracteur rejoignent silver en L05, pas le chargement natif. |
 | 2026-11-03 | L06 | Deux images construites et publiées, reproduction figée vérifiée après suppression/pull. Rétention tentée mais permission de suppression manquante. |
+| 2026-11-06 | L07 | DAG Airflow quotidien : extraction par période, `MERGE` dans deux tables bronze natives, dbt. Sources dbt `orders` et `order_items` repointées sur ces tables. |
 
 Mettre cette page à jour à la fin de chaque étape, en remplaçant les intentions
 par les ressources et garanties réellement vérifiées. Le [suivi du projet](project-plan.md)
