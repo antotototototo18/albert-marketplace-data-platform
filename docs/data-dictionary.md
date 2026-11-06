@@ -185,6 +185,27 @@ Pas de colonne `unnamed_0`.
 | `qty` | entier | Quantité (1 à 12 ; la v1 indiquait 1 à 9, corrigé en L05) | Non |
 | `price_at_purchase` | décimal (2 déc.) | Prix unitaire payé ; 0.00 sur 30 lignes | Non |
 
+### Copies natives orchestrées (L07) : `group6_bronze.orders_raw` et `order_items_raw`
+
+Tables BigQuery natives créées par
+[`warehouse/06_bronze_native.sql`](../warehouse/06_bronze_native.sql), que lisent
+les sources dbt `orders` et `order_items` depuis L07. Elles contiennent l'export
+legacy ci-dessus, recopié une fois, plus ce que le DAG Airflow y fusionne chaque
+jour (clés : `order_id` ; `(order_id, p_id)`). Mêmes colonnes, toutes en texte
+comme le reste de bronze, plus :
+
+| Colonne | Type | Signification | Donnée personnelle |
+|---|---|---|---|
+| `unnamed_0` (`orders_raw` seulement) | texte | Index de ligne du CSV legacy ; **vide pour une ligne extraite par le DAG**. Sert à limiter le test C1 à l'export legacy. | Non |
+| `_loaded_at` | horodatage | Dernière écriture de la ligne (copie legacy : 2026-10-16 ; DAG : heure du `MERGE`). Lu par la fraîcheur dbt. | Non |
+
+Différences des lignes extraites par le DAG : `discount_id` est `NULL` (le CSV
+legacy portait une chaîne vide) ; 11 commandes live sans paiement ont
+`payment_id` à `NULL`. Le 6 novembre 2026, ces tables comptent 223 112 et
+409 416 lignes : le legacy plus les 468 commandes et 856 lignes des 15 et
+16 septembre 2026. `buyer_id` y est une deuxième copie bronze de l'identifiant
+acheteur, à couvrir par la classification et l'effacement de L10.
+
 ### `payment` — 222 644 lignes
 
 Une transaction par commande. Pas de colonne `unnamed_0`. Pour les 222 644
