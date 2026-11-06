@@ -465,3 +465,22 @@ Aucun contrôle IAM n'a été modifié ou contourné.
 Le README contient un parcours Docker seul, avec authentification via une image
 CLI Google fixée par digest. Le test par une personne d'un autre groupe reste à
 organiser ; aucun résultat d'un tel essai n'est inventé.
+
+## L07 : images exécutées par le DAG
+
+Reconstruites le 6 novembre 2026 sur Docker Desktop, hôte Windows x86-64, même
+Dockerfiles, plateforme `linux/amd64`. Raison : l'image d'ingestion embarque
+`ingestion/extract_interval.py` (extraction d'un intervalle fourni par le run) ;
+l'image dbt embarque les sources repointées sur les tables bronze natives et le
+test C1 limité à l'export legacy. Les tags existants ont été listés avant le push
+(seul `20261103T-step6-01` existait) ; aucun tag n'a été réutilisé (ADR-0006).
+
+| Image, tag `20261106T-step7-01` | Digest du push |
+|---|---|
+| ingestion | `sha256:d273c33b9e0e3d23914927f48e8630cd83afc68f4952b1ad10857cbe2e23b3b4` |
+| transform | `sha256:e05e888f638b1dc0b9e1b435e6201bda792705b3b3b6d6587e183061439d38a2` |
+
+Le DAG [`group6_marketplace_daily`](../orchestration/dags/group6_marketplace_daily.py)
+référence les deux images par `tag@digest`. Les tâches sont lancées par le Docker
+de l'hôte, qui doit déjà détenir les images : `docker pull` par digest avant le
+premier run (le worker Airflow n'a pas les identifiants du registre).
