@@ -1,0 +1,15 @@
+google_storage_bucket.bronze: Refreshing state... [id=data-engineering-i1-group6]
+google_bigquery_dataset.warehouse: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_warehouse]
+google_bigquery_dataset.silver: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_silver]
+google_bigquery_dataset.gold: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_gold]
+google_bigquery_dataset.bronze: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_bronze]
+google_bigquery_dataset_iam_member.bronze_reader_arabeau: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_bronze/roles/bigquery.dataViewer/user:arabeau@albertschool.com]
+google_bigquery_dataset_iam_member.writer["bronze_arabeau"]: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_bronze/roles/bigquery.dataEditor/user:arabeau@albertschool.com]
+google_bigquery_dataset_iam_member.writer["bronze_csibieude"]: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_bronze/roles/bigquery.dataEditor/user:csibieude@albertschool.com]
+google_bigquery_dataset_iam_member.writer["warehouse_csibieude"]: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_warehouse/roles/bigquery.dataEditor/user:csibieude@albertschool.com]
+google_bigquery_dataset_iam_member.writer["warehouse_arabeau"]: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_warehouse/roles/bigquery.dataEditor/user:arabeau@albertschool.com]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.

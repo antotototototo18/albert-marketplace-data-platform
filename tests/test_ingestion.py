@@ -1,4 +1,5 @@
 from datetime import date
+from decimal import Decimal
 import json
 from pathlib import Path
 import tempfile
@@ -10,6 +11,7 @@ import psycopg
 import pyarrow.parquet as pq
 
 from ingestion.consume_clickstream import EventBatch, consume, validate_event
+from ingestion import extract_interval
 from ingestion.extract_orders import CHECKPOINT, connect_with_retry, extract
 from ingestion.storage import BronzeStore
 
@@ -125,6 +127,58 @@ class ExtractorTests(unittest.TestCase):
                     extract("postgresql://localhost/marketplace", store)
             self.assertEqual(len(list(Path(directory).rglob("*.parquet"))), 1)
             self.assertIsNone(store.read_checkpoint(CHECKPOINT)[0])
+
+
+class IntervalExtractorTests(unittest.TestCase):
+    DSN = "postgresql://localhost/marketplace"
+
+    @patch("ingestion.extract_interval.connect_with_retry")
+    def test_interval_comes_from_the_run_not_the_clock(self, connect):
+        connection = connection_with_pages([order(1)])
+        connect.return_value = connection
+        with tempfile.TemporaryDirectory() as directory:
+            result = extract_interval.extract(
+                self.DSN, BronzeStore(directory), "orders", "2026-09-15", "2026-09-16"
+            )
+        self.assertEqual(connection.execute.call_args_list[1].args[1], (date(2026, 9, 15), date(2026, 9, 16)))
+        self.assertEqual(result["object"], "orders/2026-09-15.parquet")
+
+    @patch("ingestion.extract_interval.connect_with_retry")
+    def test_rerun_replaces_its_own_file(self, connect):
+        with tempfile.TemporaryDirectory() as directory:
+            store = BronzeStore(directory)
+            connect.return_value = connection_with_pages([order(1), order(2)])
+            extract_interval.extract(self.DSN, store, "orders", "2026-09-15", "2026-09-16")
+            connect.return_value = connection_with_pages([order(1)])
+            second = extract_interval.extract(self.DSN, store, "orders", "2026-09-15", "2026-09-16")
+            files = list(Path(directory).rglob("*.parquet"))
+            self.assertEqual(len(files), 1)
+            self.assertEqual(pq.ParquetFile(files[0]).metadata.num_rows, second["rows_written"])
+
+    @patch("ingestion.extract_interval.connect_with_retry")
+    def test_every_column_is_text_and_null_stays_null(self, connect):
+        line = {"order_id": 222645, "p_id": "0123", "qty": 1, "price_at_purchase": Decimal("14.20")}
+        connect.return_value = connection_with_pages([line])
+        with tempfile.TemporaryDirectory() as directory:
+            extract_interval.extract(self.DSN, BronzeStore(directory), "order_items", "2026-09-15", "2026-09-16")
+            orders = connection_with_pages([order(7)])
+            connect.return_value = orders
+            extract_interval.extract(self.DSN, BronzeStore(directory), "orders", "2026-09-15", "2026-09-16")
+            items = pq.read_table(Path(directory) / "order_items" / "2026-09-15.parquet").to_pylist()
+            written = pq.read_table(Path(directory) / "orders" / "2026-09-15.parquet")
+        self.assertEqual(items, [{"order_id": "222645", "p_id": "0123", "qty": "1", "price_at_purchase": "14.20"}])
+        self.assertEqual({str(field.type) for field in written.schema}, {"string"})
+        self.assertEqual(written.to_pylist()[0]["order_date"], "2026-09-15")
+        self.assertIsNone(written.to_pylist()[0]["payment_id"])
+
+    @patch("ingestion.extract_interval.connect_with_retry")
+    def test_bad_configuration_fails_before_connecting(self, connect):
+        cases = [("orders", "2026-09-16", "2026-09-15"), ("orders", "yesterday", "2026-09-16"),
+                 ("payment", "2026-09-15", "2026-09-16")]
+        for table, since, until in cases:
+            with self.subTest(table=table, since=since), self.assertRaises(ValueError):
+                extract_interval.extract(self.DSN, MagicMock(), table, since, until)
+        connect.assert_not_called()
 
 
 class EventTests(unittest.TestCase):

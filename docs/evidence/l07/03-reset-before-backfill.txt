@@ -1,0 +1,9 @@
+L07 reset of bronze before the measured back-fill, 2026-11-06 (UTC ~13:20)
+Script: docs/evidence/l07/03-reset-before-backfill.sql, one BigQuery transaction.
+
+                  before    after    difference
+orders_raw        223112   222644      -468
+  of which DAG       468        0      (rows without unnamed_0)
+order_items_raw   409416   408560      -856
+
+After: identical to the legacy export (warehouse/06_bronze_native.sql).

@@ -1,0 +1,187 @@
++ docker network create l06-20261103175934-13741
+39970c0656ce6b0b3f121432ea5cfedc54b9827dfe2293dceeb9c13d6fea2319
++ docker run -d --name l06-20261103175934-13741-db --network l06-20261103175934-13741 --network-alias fixture -e POSTGRES_HOST_AUTH_METHOD=trust postgres:17.6-bookworm@sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3
+Unable to find image 'postgres:17.6-bookworm@sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3' locally
+docker.io/library/postgres@sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3: Pulling from library/postgres
+162e72af9357: Pulling fs layer
+43297198b981: Pulling fs layer
+359be260dcae: Pulling fs layer
+f6184d0dc2fb: Pulling fs layer
+a5d51e77f69f: Pulling fs layer
+0f6c9876a1a2: Pulling fs layer
+f6080d7cc0c1: Pulling fs layer
+752fc1bcb5e0: Pulling fs layer
+aa186232e6d4: Pulling fs layer
+553e8b781e3b: Pulling fs layer
+68ae6031e0df: Pulling fs layer
+38723cf27dcc: Pulling fs layer
+33049f381174: Pulling fs layer
+9119c7c41821: Pulling fs layer
+43297198b981: Download complete
+9119c7c41821: Download complete
+a5d51e77f69f: Download complete
+752fc1bcb5e0: Download complete
+f6080d7cc0c1: Download complete
+f6184d0dc2fb: Download complete
+aa186232e6d4: Download complete
+68ae6031e0df: Download complete
+38723cf27dcc: Download complete
+359be260dcae: Download complete
+0f6c9876a1a2: Download complete
+33049f381174: Download complete
+921639da2aa1: Download complete
+1c4ddb9c7541: Download complete
+162e72af9357: Download complete
+359be260dcae: Pull complete
+162e72af9357: Pull complete
+a5d51e77f69f: Pull complete
+f6184d0dc2fb: Pull complete
+0f6c9876a1a2: Pull complete
+752fc1bcb5e0: Pull complete
+f6080d7cc0c1: Pull complete
+aa186232e6d4: Pull complete
+553e8b781e3b: Download complete
+68ae6031e0df: Pull complete
+38723cf27dcc: Pull complete
+33049f381174: Pull complete
+553e8b781e3b: Pull complete
+43297198b981: Pull complete
+9119c7c41821: Pull complete
+Digest: sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3
+Status: Downloaded newer image for postgres@sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3
+7d0155032277ed093b13d8ec9d34f3b80973cf5a416ce962de120fa308f696a8
++ ready=0
++ '[' 0 -lt 60 ']'
++ docker exec l06-20261103175934-13741-db pg_isready -U postgres
+/var/run/postgresql:5432 - no response
++ ready=1
++ sleep 1
++ '[' 1 -lt 60 ']'
++ docker exec l06-20261103175934-13741-db pg_isready -U postgres
+/var/run/postgresql:5432 - no response
++ ready=2
++ sleep 1
++ '[' 2 -lt 60 ']'
++ docker exec l06-20261103175934-13741-db pg_isready -U postgres
+/var/run/postgresql:5432 - accepting connections
++ break
++ docker exec -i l06-20261103175934-13741-db psql -v ON_ERROR_STOP=1 -U postgres
+CREATE TABLE
+INSERT 0 3
+ frozen_input_rows
+-------------------
+                 3
+(1 row)
+
++ docker image inspect europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01 --format 'user={{.Config.User}} id={{.Id}} digests={{json .RepoDigests}}'
+user=10001:10001 id=sha256:45174dffd123b9a406624c736dfc6ac0b137ce26584b98d9271faa1b3003bfd7 digests=["europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion@sha256:45174dffd123b9a406624c736dfc6ac0b137ce26584b98d9271faa1b3003bfd7"]
++ run_job l06-20261103175934-13741-before
++ docker volume create l06-20261103175934-13741-before
+l06-20261103175934-13741-before
++ docker run --rm --network l06-20261103175934-13741 -v l06-20261103175934-13741-before:/output -e DATABASE_URL=postgresql://postgres@fixture/postgres -e BRONZE_URI=/output europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+{"rows_written": 3, "last_order_id": 3}
+++ check_output l06-20261103175934-13741-before
+++ docker run --rm --network none -v l06-20261103175934-13741-before:/output:ro --entrypoint python europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01 -c '
+import hashlib, json
+from pathlib import Path
+import pyarrow.parquet as pq
+rows = []
+for path in sorted(Path("/output/manual/orders").rglob("*.parquet")):
+    rows.extend(pq.ParquetFile(path).read().to_pylist())
+rows.sort(key=lambda row: row["order_id"])
+payload = json.dumps(rows, sort_keys=True, default=str, separators=(",", ":"))
+print(payload)
+print("rows=", len(rows), "sha256=", hashlib.sha256(payload.encode()).hexdigest())
+assert len(rows) == 3
+assert [row["order_id"] for row in rows] == [1, 2, 3]
+'
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
++ BEFORE='[{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-01","order_id":1,"payment_id":101},{"buyer_id":"fixture-b","discount_id":7,"order_date":"2026-10-02","order_id":2,"payment_id":102},{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-03","order_id":3,"payment_id":103}]
+rows= 3 sha256= a08db0b2503b95e3fd39f918e7e2bbaf35b68de7c485f65936638a08b0928e89'
++ printf '%s\n' '[{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-01","order_id":1,"payment_id":101},{"buyer_id":"fixture-b","discount_id":7,"order_date":"2026-10-02","order_id":2,"payment_id":102},{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-03","order_id":3,"payment_id":103}]
+rows= 3 sha256= a08db0b2503b95e3fd39f918e7e2bbaf35b68de7c485f65936638a08b0928e89'
+[{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-01","order_id":1,"payment_id":101},{"buyer_id":"fixture-b","discount_id":7,"order_date":"2026-10-02","order_id":2,"payment_id":102},{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-03","order_id":3,"payment_id":103}]
+rows= 3 sha256= a08db0b2503b95e3fd39f918e7e2bbaf35b68de7c485f65936638a08b0928e89
++ docker rmi europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01
+Untagged: europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01
+Deleted: sha256:45174dffd123b9a406624c736dfc6ac0b137ce26584b98d9271faa1b3003bfd7
++ docker images europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01
+IMAGE   ID             DISK USAGE   CONTENT SIZE   EXTRA
++ docker image inspect europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01
+[]
+Error response from daemon: No such image: europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01
++ docker pull --platform linux/amd64 europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01
+20261103T-step6-01: Pulling from data-engineering-i1/dataeng/group6-ingestion
+ffa1dade770a: Pulling fs layer
+f9f25941dc13: Pulling fs layer
+dbeb2af0e7bd: Pulling fs layer
+572ad4ee692b: Pulling fs layer
+3fb54130dc59: Pulling fs layer
+79a701b02134: Pulling fs layer
+84a2afebaf4d: Pulling fs layer
+2e8ff2a71e95: Pulling fs layer
+572ad4ee692b: Already exists
+3fb54130dc59: Already exists
+79a701b02134: Already exists
+ffa1dade770a: Already exists
+2e8ff2a71e95: Already exists
+f9f25941dc13: Already exists
+44136fa355b3: Already exists
+dbeb2af0e7bd: Already exists
+84a2afebaf4d: Already exists
+06e4a9c2b2a0: Download complete
+84a2afebaf4d: Pull complete
+2e8ff2a71e95: Pull complete
+572ad4ee692b: Pull complete
+79a701b02134: Pull complete
+f9f25941dc13: Pull complete
+dbeb2af0e7bd: Pull complete
+3fb54130dc59: Pull complete
+ffa1dade770a: Pull complete
+Digest: sha256:45174dffd123b9a406624c736dfc6ac0b137ce26584b98d9271faa1b3003bfd7
+Status: Downloaded newer image for europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01
+europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01
++ docker image inspect europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01 --format 'user={{.Config.User}} id={{.Id}} digests={{json .RepoDigests}}'
+user=10001:10001 id=sha256:45174dffd123b9a406624c736dfc6ac0b137ce26584b98d9271faa1b3003bfd7 digests=["europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion@sha256:45174dffd123b9a406624c736dfc6ac0b137ce26584b98d9271faa1b3003bfd7"]
++ run_job l06-20261103175934-13741-after
++ docker volume create l06-20261103175934-13741-after
+l06-20261103175934-13741-after
++ docker run --rm --network l06-20261103175934-13741 -v l06-20261103175934-13741-after:/output -e DATABASE_URL=postgresql://postgres@fixture/postgres -e BRONZE_URI=/output europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+{"rows_written": 3, "last_order_id": 3}
+++ check_output l06-20261103175934-13741-after
+++ docker run --rm --network none -v l06-20261103175934-13741-after:/output:ro --entrypoint python europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-ingestion:20261103T-step6-01 -c '
+import hashlib, json
+from pathlib import Path
+import pyarrow.parquet as pq
+rows = []
+for path in sorted(Path("/output/manual/orders").rglob("*.parquet")):
+    rows.extend(pq.ParquetFile(path).read().to_pylist())
+rows.sort(key=lambda row: row["order_id"])
+payload = json.dumps(rows, sort_keys=True, default=str, separators=(",", ":"))
+print(payload)
+print("rows=", len(rows), "sha256=", hashlib.sha256(payload.encode()).hexdigest())
+assert len(rows) == 3
+assert [row["order_id"] for row in rows] == [1, 2, 3]
+'
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
++ AFTER='[{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-01","order_id":1,"payment_id":101},{"buyer_id":"fixture-b","discount_id":7,"order_date":"2026-10-02","order_id":2,"payment_id":102},{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-03","order_id":3,"payment_id":103}]
+rows= 3 sha256= a08db0b2503b95e3fd39f918e7e2bbaf35b68de7c485f65936638a08b0928e89'
++ printf '%s\n' '[{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-01","order_id":1,"payment_id":101},{"buyer_id":"fixture-b","discount_id":7,"order_date":"2026-10-02","order_id":2,"payment_id":102},{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-03","order_id":3,"payment_id":103}]
+rows= 3 sha256= a08db0b2503b95e3fd39f918e7e2bbaf35b68de7c485f65936638a08b0928e89'
+[{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-01","order_id":1,"payment_id":101},{"buyer_id":"fixture-b","discount_id":7,"order_date":"2026-10-02","order_id":2,"payment_id":102},{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-03","order_id":3,"payment_id":103}]
+rows= 3 sha256= a08db0b2503b95e3fd39f918e7e2bbaf35b68de7c485f65936638a08b0928e89
++ test '[{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-01","order_id":1,"payment_id":101},{"buyer_id":"fixture-b","discount_id":7,"order_date":"2026-10-02","order_id":2,"payment_id":102},{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-03","order_id":3,"payment_id":103}]
+rows= 3 sha256= a08db0b2503b95e3fd39f918e7e2bbaf35b68de7c485f65936638a08b0928e89' = '[{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-01","order_id":1,"payment_id":101},{"buyer_id":"fixture-b","discount_id":7,"order_date":"2026-10-02","order_id":2,"payment_id":102},{"buyer_id":"fixture-a","discount_id":null,"order_date":"2026-10-03","order_id":3,"payment_id":103}]
+rows= 3 sha256= a08db0b2503b95e3fd39f918e7e2bbaf35b68de7c485f65936638a08b0928e89'
++ printf '%s\n' 'PASS: identical rows and canonical content hash after image deletion and pull.'
+PASS: identical rows and canonical content hash after image deletion and pull.
++ docker stop l06-20261103175934-13741-db
+l06-20261103175934-13741-db
++ docker rm l06-20261103175934-13741-db
+l06-20261103175934-13741-db
++ docker network rm l06-20261103175934-13741
+l06-20261103175934-13741
++ printf 'Retained evidence volumes: %s-before %s-after\n' l06-20261103175934-13741 l06-20261103175934-13741
+Retained evidence volumes: l06-20261103175934-13741-before l06-20261103175934-13741-after

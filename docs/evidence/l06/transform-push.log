@@ -1,0 +1,51 @@
+The push refers to repository [europe-west1-docker.pkg.dev/data-engineering-i1/dataeng/group6-transform]
+84a2afebaf4d: Waiting
+44136fa355b3: Waiting
+2e8ff2a71e95: Waiting
+c4d068f08bcd: Waiting
+2e8ff2a71e95: Waiting
+c4d068f08bcd: Waiting
+84a2afebaf4d: Waiting
+44136fa355b3: Waiting
+44136fa355b3: Waiting
+2e8ff2a71e95: Waiting
+c4d068f08bcd: Waiting
+84a2afebaf4d: Waiting
+2e8ff2a71e95: Waiting
+c4d068f08bcd: Waiting
+84a2afebaf4d: Waiting
+44136fa355b3: Waiting
+2e8ff2a71e95: Waiting
+c4d068f08bcd: Waiting
+84a2afebaf4d: Waiting
+44136fa355b3: Waiting
+c4d068f08bcd: Waiting
+84a2afebaf4d: Waiting
+44136fa355b3: Already exists
+f9f25941dc13: Waiting
+dbeb2af0e7bd: Waiting
+2e8ff2a71e95: Layer already exists
+7e5ebc76c5ec: Waiting
+f9f25941dc13: Layer already exists
+dbeb2af0e7bd: Layer already exists
+d4c7b1db0ae7: Waiting
+e6fce87820e9: Waiting
+84a2afebaf4d: Layer already exists
+d4c7b1db0ae7: Waiting
+e6fce87820e9: Waiting
+7e5ebc76c5ec: Waiting
+a80c6792ff22: Waiting
+d4c7b1db0ae7: Waiting
+c4d068f08bcd: Pushed
+a80c6792ff22: Waiting
+422c2c7136e6: Waiting
+e6fce87820e9: Pushed
+6afe3f2b0049: Waiting
+7e5ebc76c5ec: Pushed
+6afe3f2b0049: Waiting
+6afe3f2b0049: Waiting
+a80c6792ff22: Pushed
+422c2c7136e6: Pushed
+6afe3f2b0049: Pushed
+d4c7b1db0ae7: Pushed
+20261103T-step6-01: digest: sha256:ea2d809cc22761514c0dcf3b440919cb1fbc2e4e788e3ed0bb41683b680ba7af size: 856
