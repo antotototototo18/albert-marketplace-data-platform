@@ -2,6 +2,9 @@ name: albert_marketplace
 version: "1.0.0"
 config-version: 2
 profile: albert_marketplace
+query-comment:
+  comment: "{{ finops_query_comment(node) }}"
+  job-label: true
 require-dbt-version: [">=1.10.0", "<2.0.0"]
 
 model-paths: ["models"]
@@ -18,13 +21,26 @@ vars:
 # Datasets: <target dataset>_silver and <target dataset>_gold, e.g. group6_silver.
 models:
   albert_marketplace:
+    +labels: &cost_labels
+      team: group6
+      environment: course
+      pipeline: marketplace
     staging:
+      +labels:
+        <<: *cost_labels
+        component: silver
       +materialized: view
       +schema: silver
     intermediate:
+      +labels:
+        <<: *cost_labels
+        component: silver
       +materialized: view
       +schema: silver
     marts:
+      +labels:
+        <<: *cost_labels
+        component: gold
       +materialized: table
       +schema: gold
 

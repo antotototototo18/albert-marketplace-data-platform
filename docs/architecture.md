@@ -1,6 +1,6 @@
 # Architecture d'Albert's Marketplace
 
-Version L08 du 10 novembre 2026. Le bucket bronze du groupe contient l'export
+Version L09 du 10 novembre 2026. Le bucket bronze du groupe contient l'export
 legacy (L02) et les écritures des trois chemins d'ingestion L03 ; le jeu de
 travail est chargé dans BigQuery (L04) ; dbt construit silver et gold (L05) ;
 un DAG Airflow alimente chaque jour les commandes de bronze et relance dbt
@@ -135,6 +135,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | Docker (L06) | Deux images privées `group6-ingestion` et `group6-transform` dans Artifact Registry `dataeng`, `europe-west1`, base et dépendances fixées, UID 10001. Reproduction d'ingestion après suppression locale réussie ; rétention refusée par IAM, voir [le transcript](reproduce.md). |
 | Orchestration (L07) | DAG `group6_marketplace_daily` sur Airflow 3.3.2 local : run planifié et back-fill du 15 au 16 septembre réussis, prédiction exacte (+468 commandes, +856 lignes), rejeu sans effet ; alerte e-mail reçue après les retries ; quality gate déclenchée par une ligne dupliquée. Voir [orchestration.md](orchestration.md). |
 | Terraform (L08) | Bucket, quatre datasets et cinq membres IAM dataset déclarés, imports conservés, état GCS partagé versionné ; plans réels sans changement et dérive lifecycle détectée puis écrasée. Compte de service non adoptable avec les accès disponibles ; voir [infra.md](infra.md) et [ADR-0008](adr/0008-remote-state.md). |
+| FinOps (L09) | Quatre labels appliqués par Terraform au bucket et aux datasets ; futurs jobs dbt/bq attribués ; registre et sonde d'élagage des partitions mesurée. Budget préparé mais création bloquée par l'API désactivée ; voir [costs.md](costs.md) et [ADR-0009](adr/0009-cost-attribution.md). |
 
 ## Decisions
 
@@ -146,6 +147,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | [0004](adr/0004-warehouse-pricing.md) | BigQuery à la demande, plafonné à 1 GiB par requête | Proposed |
 | [0006](adr/0006-image-tags.md) | Images privées, tags de build datés, rollback par digest et rétention | Proposed ; suppression bloquée par IAM |
 | [0008](adr/0008-remote-state.md) | État Terraform partagé dans GCS, versions et verrouillage | Proposed pour relecture ; backend vérifié |
+| [0009](adr/0009-cost-attribution.md) | Labels des ressources et jobs, estimation séparée de la facture, projets distincts à dix équipes | Proposed pour relecture ; alerte budget bloquée |
 
 ## Change log
 
@@ -158,6 +160,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | 2026-11-03 | L06 | Deux images construites et publiées, reproduction figée vérifiée après suppression/pull. Rétention tentée mais permission de suppression manquante. |
 | 2026-11-06 | L07 | DAG Airflow quotidien : extraction par période, `MERGE` dans deux tables bronze natives, dbt. Sources dbt `orders` et `order_items` repointées sur ces tables. |
 | 2026-11-10 | L08 | Configuration alignée sur l'état distant existant, lifecycle réel à 45 jours adopté, dérive 45 → 46 détectée puis restaurée ; CI sans accès cloud et ADR d'état distant. |
+| 2026-11-10 | L09 | Labels appliqués, registre daté et analyse des pics de jobs ; sonde mensuelle à résultats identiques avec 98,79 % de scan en moins, minimum facturé inchangé. Budget à activer avec l'administrateur. |
 
 Mettre cette page à jour à la fin de chaque étape, en remplaçant les intentions
 par les ressources et garanties réellement vérifiées. Le [suivi du projet](project-plan.md)
