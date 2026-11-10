@@ -16,6 +16,20 @@ Il vérifie :
 - l'absence de fichiers suivis par Git alors qu'ils sont couverts par `.gitignore`.
 - l'attribution des contributions aux cinq comptes humains du groupe uniquement.
 
+### Blocage GitHub Actions au 10 novembre 2026
+
+Les crédits GitHub Actions du compte sont épuisés, comme confirmé par Anthony.
+Sur la [PR L08 #12](https://github.com/antotototototo18/albert-marketplace-data-platform/pull/12),
+les contrôles **Repository checks** et **Terraform fmt and validate** sont
+affichés en échec, mais aucun job n'a pu démarrer. L'annotation GitHub indique
+un blocage de facturation ou de plafond de dépenses ; ce résultat ne permet
+donc pas de conclure à une erreur du code.
+
+Pendant ce blocage, joindre à chaque PR les commandes de vérification exécutées
+en local et leurs résultats, et conserver la relecture par un autre membre.
+Ces résultats locaux ne constituent pas une CI verte. Les workflows restent
+activés ; relancer les contrôles lorsque des crédits seront disponibles.
+
 ### Requirement : aucun agent contributeur
 
 Le script [check_contributors.py](../scripts/check_contributors.py) interroge
