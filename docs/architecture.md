@@ -1,6 +1,6 @@
 # Architecture d'Albert's Marketplace
 
-Version L07 du 6 novembre 2026. Le bucket bronze du groupe contient l'export
+Version L08 du 10 novembre 2026. Le bucket bronze du groupe contient l'export
 legacy (L02) et les écritures des trois chemins d'ingestion L03 ; le jeu de
 travail est chargé dans BigQuery (L04) ; dbt construit silver et gold (L05) ;
 un DAG Airflow alimente chaque jour les commandes de bronze et relance dbt
@@ -124,7 +124,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | Schéma et profil de l'export legacy | Inspection reproductible ; voir [le profil L01](evidence/l01-source-profile.json). |
 | Bucket du groupe | `gs://data-engineering-i1-group6`, `europe-west1`, Standard, accès uniforme, accès public bloqué, suppression réversible de 7 jours ; lu avec `gcloud storage buckets describe`. |
 | Bronze legacy | 27 tables, 2 928 485 lignes, 62 Mo de Parquet zstd, chacune comparée à son CSV ; voir [le manifeste](evidence/l02-bronze-legacy-manifest.json). |
-| Lifecycle | Défini dans [infra/lifecycle.json](../infra/lifecycle.json), limité à `bronze/legacy/` : Nearline à 30 jours, Coldline à 90, Archive à 365. |
+| Lifecycle | Défini dans [infra/lifecycle.json](../infra/lifecycle.json), limité à `bronze/legacy/` : Nearline à 45 jours (valeur réelle adoptée en L08), Coldline à 90, Archive à 365. |
 | IAM | Six liaisons par défaut, aucune ajoutée ; moindre privilège non atteint ; voir [infra/iam.md](../infra/iam.md). |
 | Coûts | Moins de $0.002 par mois ; voir [costs.md](costs.md). |
 | Extracteur `orders` (L03) | 228 028 commandes puis 2 à la reprise ; voir [le compte rendu](evidence/l03-live-run.json). |
@@ -134,7 +134,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | Transformations | À réaliser en L05. |
 | Docker (L06) | Deux images privées `group6-ingestion` et `group6-transform` dans Artifact Registry `dataeng`, `europe-west1`, base et dépendances fixées, UID 10001. Reproduction d'ingestion après suppression locale réussie ; rétention refusée par IAM, voir [le transcript](reproduce.md). |
 | Orchestration (L07) | DAG `group6_marketplace_daily` sur Airflow 3.3.2 local : run planifié et back-fill du 15 au 16 septembre réussis, prédiction exacte (+468 commandes, +856 lignes), rejeu sans effet ; alerte e-mail reçue après les retries ; quality gate déclenchée par une ligne dupliquée. Voir [orchestration.md](orchestration.md). |
-| Terraform | À réaliser en L08. |
+| Terraform (L08) | Bucket, quatre datasets et cinq membres IAM dataset déclarés, imports conservés, état GCS partagé versionné ; plans réels sans changement et dérive lifecycle détectée puis écrasée. Compte de service non adoptable avec les accès disponibles ; voir [infra.md](infra.md) et [ADR-0008](adr/0008-remote-state.md). |
 
 ## Decisions
 
@@ -145,6 +145,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | [0003](adr/0003-ingestion-modes.md) | Xmin pour le connecteur, curseur d'ID pour l'extracteur, Kafka au moins une fois | Proposed |
 | [0004](adr/0004-warehouse-pricing.md) | BigQuery à la demande, plafonné à 1 GiB par requête | Proposed |
 | [0006](adr/0006-image-tags.md) | Images privées, tags de build datés, rollback par digest et rétention | Proposed ; suppression bloquée par IAM |
+| [0008](adr/0008-remote-state.md) | État Terraform partagé dans GCS, versions et verrouillage | Proposed pour relecture ; backend vérifié |
 
 ## Change log
 
@@ -156,6 +157,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | 2026-10-26 | L04 | Tables externes sur bronze, jeu de travail chargé en tables natives réglées, vue `daily_demand`, plafond par requête. Airbyte et l'extracteur rejoignent silver en L05, pas le chargement natif. |
 | 2026-11-03 | L06 | Deux images construites et publiées, reproduction figée vérifiée après suppression/pull. Rétention tentée mais permission de suppression manquante. |
 | 2026-11-06 | L07 | DAG Airflow quotidien : extraction par période, `MERGE` dans deux tables bronze natives, dbt. Sources dbt `orders` et `order_items` repointées sur ces tables. |
+| 2026-11-10 | L08 | Configuration alignée sur l'état distant existant, lifecycle réel à 45 jours adopté, dérive 45 → 46 détectée puis restaurée ; CI sans accès cloud et ADR d'état distant. |
 
 Mettre cette page à jour à la fin de chaque étape, en remplaçant les intentions
 par les ressources et garanties réellement vérifiées. Le [suivi du projet](project-plan.md)
