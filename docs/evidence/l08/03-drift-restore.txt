@@ -1,0 +1,4 @@
+google_storage_bucket.bronze: Modifying... [id=data-engineering-i1-group6]
+google_storage_bucket.bronze: Modifications complete after 1s [id=data-engineering-i1-group6]
+
+Apply complete! Resources: 0 added, 1 changed, 0 destroyed.

@@ -2,7 +2,7 @@
   "rule": [
     {
       "action": { "type": "SetStorageClass", "storageClass": "NEARLINE" },
-      "condition": { "age": 30, "matchesPrefix": ["bronze/legacy/"], "matchesStorageClass": ["STANDARD"] }
+      "condition": { "age": 45, "matchesPrefix": ["bronze/legacy/"], "matchesStorageClass": ["STANDARD"] }
     },
     {
       "action": { "type": "SetStorageClass", "storageClass": "COLDLINE" },

@@ -1,0 +1,18 @@
+{
+  "creation_time": "2026-11-06T16:15:55+0000",
+  "default_storage_class": "STANDARD",
+  "generation": 1793981754676898432,
+  "location": "EUROPE-WEST1",
+  "location_type": "region",
+  "metageneration": 2,
+  "name": "data-engineering-i1-group6-tfstate",
+  "public_access_prevention": "enforced",
+  "soft_delete_policy": {
+    "effectiveTime": "2026-11-06T16:15:55.164000+00:00",
+    "retentionDurationSeconds": "604800"
+  },
+  "storage_url": "gs://data-engineering-i1-group6-tfstate/",
+  "uniform_bucket_level_access": true,
+  "update_time": "2026-11-06T16:16:06+0000",
+  "versioning_enabled": true
+}
