@@ -1,0 +1,35 @@
+{
+  "measured_at": "2026-11-10T17:11:33.288111+00:00",
+  "month": "2026-09",
+  "project": "data-engineering-i1",
+  "location": "europe-west1",
+  "labels": {
+    "team": "group6",
+    "environment": "course",
+    "pipeline": "marketplace",
+    "component": "finops"
+  },
+  "before": {
+    "job_id": "559fe029-d6c7-4854-971f-55eb3e09289a",
+    "query_sha256": "e76bfda2c309a15faa5b851859d1b27a69d7f92806fac6ea8d27ff49986b7f38",
+    "bytes_processed": 5719840,
+    "bytes_billed": 10485760,
+    "cache_hit": false,
+    "slot_ms": 152,
+    "rows": 2440,
+    "result_sha256": "1f78da782a8f951214807bbb8b22ceaa79c7a6dca22d823615bae50d0c854f71"
+  },
+  "after": {
+    "job_id": "b6819e21-173e-4039-a7ca-116894b6f93a",
+    "query_sha256": "5116f46ced6ef16e9b5340d58a7ec4511b8ada112ffd14502094e47e991b7169",
+    "bytes_processed": 69384,
+    "bytes_billed": 10485760,
+    "cache_hit": false,
+    "slot_ms": 18,
+    "rows": 2440,
+    "result_sha256": "1f78da782a8f951214807bbb8b22ceaa79c7a6dca22d823615bae50d0c854f71"
+  },
+  "results_equal": true,
+  "processed_bytes_saved": 5650456,
+  "billed_bytes_saved": 0
+}

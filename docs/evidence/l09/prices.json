@@ -1,0 +1,19 @@
+{
+  "read_at": "2026-11-10",
+  "currency": "USD",
+  "location": "europe-west1",
+  "sources": {
+    "bigquery": "https://cloud.google.com/bigquery/pricing",
+    "gcs": "https://cloud.google.com/storage/pricing",
+    "artifacts": "https://cloud.google.com/artifact-registry/pricing"
+  },
+  "rates": {
+    "bigquery_analysis_per_TiB": 7.5,
+    "bigquery_active_logical_per_GiB_month": 0.02,
+    "bigquery_long_term_logical_per_GiB_month": 0.01,
+    "gcs_standard_per_GiB_month": 0.02,
+    "artifact_storage_per_GiB_month": 0.1
+  },
+  "note": "Belgium regional rates; BigQuery default Iowa table shows different rates. Estimates before shared free tiers, credits and tax.",
+  "bigquery_page_sha256": "917acf2e7fe7bd7d3a0c75ae671fef34a4d8f8bf485117b206d23f1a9e842239"
+}

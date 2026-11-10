@@ -1,0 +1,29 @@
+{
+  "dbt_probe": {
+    "job_id": "619e2107-7b80-4d8f-b865-fdaa1100f1e6",
+    "labels": [
+      {
+        "key": "pipeline",
+        "value": "marketplace"
+      },
+      {
+        "key": "environment",
+        "value": "course"
+      },
+      {
+        "key": "component",
+        "value": "transform"
+      },
+      {
+        "key": "dbt_invocation_id",
+        "value": "a669ba0a-f095-4fc5-9d7c-0ae24e901608"
+      },
+      {
+        "key": "team",
+        "value": "group6"
+      }
+    ]
+  },
+  "model_label_configs_checked": 16,
+  "note": "dbt show SELECT 1 executed; table labels configured, not backfilled by a dbt build."
+}

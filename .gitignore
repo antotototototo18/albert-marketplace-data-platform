@@ -12,6 +12,8 @@ out/
 *.local.json
 *.parquet
 *.csv
+# Cost metadata only; no source records or personal data.
+!docs/evidence/l09/resource-ledger.csv
 *.tar.gz
 # Course stack clone: its legacy CSVs hold passwords and card numbers
 albert-marketplace/

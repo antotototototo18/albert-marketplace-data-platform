@@ -71,19 +71,23 @@ WHEN NOT MATCHED THEN INSERT (order_id, p_id, qty, price_at_purchase, _loaded_at
 # a container cannot answer ("Reauthentication failed", 2026-11-06). One credential
 # to keep fresh instead of two.
 BQ = f"bq --headless --project_id={PROJECT} --location=europe-west1"
+BQ_LABELS = (
+    "--label=team:group6 --label=environment:course "
+    "--label=pipeline:marketplace --label=component:bronze"
+)
 GCLOUD_SETUP = (
     "set -euo pipefail; cp -r /gcloud-ro /tmp/gcloud; export CLOUDSDK_CONFIG=/tmp/gcloud; "
     "export CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE=/gcloud-ro/application_default_credentials.json"
 )
 LOAD = f"""{GCLOUD_SETUP}
-{BQ} load --source_format=PARQUET --replace "group6_bronze.stage_${{TABLE}}_${{STAGE_SUFFIX}}" "/data/${{TABLE}}/${{SINCE}}.parquet"
-{BQ} query --use_legacy_sql=false --maximum_bytes_billed=1073741824 "$MERGE_SQL"
-{BQ} query --use_legacy_sql=false --format=pretty "SELECT '$TABLE' AS tbl,
+{BQ} load {BQ_LABELS} --source_format=PARQUET --replace "group6_bronze.stage_${{TABLE}}_${{STAGE_SUFFIX}}" "/data/${{TABLE}}/${{SINCE}}.parquet"
+{BQ} query {BQ_LABELS} --use_legacy_sql=false --maximum_bytes_billed=1073741824 "$MERGE_SQL"
+{BQ} query {BQ_LABELS} --use_legacy_sql=false --format=pretty "SELECT '$TABLE' AS tbl,
   (SELECT COUNT(*) FROM \\`{PROJECT}.group6_bronze.stage_${{TABLE}}_${{STAGE_SUFFIX}}\\`) AS n_staged,
   (SELECT COUNT(*) FROM \\`{PROJECT}.group6_bronze.${{TABLE}}_raw\\`) AS n_in_bronze"
 """
 DROP_STAGING = f"""{GCLOUD_SETUP}
-{BQ} query --use_legacy_sql=false "
+{BQ} query {BQ_LABELS} --use_legacy_sql=false "
 DROP TABLE IF EXISTS \\`{PROJECT}.group6_bronze.stage_orders_${{STAGE_SUFFIX}}\\`;
 DROP TABLE IF EXISTS \\`{PROJECT}.group6_bronze.stage_order_items_${{STAGE_SUFFIX}}\\`;"
 """

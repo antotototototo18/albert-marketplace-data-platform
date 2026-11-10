@@ -1,5 +1,6 @@
 # Preserve resource-level grants already present in the shared remote state.
 # These are the human identities used by the existing pipeline; no project IAM.
+# IAM members have no labels field and no direct charge; attribute via their dataset.
 locals {
   dataset_writers = {
     bronze_arabeau      = { dataset = google_bigquery_dataset.bronze.dataset_id, member = "user:arabeau@albertschool.com" }

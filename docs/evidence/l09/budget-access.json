@@ -1,0 +1,14 @@
+{
+  "checked_at": "2026-11-10",
+  "budget_created": false,
+  "intended_recipient": "Anthony Rascle <arascle@albertschool.com>",
+  "proposed_monthly_amount": {
+    "currency": "USD",
+    "units": 10
+  },
+  "scope": "projects/671557693556 (shared teaching project)",
+  "budget_api_status": "SERVICE_DISABLED",
+  "enable_api_status": "PERMISSION_DENIED",
+  "missing_permission": "serviceusage.services.enable",
+  "next_step": "Administrator enables billingbudgets.googleapis.com, confirms account currency and grants budget access; review plan with enable_budget_alert=true."
+}
