@@ -1,0 +1,31 @@
+# Allowlist: only job sources and their dependency manifests enter the context.
+**
+# Never re-include a whole directory: Docker would then send all of it,
+# including local dbt target/, logs/, dbt_packages/ and data files.
+!ingestion/*.py
+!ingestion/clickstream.schema.json
+!ingestion/requirements.lock
+!transform/requirements.lock
+!transform/dbt_project.yml
+!transform/profiles.yml
+!transform/packages.yml
+!transform/package-lock.yml
+!transform/models/
+!transform/models/**
+!transform/macros/
+!transform/macros/**
+!transform/tests/
+!transform/tests/**
+# Explicit defense even if the allowlist is expanded later.
+**/.env
+**/.env.*
+**/.venv/**
+**/venv/**
+**/*credentials*.json
+**/*-key.json
+**/service-account*.json
+**/__pycache__/**
+transform/target/
+transform/dbt_packages/
+transform/logs/
+transform/.user.yml

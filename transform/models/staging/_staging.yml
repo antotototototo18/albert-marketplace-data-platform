@@ -1,0 +1,138 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "One row per order row in the export, twins included. GRAIN: (order_id)."
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+      - name: buyer_id
+        data_tests: [not_null]
+      - name: order_date
+        data_tests: [not_null]
+
+  - name: stg_order_items
+    description: "One row per product in an exported order, twins included. GRAIN: (order_id, p_id)."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [order_id, p_id]
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
+      - name: qty
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+      - name: price_at_purchase
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+  - name: stg_product
+    description: "One row per product in the catalogue. GRAIN: (p_id)."
+    columns:
+      - name: p_id
+        data_tests: [unique, not_null]
+      - name: p_name
+        description: Trimmed; NULL where the source name is empty or blank.
+        data_tests:
+          # Six products have no name in the export (data dictionary). The test
+          # warns on those six and fails the day a seventh appears.
+          - not_null:
+              config:
+                severity: error
+                warn_if: ">0"
+                error_if: ">6"
+      - name: catalogue_price
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: false
+
+  - name: stg_review
+    description: "One row per review. GRAIN: (review_id)."
+    columns:
+      - name: review_id
+        data_tests: [unique, not_null]
+      - name: rating
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+      - name: review_text
+        description: Trimmed; NULL for the 124 empty or blank texts.
+
+  - name: stg_product_reviews
+    description: "Bridge product to review. Each review is about one product. GRAIN: (review_id)."
+    columns:
+      - name: review_id
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_review')
+                field: review_id
+      - name: p_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_product')
+                field: p_id
+
+  - name: stg_customer_shipping
+    description: "One row per address of a buyer. GRAIN: (address_id)."
+    columns:
+      - name: address_id
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_shipping_details')
+                field: address_id
+      - name: c_id
+        data_tests:
+          - not_null
+          # The rule that makes orders-to-addresses safe: one default per buyer.
+          - unique:
+              config:
+                where: is_default
+
+  - name: stg_shipping_details
+    description: "One row per address, without the street or phone. GRAIN: (address_id)."
+    columns:
+      - name: address_id
+        data_tests: [unique, not_null]
+      - name: country_code
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [DE, FR, IT, ES, NL, BE]
+
+  - name: stg_clickstream
+    description: "One row per event, replays removed. GRAIN: (event_id)."
+    columns:
+      - name: event_id
+        data_tests: [unique, not_null]
+      - name: event_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [product_viewed, added_to_cart, order_placed]

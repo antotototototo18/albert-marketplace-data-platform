@@ -1,0 +1,15 @@
+L07 gate drill, v2 (dbt_build), run backfill__2026-09-17 (period 2026-09-16), 2026-11-06 14:09-14:23 UTC
+Same poison row (docs/evidence/l07/04-poison-row.sql), inserted after a clean v2 run had rebuilt gold.
+Run state: failed. dbt_build failed on its 3 attempts; alert sent after the last one.
+dbt: PASS=54 WARN=1 ERROR=1 SKIP=38. FAIL 1 dbt_utils_unique_combination_of_columns_stg_order_items_order_id__p_id
+Skipped downstream: int_orders__deduplicated, int_orders__country, dim_date, fct_order_items, fct_daily_demand and their tests.
+
+                         bronze   gold (after the failed run)
+copies of the line       2        1
+units_sold 2026-09-16             1201 (clean baseline 1201)
+fct_order_items lines              364  (clean baseline 364)
+revenue EUR                        32802.35 (clean baseline 32802.35)
+
+Verdict: the bad row stopped at staging. A lock.
+--- 18522403 bytes
+{'orders_raw': 223112, 'items_raw': 409416, 'copies': 1, 'units_15_16': 2794, 'stage_left': 0}

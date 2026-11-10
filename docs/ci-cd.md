@@ -38,7 +38,7 @@ les contributeurs déclarés (y compris anonymes), puis tous les commits de
 l'historique de la branche vérifiée. Sur une PR, il vérifie le SHA source de
 la PR, avant fusion : la liste des contributeurs GitHub peut être en cache.
 
-Seuls les auteurs liés à `anthonyrascle43-stack`, `antorabo75`, `csb123d`,
+Seuls les auteurs liés à `antotototototo18`, `antorabo75`, `csb123d`,
 `lsantus-mines` et `BenjaminAHS` sont admis. Les bots, les comptes extérieurs,
 les auteurs sans compte lié et les signatures d'agents IA reconnus sont refusés.
 Les committers doivent aussi appartenir au groupe, avec une exception pour

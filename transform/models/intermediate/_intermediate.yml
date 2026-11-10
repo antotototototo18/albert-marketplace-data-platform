@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: int_orders__deduplicated
+    description: "One row per real order, export twins removed. GRAIN: (order_id)."
+    # Twins are checked by tests/assert_each_kept_order_has_one_twin.sql.
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+
+  - name: int_orders__country
+    description: "One row per real order with its country proxy. GRAIN: (order_id)."
+    columns:
+      - name: order_id
+        data_tests:
+          # Fails if the default-address filter ever lets a second address through.
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('int_orders__deduplicated')
+                field: order_id
+      - name: country_code
+        data_tests: [not_null]
+
+  - name: int_product__ratings
+    description: "One row per reviewed product. GRAIN: (p_id)."
+    columns:
+      - name: p_id
+        data_tests: [unique, not_null]
+      - name: avg_rating
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 5
