@@ -1,9 +1,10 @@
 # Architecture d'Albert's Marketplace
 
-Version L04 du 26 octobre 2026. Le bucket bronze du groupe contient l'export
+Version L08 du 10 novembre 2026. Le bucket bronze du groupe contient l'export
 legacy (L02) et les écritures des trois chemins d'ingestion L03 ; le jeu de
-travail est chargé dans BigQuery (L04) ; le reste du diagramme est la
-**cible proposée** en L01, à relire par le groupe.
+travail est chargé dans BigQuery (L04) ; dbt construit silver et gold (L05) ;
+un DAG Airflow alimente chaque jour les commandes de bronze et relance dbt
+(L07). Le reste du diagramme est la **cible proposée** en L01, à relire par le groupe.
 
 ## Context
 
@@ -34,6 +35,7 @@ flowchart LR
   pg -->|"1. Xmin, toutes les 24 h"| connector["Connecteur Airbyte local / sans pwd, card_no, cvv / L03"]
   pg -->|"2. order_id > curseur"| extract["ingestion/extract_orders.py / retries, curseur durable / L03"]
   kafka -->|"3. au moins une fois"| consumer["ingestion/consume_clickstream.py / JSON Schema v1 / L03"]
+  pg -->|"4. une journee par run, periode du run"| airflow["Airflow local / DAG group6_marketplace_daily, quotidien UTC, alerte e-mail / L07"]
 
   subgraph gcp["Projet data-engineering-i1 / europe-west1"]
     subgraph bucket["gs://data-engineering-i1-group6 / Standard, acces uniforme, public bloque"]
@@ -46,6 +48,7 @@ flowchart LR
     end
     subgraph bq["BigQuery / L04-L05"]
       ext[("group6_bronze / tables externes, aucune ligne stockee / L04")]
+      raw[("group6_bronze.orders_raw, order_items_raw / natives, legacy + extraits du DAG / L07")]
       loaded[("group6_warehouse / 7 tables natives typees, orders et order_items partitionnees par mois / L04")]
       mv[("daily_demand / vue materialisee produit x jour / L04")]
       silver[("Silver / types, deduplication, jointures")]
@@ -53,8 +56,12 @@ flowchart LR
       ext -->|"CREATE TABLE AS SELECT / L04"| loaded
       loaded --> mv
       loaded -.->|"dbt"| silver
-      silver -.->|"dbt et tests"| gold
+      ext -->|"copie initiale du legacy / L07"| raw
+      raw -->|"dbt build, sources orders et order_items / L07"| silver
+      ext -->|"dimensions, legacy / L05"| silver
+      silver -->|"dbt et tests / L05"| gold
     end
+    airflow -->|"MERGE sur la cle / L07"| raw
     legacy -->|"7 tables / L04"| ext
     click -->|"partition dt / L04"| ext
     airbyte -.->|"une source par table, L05"| silver
@@ -79,6 +86,12 @@ Le diagramme montre quatre producteurs du bronze, sans dépôt manuel :
   incomplète, faute de mémoire dans Docker.
 - **L'extracteur SQL**, sous `manual/orders/`, avec son curseur sous `_state/`.
 - **Le consumer Kafka**, sous `clickstream/v1/`, et ses rejets sous `_dlq/`.
+
+Depuis L07, un cinquième producteur écrit directement dans BigQuery : le DAG
+Airflow extrait chaque jour les commandes et leurs lignes de la période du run,
+puis les fusionne par `MERGE` dans `group6_bronze.orders_raw` et
+`order_items_raw`, que lit dbt ([orchestration](orchestration.md),
+[ADR-0007](adr/0007-idempotency.md)).
 
 Chaque préfixe a un seul producteur identifié. `orders` arrive par trois
 chemins, avec des types différents : le [dictionnaire](data-dictionary.md#flux-l03)
@@ -111,7 +124,7 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | Schéma et profil de l'export legacy | Inspection reproductible ; voir [le profil L01](evidence/l01-source-profile.json). |
 | Bucket du groupe | `gs://data-engineering-i1-group6`, `europe-west1`, Standard, accès uniforme, accès public bloqué, suppression réversible de 7 jours ; lu avec `gcloud storage buckets describe`. |
 | Bronze legacy | 27 tables, 2 928 485 lignes, 62 Mo de Parquet zstd, chacune comparée à son CSV ; voir [le manifeste](evidence/l02-bronze-legacy-manifest.json). |
-| Lifecycle | Défini dans [infra/lifecycle.json](../infra/lifecycle.json), limité à `bronze/legacy/` : Nearline à 30 jours, Coldline à 90, Archive à 365. |
+| Lifecycle | Défini dans [infra/lifecycle.json](../infra/lifecycle.json), limité à `bronze/legacy/` : Nearline à 45 jours (valeur réelle adoptée en L08), Coldline à 90, Archive à 365. |
 | IAM | Six liaisons par défaut, aucune ajoutée ; moindre privilège non atteint ; voir [infra/iam.md](../infra/iam.md). |
 | Coûts | Moins de $0.002 par mois ; voir [costs.md](costs.md). |
 | Extracteur `orders` (L03) | 228 028 commandes puis 2 à la reprise ; voir [le compte rendu](evidence/l03-live-run.json). |
@@ -119,7 +132,9 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | Connecteur Airbyte (L03) | Xmin, Incremental \| Append, 24 h ; `pwd`, `card_no` et `cvv` absents des fichiers. Synchro partielle : 6 streams complets sur 9 ; voir [la preuve](evidence/l03-airbyte-sync.json). Clé HMAC de compte utilisateur, à remplacer. |
 | Warehouse (L04) | `group6_warehouse`, `europe-west1` : 7 tables natives aux comptes du bronze, `orders` et `order_items` partitionnées par mois (37 partitions), vue `daily_demand` ; avant/après mesurés cache désactivé, plafond de 1 GiB vu en échec ; voir [les mesures](evidence/l04-warehouse-measurements.json) et [les réglages](warehouse-tuning.md). |
 | Transformations | À réaliser en L05. |
-| Docker, orchestration et Terraform | À réaliser de L06 à L08. |
+| Docker (L06) | Deux images privées `group6-ingestion` et `group6-transform` dans Artifact Registry `dataeng`, `europe-west1`, base et dépendances fixées, UID 10001. Reproduction d'ingestion après suppression locale réussie ; rétention refusée par IAM, voir [le transcript](reproduce.md). |
+| Orchestration (L07) | DAG `group6_marketplace_daily` sur Airflow 3.3.2 local : run planifié et back-fill du 15 au 16 septembre réussis, prédiction exacte (+468 commandes, +856 lignes), rejeu sans effet ; alerte e-mail reçue après les retries ; quality gate déclenchée par une ligne dupliquée. Voir [orchestration.md](orchestration.md). |
+| Terraform (L08) | Bucket, quatre datasets et cinq membres IAM dataset déclarés, imports conservés, état GCS partagé versionné ; plans réels sans changement et dérive lifecycle détectée puis écrasée. Compte de service non adoptable avec les accès disponibles ; voir [infra.md](infra.md) et [ADR-0008](adr/0008-remote-state.md). |
 
 ## Decisions
 
@@ -129,6 +144,8 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | [0002](adr/0002-bronze-layout.md) | Bronze legacy en Parquet zstd, colonnes texte, partition `ingested_date` | Proposed |
 | [0003](adr/0003-ingestion-modes.md) | Xmin pour le connecteur, curseur d'ID pour l'extracteur, Kafka au moins une fois | Proposed |
 | [0004](adr/0004-warehouse-pricing.md) | BigQuery à la demande, plafonné à 1 GiB par requête | Proposed |
+| [0006](adr/0006-image-tags.md) | Images privées, tags de build datés, rollback par digest et rétention | Proposed ; suppression bloquée par IAM |
+| [0008](adr/0008-remote-state.md) | État Terraform partagé dans GCS, versions et verrouillage | Proposed pour relecture ; backend vérifié |
 
 ## Change log
 
@@ -138,6 +155,9 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | 2026-10-16 | L02 | Bucket du groupe, bronze legacy chargé, layout mesuré, lifecycle, IAM et coûts ; diagramme distinguant le construit de la cible. |
 | 2026-10-16 | L03 | Trois chemins d'ingestion vers bronze (connecteur, extracteur, consumer), DLQ et état de l'extracteur. |
 | 2026-10-26 | L04 | Tables externes sur bronze, jeu de travail chargé en tables natives réglées, vue `daily_demand`, plafond par requête. Airbyte et l'extracteur rejoignent silver en L05, pas le chargement natif. |
+| 2026-11-03 | L06 | Deux images construites et publiées, reproduction figée vérifiée après suppression/pull. Rétention tentée mais permission de suppression manquante. |
+| 2026-11-06 | L07 | DAG Airflow quotidien : extraction par période, `MERGE` dans deux tables bronze natives, dbt. Sources dbt `orders` et `order_items` repointées sur ces tables. |
+| 2026-11-10 | L08 | Configuration alignée sur l'état distant existant, lifecycle réel à 45 jours adopté, dérive 45 → 46 détectée puis restaurée ; CI sans accès cloud et ADR d'état distant. |
 
 Mettre cette page à jour à la fin de chaque étape, en remplaçant les intentions
 par les ressources et garanties réellement vérifiées. Le [suivi du projet](project-plan.md)

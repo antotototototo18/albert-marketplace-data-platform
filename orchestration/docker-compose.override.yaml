@@ -1,0 +1,62 @@
+# Compose merges this file on top of docker-compose.yaml. The service names
+# below must match the ones in that file exactly.
+#
+# The course's three additions (build + image, HOST_DIR/GCLOUD_DIR, the Docker
+# socket on scheduler and worker), plus group 6's: dags/ mounted from the
+# repository's orchestration/dags, and the variables the DAG and its failure
+# alert read. Volumes merge by container path, so this dags mount replaces the
+# base file's ./dags one.
+x-group6-environment: &group6-environment
+  HOST_DIR: ${HOST_DIR}
+  GCLOUD_DIR: ${GCLOUD_DIR}
+  SOURCE_DATABASE_URL: ${SOURCE_DATABASE_URL}
+  SMTP_HOST: ${SMTP_HOST}
+  SMTP_PORT: ${SMTP_PORT}
+  SMTP_USER: ${SMTP_USER}
+  SMTP_PASSWORD: ${SMTP_PASSWORD}
+  ALERT_EMAIL_TO: ${ALERT_EMAIL_TO}
+  # dbt target: group6 = the shared group6_silver/gold; group6_l07_<name> while developing.
+  DBT_DATASET: ${DBT_DATASET:-group6}
+
+services:
+
+  airflow-worker:
+    build: .
+    image: albert-airflow:3.3.2
+    environment: *group6-environment
+    volumes:
+      - ${DAGS_DIR}:/opt/airflow/dags
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  airflow-scheduler:
+    build: .
+    image: albert-airflow:3.3.2
+    environment: *group6-environment
+    volumes:
+      - ${DAGS_DIR}:/opt/airflow/dags
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  airflow-dag-processor:
+    build: .
+    image: albert-airflow:3.3.2
+    environment: *group6-environment
+    volumes:
+      - ${DAGS_DIR}:/opt/airflow/dags
+
+  airflow-apiserver:
+    build: .
+    image: albert-airflow:3.3.2
+    environment: *group6-environment
+    volumes:
+      - ${DAGS_DIR}:/opt/airflow/dags
+
+  airflow-triggerer:
+    build: .
+    image: albert-airflow:3.3.2
+    environment: *group6-environment
+    volumes:
+      - ${DAGS_DIR}:/opt/airflow/dags
+
+  airflow-init:
+    build: .
+    image: albert-airflow:3.3.2
