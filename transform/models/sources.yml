@@ -1,0 +1,120 @@
+version: 2
+
+# Bronze, declared and never built by dbt. The tables are BigQuery external tables
+# over gs://data-engineering-i1-group6/bronze (warehouse/02_bronze_external.sql),
+# except orders and order_items: since L07 they are native tables the Airflow DAG
+# merges into (warehouse/06_bronze_native.sql, ADR-0007), legacy rows included.
+#
+# Freshness: each threshold is answered by "what breaks, and for whom, if this is
+# this old?". The reasons are next to the numbers, and summarised in
+# docs/acceptance-criteria.md. `dbt source freshness` runs them; `dbt build` does not.
+
+sources:
+  - name: bronze_legacy
+    description: >
+      Relational tables of the marketplace, landed as Parquet with every column a
+      STRING (ADR-0002). Today only the 2026-10-16 legacy export is behind them;
+      the 24-hour Airbyte sync (ADR-0003) is what these thresholds are set for.
+    database: "{{ env_var('GCP_PROJECT_ID', 'data-engineering-i1') }}"
+    schema: group6_bronze
+    config:
+      # The landing date is only in the object path (.../ingested_date=YYYY-MM-DD/).
+      loaded_at_field: >-
+        TIMESTAMP(PARSE_DATE('%Y-%m-%d', REGEXP_EXTRACT(_FILE_NAME, r'ingested_date=(\d{4}-\d{2}-\d{2})')))
+    tables:
+      - name: orders
+        identifier: orders_raw
+        description: >
+          One row per order, merged on order_id by the DAG. Every order of the legacy
+          export appears twice (see int_orders__deduplicated); scheduled extracts do not.
+        config:
+          # A native table has no _FILE_NAME: the merge stamps each row it writes.
+          loaded_at_field: _loaded_at
+          # The ML team trains every morning on fct_daily_demand, and the sync runs
+          # every 24 h. One missed sync (24 h + 2 h for the sync itself) is a warning.
+          # A second one means the morning's training set has a whole day with zero
+          # demand that is not real: that must stop the pipeline.
+          freshness:
+            warn_after: {count: 26, period: hour}
+            error_after: {count: 48, period: hour}
+
+      - name: order_items
+        identifier: order_items_raw
+        description: One row per product in an order, merged on (order_id, p_id) by the DAG. No unnamed_0 column.
+        config:
+          loaded_at_field: _loaded_at
+          # Same sync and same consumer as orders, so the same numbers: an order
+          # whose lines have not arrived counts zero units, which is worse than a
+          # missing order.
+          freshness:
+            warn_after: {count: 26, period: hour}
+            error_after: {count: 48, period: hour}
+
+      - name: product
+        description: The catalogue, one row per product.
+        config:
+          # Gold uses only the name and the category. A product sold before the
+          # catalogue catches up already fails the relationships test on
+          # fct_order_items, so freshness only has to catch a catalogue load that
+          # died silently: three days to notice, a week before it is an error.
+          freshness:
+            warn_after: {count: 72, period: hour}
+            error_after: {count: 7, period: day}
+
+      - name: review
+        description: One row per review. Rating 1 to 5, free text.
+        config:
+          # Feeds only avg_rating and review_count in dim_product. About 100 reviews
+          # a day over 111,322 in three years: a week's delay moves no product's
+          # average rating in a way any consumer would act on.
+          freshness:
+            warn_after: {count: 7, period: day}
+            error_after: {count: 14, period: day}
+
+      - name: product_reviews
+        description: Bridge between product and review, one row per review.
+        config:
+          # Loaded with review and useless without it: same thresholds.
+          freshness:
+            warn_after: {count: 7, period: day}
+            error_after: {count: 14, period: day}
+
+      - name: customer_shipping
+        description: Buyer to address, with the default-address flag.
+        config:
+          # Used only for the country proxy. A new buyer whose address has not
+          # arrived lands in UNKNOWN, which has its own warning test; addresses of
+          # existing buyers rarely change. A month before it is an error.
+          freshness:
+            warn_after: {count: 7, period: day}
+            error_after: {count: 30, period: day}
+
+      - name: shipping_details
+        description: One row per address. Holds direct personal data (street, phone).
+        config:
+          # Loaded with customer_shipping, used for the country only: same thresholds.
+          freshness:
+            warn_after: {count: 7, period: day}
+            error_after: {count: 30, period: day}
+
+  - name: bronze_stream
+    description: Clickstream events written by ingestion/consume_clickstream.py.
+    database: "{{ env_var('GCP_PROJECT_ID', 'data-engineering-i1') }}"
+    schema: group6_bronze
+    tables:
+      - name: clickstream
+        description: >
+          One row per event received, at least once: a replay writes the same
+          event_id again. dt is the UTC day of event_time, from the object path;
+          every query must filter on it.
+        config:
+          loaded_at_field: TIMESTAMP(_ingested_at)
+          # The consumer flushes every 5 seconds (KAFKA_FLUSH_SECONDS), so two hours
+          # without a file means it is down, not that the shop is quiet. Nothing in
+          # gold reads events yet: the cost of the gap is the replay, which is only
+          # possible while Kafka still holds the events (7 days by broker default,
+          # not measured on our cluster). A day is the error, with six left to replay.
+          freshness:
+            warn_after: {count: 2, period: hour}
+            error_after: {count: 24, period: hour}
+            filter: dt >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)

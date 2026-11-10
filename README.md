@@ -16,7 +16,7 @@ the end of the course it holds the platform your group defends orally:
 
 | Name | GitHub | Role |
 |---|---|---|
-| Anthony Rascle | [@anthonyrascle43-stack](https://github.com/anthonyrascle43-stack) | Data Engineer |
+| Anthony Rascle | [@antotototototo18](https://github.com/antotototototo18) | Data Engineer |
 | Antoine Rabeau | [@antorabo75](https://github.com/antorabo75) | Data Engineer |
 | Colin Sibieude | [@csb123d](https://github.com/csb123d) | Data Engineer |
 | Lenny Santus | [@lsantus-mines](https://github.com/lsantus-mines) | Data Analyst |
@@ -30,7 +30,7 @@ Every pull request is reviewed inside its author's squad.
 
 | Squad | Members | Reviews |
 |---|---|---|
-| A | Anthony ([@anthonyrascle43-stack](https://github.com/anthonyrascle43-stack)), Antoine ([@antorabo75](https://github.com/antorabo75)) | Anthony ↔ Antoine |
+| A | Anthony ([@antotototototo18](https://github.com/antotototototo18)), Antoine ([@antorabo75](https://github.com/antorabo75)) | Anthony ↔ Antoine |
 | B | Benjamin ([@BenjaminAHS](https://github.com/BenjaminAHS)), Lenny ([@lsantus-mines](https://github.com/lsantus-mines)) | Benjamin ↔ Lenny |
 | Floating | Colin ([@csb123d](https://github.com/csb123d)) | Joins one squad per lesson, in turn |
 
@@ -68,6 +68,108 @@ see [ingestion/README.md](ingestion/README.md), the
 [ingestion decision](docs/adr/0003-ingestion-modes.md) and the
 [failure modes](docs/ingestion-failure-modes.md).
 
+The L04 warehouse loads the working set into BigQuery (`group6_warehouse`):
+see [warehouse/README.md](warehouse/README.md), the measured
+[tuning and costs](docs/warehouse-tuning.md), the
+[pricing decision](docs/adr/0004-warehouse-pricing.md) and the
+[slow-query runbook](docs/runbooks/slow-query.md).
+
+## L06 — Run the images on a new machine
+
+You need Docker Desktop (running), a browser, a terminal with a POSIX shell,
+and your own course GCP account with access to the private `dataeng` registry.
+No host Python, dbt, Git or Google SDK is required. In GitHub, on branch
+`main`, choose **Code → Download ZIP**, extract it and open a terminal in the
+extracted repository. The course template remains restricted to course use.
+
+On Windows, use Git Bash and run `export MSYS_NO_PATHCONV=1` first: otherwise
+Git Bash rewrites container paths such as `/config` into `C:/Program Files/Git/config`.
+
+Authenticate using the Google CLI inside a pinned container. These commands
+store credentials in a Docker volume, outside the repository and images:
+
+```sh
+SDK=gcr.io/google.com/cloudsdktool/google-cloud-cli:546.0.0-stable@sha256:216b2307d4fafab08e259abe774ed7c29f3fef290418b2d0142d627c3184cff5
+docker volume create group6-gcloud
+docker run --rm --entrypoint sh -v group6-gcloud:/config "$SDK" \
+  -c 'chown 10001:10001 /config'
+docker run --rm -it --user 10001:10001 -e HOME=/tmp -e CLOUDSDK_CONFIG=/config \
+  -v group6-gcloud:/config "$SDK" gcloud auth login --no-launch-browser
+docker run --rm --user 10001:10001 -e HOME=/tmp -e CLOUDSDK_CONFIG=/config \
+  -v group6-gcloud:/config "$SDK" gcloud auth print-access-token \
+  | docker login -u oauth2accesstoken --password-stdin https://europe-west1-docker.pkg.dev
+REGISTRY=europe-west1-docker.pkg.dev/data-engineering-i1/dataeng
+TAG=20261103T-step6-01
+docker pull --platform linux/amd64 "$REGISTRY/group6-ingestion:$TAG"
+docker pull --platform linux/amd64 "$REGISTRY/group6-transform:$TAG"
+```
+
+To verify ingestion without production credentials or a live source:
+
+```sh
+sh scripts/reproduce-images.sh "$REGISTRY/group6-ingestion:$TAG"
+```
+
+Expected: `rows_written: 3`, then the same three rows and canonical content
+hash twice, and `PASS`. This creates an isolated PostgreSQL fixture, deletes
+the ingestion image locally, pulls it again and checks both outputs. Output
+volumes are retained and named in the final line. No production table is used.
+The actual transcript, push/pull digests and outstanding IAM limitation are
+in [docs/reproduce.md](docs/reproduce.md).
+
+For production GCS/BigQuery, create Application Default Credentials in the same
+volume, using your own account:
+
+```sh
+docker run --rm -it --user 10001:10001 -e HOME=/tmp -e CLOUDSDK_CONFIG=/config \
+  -v group6-gcloud:/config "$SDK" gcloud auth application-default login --no-launch-browser
+```
+
+Prepare an untracked `.env` from `.env.example` with `DATABASE_URL` and
+`BRONZE_URI`. In containers, a database or Kafka broker running on the host
+must use `host.docker.internal`, rather than `localhost`; use the actual host
+port. Keep credentials out of shell history and Git. Run the SQL extractor:
+
+```sh
+docker run --rm --platform linux/amd64 --add-host host.docker.internal:host-gateway \
+  --env-file .env -v group6-gcloud:/credentials:ro \
+  -e GOOGLE_APPLICATION_CREDENTIALS=/credentials/application_default_credentials.json \
+  "$REGISTRY/group6-ingestion:$TAG"
+```
+
+The ingestion entrypoint also runs the Kafka job: append
+`ingestion.consume_clickstream --max-messages 200` to that command, after
+configuring the Kafka variables described in [ingestion/README.md](ingestion/README.md).
+Mount any `KAFKA_CLIENT_CONFIG` separately, read-only. Run dbt in your own datasets:
+
+```sh
+docker run --rm --platform linux/amd64 -v group6-gcloud:/credentials:ro \
+  -e GOOGLE_APPLICATION_CREDENTIALS=/credentials/application_default_credentials.json \
+  -e GCP_PROJECT_ID=data-engineering-i1 -e DBT_DATASET=group6_dev_lenny \
+  "$REGISTRY/group6-transform:$TAG" build
+```
+
+Replace `group6_dev_lenny` with your own dataset prefix. The account needs
+BigQuery job permission, bronze read access and permission to create/write the
+development datasets. `dbt_utils` is already installed in the image. Docker
+Desktop emulates `linux/amd64` on Apple Silicon. A failed pull with 401 means
+the access token expired: repeat the token/login command; a 403 requires the
+course administrator to grant registry read access.
+
+To rebuild, run from the repository root, choose a new unused dated build tag,
+and build both jobs with the root build context:
+
+```sh
+TAG=20261103T-step6-02
+docker build --platform linux/amd64 -f ingestion/Dockerfile -t "$REGISTRY/group6-ingestion:$TAG" .
+docker build --platform linux/amd64 -f transform/Dockerfile -t "$REGISTRY/group6-transform:$TAG" .
+```
+
+Publish only after verifying the tag is unused and recording both push digests.
+See [ADR-0006](docs/adr/0006-image-tags.md) for rollback and retention.
+The Docker-only instructions are prepared; a walkthrough by someone from another
+group remains to be performed and recorded.
+
 ## How this repo grows
 
 | Lesson | What your group adds | Where |
@@ -77,8 +179,8 @@ see [ingestion/README.md](ingestion/README.md), the
 | L03 · Batch, streaming, CDC | Ingestion pipelines | `ingestion/` |
 | L04 · SQL warehouses | Warehouse tables, three costed queries | `docs/` |
 | L05 · dbt and the medallion pattern | Silver and gold models, tests | `transform/` (planned) |
-| L06 · Packaging data jobs | Dockerfiles for the ingestion job and dbt | `ingestion/`, `transform/` (planned) |
-| L07 · Airflow | A scheduled DAG | `orchestration/` |
+| L06 · Packaging data jobs | Two published images and ingestion reproduction; retention deletion blocked by IAM | `ingestion/`, `transform/`, [evidence](docs/reproduce.md) |
+| L07 · Airflow | A daily DAG: extract a day, merge into bronze, dbt; alert, quality gate, back-fill | `orchestration/`, [docs](docs/orchestration.md) |
 | L08 · Terraform | The platform as code, format and validation in CI, local plan | `infra/`, `.github/workflows/` |
 | L09 · FinOps | Labels, a budget alert, one measured optimisation | `infra/`, `docs/` |
 | L10 · Security and governance | Least-privilege access, PII redaction, data classification | `infra/`, `transform/`, `docs/` |

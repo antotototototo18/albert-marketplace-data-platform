@@ -1,0 +1,72 @@
+google_bigquery_dataset.gold: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_gold]
+google_storage_bucket.bronze: Refreshing state... [id=data-engineering-i1-group6]
+google_bigquery_dataset.warehouse: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_warehouse]
+google_bigquery_dataset.silver: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_silver]
+google_bigquery_dataset.bronze: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_bronze]
+google_bigquery_dataset_iam_member.bronze_reader_arabeau: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_bronze/roles/bigquery.dataViewer/user:arabeau@albertschool.com]
+google_bigquery_dataset_iam_member.writer["bronze_arabeau"]: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_bronze/roles/bigquery.dataEditor/user:arabeau@albertschool.com]
+google_bigquery_dataset_iam_member.writer["warehouse_csibieude"]: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_warehouse/roles/bigquery.dataEditor/user:csibieude@albertschool.com]
+google_bigquery_dataset_iam_member.writer["bronze_csibieude"]: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_bronze/roles/bigquery.dataEditor/user:csibieude@albertschool.com]
+google_bigquery_dataset_iam_member.writer["warehouse_arabeau"]: Refreshing state... [id=projects/data-engineering-i1/datasets/group6_warehouse/roles/bigquery.dataEditor/user:arabeau@albertschool.com]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # google_storage_bucket.bronze will be updated in-place
+  ~ resource "google_storage_bucket" "bronze" {
+        id                          = "data-engineering-i1-group6"
+        name                        = "data-engineering-i1-group6"
+        # (18 unchanged attributes hidden)
+
+      ~ lifecycle_rule {
+          - condition {
+              - age                                     = 46 -> null
+              - days_since_custom_time                  = 0 -> null
+              - days_since_noncurrent_time              = 0 -> null
+              - matches_prefix                          = [
+                  - "bronze/legacy/",
+                ] -> null
+              - matches_storage_class                   = [
+                  - "STANDARD",
+                ] -> null
+              - matches_suffix                          = [] -> null
+              - num_newer_versions                      = 0 -> null
+              - send_age_if_zero                        = false -> null
+              - send_days_since_custom_time_if_zero     = false -> null
+              - send_days_since_noncurrent_time_if_zero = false -> null
+              - send_num_newer_versions_if_zero         = false -> null
+              - size_above_bytes                        = 0 -> null
+              - size_below_bytes                        = 0 -> null
+              - with_state                              = "ANY" -> null
+                # (3 unchanged attributes hidden)
+            }
+          + condition {
+              + age                    = 45
+              + matches_prefix         = [
+                  + "bronze/legacy/",
+                ]
+              + matches_storage_class  = [
+                  + "STANDARD",
+                ]
+              + matches_suffix         = []
+              + with_state             = (known after apply)
+                # (3 unchanged attributes hidden)
+            }
+
+            # (1 unchanged block hidden)
+        }
+
+        # (4 unchanged blocks hidden)
+    }
+
+Plan: 0 to add, 1 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: drift.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "drift.tfplan"

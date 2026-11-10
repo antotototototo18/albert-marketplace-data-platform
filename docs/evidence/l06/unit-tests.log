@@ -1,0 +1,43 @@
+test_all_seven_streams_and_only_whitelisted_evidence (test_airbyte_selection.AirbyteSelectionTests.test_all_seven_streams_and_only_whitelisted_evidence) ... ok
+test_missing_stream_and_manual_connection_are_rejected (test_airbyte_selection.AirbyteSelectionTests.test_missing_stream_and_manual_connection_are_rejected) ... ok
+test_secret_columns_must_be_deselected_before_writing (test_airbyte_selection.AirbyteSelectionTests.test_secret_columns_must_be_deselected_before_writing) ... ok
+test_all_pages_are_read (test_contributor_policy.ApiTests.test_all_pages_are_read) ... ok
+test_api_errors_do_not_pass (test_contributor_policy.ApiTests.test_api_errors_do_not_pass) ... ok
+test_missing_credentials_do_not_skip_the_policy (test_contributor_policy.ApiTests.test_missing_credentials_do_not_skip_the_policy) ... ok
+test_unexpected_payload_is_rejected (test_contributor_policy.ApiTests.test_unexpected_payload_is_rejected) ... ok
+test_agent_cannot_be_committer (test_contributor_policy.AttributionTests.test_agent_cannot_be_committer) ... ok
+test_agent_signature_under_human_account_is_rejected (test_contributor_policy.AttributionTests.test_agent_signature_under_human_account_is_rejected) ... ok
+test_bot_and_outsider_contributors_are_rejected (test_contributor_policy.AttributionTests.test_bot_and_outsider_contributors_are_rejected) ... ok
+test_coauthors_must_belong_to_group (test_contributor_policy.AttributionTests.test_coauthors_must_belong_to_group) ... ok
+test_empty_results_do_not_pass (test_contributor_policy.AttributionTests.test_empty_results_do_not_pass) ... ok
+test_forged_web_committer_is_rejected (test_contributor_policy.AttributionTests.test_forged_web_committer_is_rejected) ... ok
+test_github_web_committer_is_accepted_for_human_author (test_contributor_policy.AttributionTests.test_github_web_committer_is_accepted_for_human_author) ... ok
+test_group_members_are_accepted (test_contributor_policy.AttributionTests.test_group_members_are_accepted) ... ok
+test_history_is_checked_beyond_tip (test_contributor_policy.AttributionTests.test_history_is_checked_beyond_tip) ... ok
+test_pr_author_is_checked_before_contributors_cache_updates (test_contributor_policy.AttributionTests.test_pr_author_is_checked_before_contributors_cache_updates) ... ok
+test_bad_row_is_persisted_and_later_good_row_continues (test_ingestion.EventTests.test_bad_row_is_persisted_and_later_good_row_continues) ... ok
+test_commit_failure_replays_durable_files (test_ingestion.EventTests.test_commit_failure_replays_durable_files) ... ok
+test_dlq_failure_never_commits_valid_events_either (test_ingestion.EventTests.test_dlq_failure_never_commits_valid_events_either) ... ok
+test_each_observed_event_shape_is_accepted (test_ingestion.EventTests.test_each_observed_event_shape_is_accepted) ... ok
+test_offsets_are_explicit_for_each_partition (test_ingestion.EventTests.test_offsets_are_explicit_for_each_partition) ... ok
+test_reject_reason_names_missing_field_without_values (test_ingestion.EventTests.test_reject_reason_names_missing_field_without_values) ... ok
+test_schema_dispatch_and_bad_payloads (test_ingestion.EventTests.test_schema_dispatch_and_bad_payloads) ... ok
+test_storage_failure_never_commits_offsets (test_ingestion.EventTests.test_storage_failure_never_commits_offsets) ... ok
+test_connection_retries_grow_then_stop (test_ingestion.ExtractorTests.test_connection_retries_grow_then_stop) ... PostgreSQL connection failed; retry 1 in 1s
+PostgreSQL connection failed; retry 2 in 2s
+PostgreSQL connection failed; retry 3 in 4s
+ok
+test_failed_checkpoint_write_leaves_objects_replayable (test_ingestion.ExtractorTests.test_failed_checkpoint_write_leaves_objects_replayable) ... ok
+test_failed_object_write_does_not_advance_cursor (test_ingestion.ExtractorTests.test_failed_object_write_does_not_advance_cursor) ... ok
+test_restart_uses_durable_id_cursor_for_same_day_insert (test_ingestion.ExtractorTests.test_restart_uses_durable_id_cursor_for_same_day_insert) ... ok
+test_data_is_not_overwritten_and_checkpoint_rejects_stale_version (test_ingestion.StoreTests.test_data_is_not_overwritten_and_checkpoint_rejects_stale_version) ... ok
+test_gcs_writes_use_generation_preconditions (test_ingestion.StoreTests.test_gcs_writes_use_generation_preconditions) ... ok
+test_unsafe_object_paths_are_rejected (test_ingestion.StoreTests.test_unsafe_object_paths_are_rejected) ... ok
+test_ambiguous_table_paths_are_rejected (test_source_profile.SourceProfileTests.test_ambiguous_table_paths_are_rejected) ... ok
+test_defects_are_counted_without_cleaning_or_disclosing_rows (test_source_profile.SourceProfileTests.test_defects_are_counted_without_cleaning_or_disclosing_rows) ... ok
+test_missing_tables_are_rejected (test_source_profile.SourceProfileTests.test_missing_tables_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 35 tests in 0.777s
+
+OK

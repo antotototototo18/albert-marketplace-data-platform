@@ -34,6 +34,7 @@ transform/logs/
 .terraform/
 *.tfstate
 *.tfstate.*
+*.tfplan
 crash.log
 *.tfvars
 !*.tfvars.example
@@ -45,3 +46,4 @@ orchestration/logs/
 .idea/
 .DS_Store
 Thumbs.db
+transform/.user.yml
