@@ -6,6 +6,7 @@ resource "google_storage_bucket" "bronze" {
   uniform_bucket_level_access = true
   public_access_prevention    = "enforced"
   force_destroy               = false
+  labels                      = merge(local.common_labels, { component = "bronze" })
 
   soft_delete_policy {
     retention_duration_seconds = 604800
@@ -32,6 +33,7 @@ resource "google_storage_bucket" "bronze" {
 }
 
 resource "google_bigquery_dataset" "bronze" {
+  labels                     = merge(local.common_labels, { component = "bronze" })
   dataset_id                 = "group6_bronze"
   location                   = "europe-west1"
   description                = "External tables over gs://data-engineering-i1-group6/bronze. Definitions only, no stored rows."
@@ -42,6 +44,7 @@ resource "google_bigquery_dataset" "bronze" {
 }
 
 resource "google_bigquery_dataset" "warehouse" {
+  labels                     = merge(local.common_labels, { component = "warehouse" })
   dataset_id                 = "group6_warehouse"
   location                   = "europe-west1"
   description                = "Native tables loaded from group6_bronze (L04). Typed, not cleaned."
@@ -52,6 +55,7 @@ resource "google_bigquery_dataset" "warehouse" {
 }
 
 resource "google_bigquery_dataset" "silver" {
+  labels                     = merge(local.common_labels, { component = "silver" })
   dataset_id                 = "group6_silver"
   location                   = "europe-west1"
   description                = ""
@@ -62,6 +66,7 @@ resource "google_bigquery_dataset" "silver" {
 }
 
 resource "google_bigquery_dataset" "gold" {
+  labels                     = merge(local.common_labels, { component = "gold" })
   dataset_id                 = "group6_gold"
   location                   = "europe-west1"
   description                = ""
