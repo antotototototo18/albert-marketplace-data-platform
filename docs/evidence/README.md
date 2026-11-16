@@ -63,3 +63,17 @@ ligne de commande ni identifiant client.
 Reproduire : voir [docs/warehouse-tuning.md](../warehouse-tuning.md#reproduire).
 Les octets traités doivent être identiques tant que les tables n'ont pas été
 rechargées ; les durées et les temps de slot varient d'une exécution à l'autre.
+
+## L09 : attribution et consommation
+
+- [Inventaire](l09/inventory.json) : stockage, labels et jobs quotidiens sur la
+  fenêtre du 11 octobre au 10 novembre 2026 exclu ; pas de lignes métier.
+- [Optimisation](l09/optimization.json) : deux jobs sans cache, métriques et
+  empreintes de tous les résultats. Le minimum facturé reste inchangé.
+- [Registre CSV](l09/resource-ledger.csv) et [tarifs datés](l09/prices.json) :
+  estimations avant franchises partagées, distinctes de la facture.
+- [Sonde des labels dbt](l09/job-label-probe.json),
+  [blocage du budget](l09/budget-access.json) et
+  [vérifications locales](l09/validation.txt).
+
+Les commandes de reproduction et les limites sont dans [costs.md](../costs.md).

@@ -1,0 +1,450 @@
+{
+  "captured_at": "2026-11-10T17:13:11.240021+00:00",
+  "project": "data-engineering-i1",
+  "location": "europe-west1",
+  "window": {
+    "start_inclusive": "2026-10-11",
+    "end_exclusive": "2026-11-10"
+  },
+  "source": "INFORMATION_SCHEMA.JOBS_BY_PROJECT; __TABLES__; resource metadata APIs",
+  "billing_export_candidates_visible": [],
+  "daily": {
+    "job_id": "8cff7216-4d49-491e-9677-d4cb096d63f1",
+    "rows": [
+      {
+        "day": "2026-10-26",
+        "jobs": 89,
+        "bytes_processed": 853150018,
+        "bytes_billed": 1373634560,
+        "cache_hits": 0
+      },
+      {
+        "day": "2026-10-29",
+        "jobs": 1,
+        "bytes_processed": 0,
+        "bytes_billed": 0,
+        "cache_hits": 0
+      },
+      {
+        "day": "2026-11-03",
+        "jobs": 110,
+        "bytes_processed": 632045324,
+        "bytes_billed": 1275068416,
+        "cache_hits": 0
+      },
+      {
+        "day": "2026-11-06",
+        "jobs": 1358,
+        "bytes_processed": 6622429115,
+        "bytes_billed": 15409872896,
+        "cache_hits": 0
+      }
+    ]
+  },
+  "datasets": [
+    {
+      "dataset": "group6_bronze",
+      "labels": {
+        "component": "bronze",
+        "environment": "course",
+        "pipeline": "marketplace",
+        "team": "group6"
+      },
+      "storage_billing_model": "LOGICAL",
+      "logical_bytes": 31790730
+    },
+    {
+      "dataset": "group6_warehouse",
+      "labels": {
+        "component": "warehouse",
+        "environment": "course",
+        "pipeline": "marketplace",
+        "team": "group6"
+      },
+      "storage_billing_model": "LOGICAL",
+      "logical_bytes": 219602295
+    },
+    {
+      "dataset": "group6_silver",
+      "labels": {
+        "component": "silver",
+        "environment": "course",
+        "pipeline": "marketplace",
+        "team": "group6"
+      },
+      "storage_billing_model": "LOGICAL",
+      "logical_bytes": 0
+    },
+    {
+      "dataset": "group6_gold",
+      "labels": {
+        "component": "gold",
+        "environment": "course",
+        "pipeline": "marketplace",
+        "team": "group6"
+      },
+      "storage_billing_model": "LOGICAL",
+      "logical_bytes": 34085635
+    }
+  ],
+  "tables": {
+    "job_id": "91bd7731-76cf-41d9-80e3-a301489615c3",
+    "rows": [
+      {
+        "dataset": "group6_bronze",
+        "table_id": "clickstream",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 3
+      },
+      {
+        "dataset": "group6_bronze",
+        "table_id": "customer_shipping",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 3
+      },
+      {
+        "dataset": "group6_bronze",
+        "table_id": "order_items",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 3
+      },
+      {
+        "dataset": "group6_bronze",
+        "table_id": "order_items_raw",
+        "row_count": 409416,
+        "size_bytes": 15309043,
+        "type": 1
+      },
+      {
+        "dataset": "group6_bronze",
+        "table_id": "orders",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 3
+      },
+      {
+        "dataset": "group6_bronze",
+        "table_id": "orders_raw",
+        "row_count": 223112,
+        "size_bytes": 16481687,
+        "type": 1
+      },
+      {
+        "dataset": "group6_bronze",
+        "table_id": "product",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 3
+      },
+      {
+        "dataset": "group6_bronze",
+        "table_id": "product_reviews",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 3
+      },
+      {
+        "dataset": "group6_bronze",
+        "table_id": "review",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 3
+      },
+      {
+        "dataset": "group6_bronze",
+        "table_id": "shipping_details",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 3
+      },
+      {
+        "dataset": "group6_gold",
+        "table_id": "dim_country",
+        "row_count": 7,
+        "size_bytes": 116,
+        "type": 1
+      },
+      {
+        "dataset": "group6_gold",
+        "table_id": "dim_date",
+        "row_count": 1096,
+        "size_bytes": 62472,
+        "type": 1
+      },
+      {
+        "dataset": "group6_gold",
+        "table_id": "dim_product",
+        "row_count": 42858,
+        "size_bytes": 7922751,
+        "type": 1
+      },
+      {
+        "dataset": "group6_gold",
+        "table_id": "fct_daily_demand",
+        "row_count": 203431,
+        "size_bytes": 11392136,
+        "type": 1
+      },
+      {
+        "dataset": "group6_gold",
+        "table_id": "fct_order_items",
+        "row_count": 204280,
+        "size_bytes": 14708160,
+        "type": 1
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "int_orders__country",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "int_orders__deduplicated",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "int_product__ratings",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "stg_clickstream",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "stg_customer_shipping",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "stg_order_items",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "stg_orders",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "stg_product",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "stg_product_reviews",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "stg_review",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_silver",
+        "table_id": "stg_shipping_details",
+        "row_count": 0,
+        "size_bytes": 0,
+        "type": 2
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "customer_shipping",
+        "row_count": 200001,
+        "size_bytes": 10688978,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "daily_demand",
+        "row_count": 356981,
+        "size_bytes": 18563012,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "order_items",
+        "row_count": 408560,
+        "size_bytes": 21245120,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "order_items_day",
+        "row_count": 408560,
+        "size_bytes": 21245120,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "order_items_untuned",
+        "row_count": 408560,
+        "size_bytes": 21245120,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "orders",
+        "row_count": 222644,
+        "size_bytes": 14138834,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "orders_untuned",
+        "row_count": 222644,
+        "size_bytes": 14138834,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "product",
+        "row_count": 42858,
+        "size_bytes": 16314622,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "product_reviews",
+        "row_count": 111322,
+        "size_bytes": 3005906,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "product_reviews_untuned",
+        "row_count": 111322,
+        "size_bytes": 3005906,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "review",
+        "row_count": 111322,
+        "size_bytes": 28618604,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "review_untuned",
+        "row_count": 111322,
+        "size_bytes": 28618604,
+        "type": 1
+      },
+      {
+        "dataset": "group6_warehouse",
+        "table_id": "shipping_details",
+        "row_count": 200001,
+        "size_bytes": 18773635,
+        "type": 1
+      }
+    ]
+  },
+  "buckets": [
+    {
+      "bucket": "data-engineering-i1-group6",
+      "labels": {
+        "environment": "course",
+        "pipeline": "marketplace",
+        "team": "group6",
+        "component": "bronze"
+      },
+      "location": "EUROPE-WEST1",
+      "object_versions": 316,
+      "soft_deleted_objects": 0,
+      "bytes_by_class": {
+        "STANDARD": 1171013274
+      }
+    },
+    {
+      "bucket": "data-engineering-i1-group6-tfstate",
+      "labels": {},
+      "location": "EUROPE-WEST1",
+      "object_versions": 25,
+      "soft_deleted_objects": 0,
+      "bytes_by_class": {
+        "STANDARD": 91784
+      }
+    }
+  ],
+  "artifact_manifests": [
+    {
+      "image": "group6-ingestion@sha256:1d88dfe53e5e68e2d27366d73539e1631ae00bb2b0c487162210e76dbbf82d06",
+      "manifest_bytes": 124233462
+    },
+    {
+      "image": "group6-ingestion@sha256:45174dffd123b9a406624c736dfc6ac0b137ce26584b98d9271faa1b3003bfd7",
+      "manifest_bytes": 0
+    },
+    {
+      "image": "group6-ingestion@sha256:8b02d903175821686e2c3c387a66a2bc5dc793a2c2bbb465c5893a513610b6de",
+      "manifest_bytes": 1682
+    },
+    {
+      "image": "group6-ingestion@sha256:c89c26e0239463c38e379221770713d4521981a91b910bc4b1169be511858bc9",
+      "manifest_bytes": 1697
+    },
+    {
+      "image": "group6-ingestion@sha256:d273c33b9e0e3d23914927f48e8630cd83afc68f4952b1ad10857cbe2e23b3b4",
+      "manifest_bytes": 0
+    },
+    {
+      "image": "group6-ingestion@sha256:e1e03d66eff45dbe346efff415ac88dcf2c2c7da859bf1544a7838b01c2fc232",
+      "manifest_bytes": 124234794
+    },
+    {
+      "image": "group6-retention-probe@sha256:6c7c0a1e426a85518e42cff23f724c8f457acfe73b61e03c35d3a490fcb48a1a",
+      "manifest_bytes": 447
+    },
+    {
+      "image": "group6-transform@sha256:0476da1053b1a3d6058db3da3fdecfb540ff417004c0818bfea458f3e5364635",
+      "manifest_bytes": 224864017
+    },
+    {
+      "image": "group6-transform@sha256:280e1e088c69558641c52cc4d54ecf400bf21e2c5329fb597448e14b9e9d93ab",
+      "manifest_bytes": 224865293
+    },
+    {
+      "image": "group6-transform@sha256:2ee1964a11b3f637eb086358b746bba8bdf4d396d0fe4ba912bed3c2234b6fd1",
+      "manifest_bytes": 1682
+    },
+    {
+      "image": "group6-transform@sha256:42718091f4fef68161ad26d67831da817ea4796c6aab4839308724eafe26aa8f",
+      "manifest_bytes": 1696
+    },
+    {
+      "image": "group6-transform@sha256:e05e888f638b1dc0b9e1b435e6201bda792705b3b3b6d6587e183061439d38a2",
+      "manifest_bytes": 0
+    },
+    {
+      "image": "group6-transform@sha256:ea2d809cc22761514c0dcf3b440919cb1fbc2e4e788e3ed0bb41683b680ba7af",
+      "manifest_bytes": 0
+    }
+  ],
+  "artifact_note": "Manifest sizes can double-count shared layers; not invoice bytes."
+}

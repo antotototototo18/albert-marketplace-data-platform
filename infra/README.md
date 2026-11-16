@@ -21,4 +21,7 @@ Les données sont protégées par `prevent_destroy` ; toujours relire le plan.
 
 Le compte technique non adoptable est documenté, sans ressource fictive.
 Les API et accès projet restent administrés par l'équipe enseignante.
-L09 ajoute les coûts et budgets ; L10 précise le moindre privilège.
+L09 ajoute les [labels et coûts mesurés](../docs/costs.md#l09--attribution-et-optimisation-mesurée).
+Le budget reste désactivé par défaut : son API n'est pas activée et le compte
+étudiant ne peut pas l'activer. Voir `terraform/budget.tf` avant de demander
+son activation à l'administrateur. L10 précise le moindre privilège.
