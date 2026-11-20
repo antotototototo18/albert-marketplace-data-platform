@@ -1,0 +1,119 @@
+L10 - erasure test on one real buyer, 2026-11-20 (docs/runbooks/erasure.md). Run by arascle@albertschool.com.
+Identifier: buyer_id with SHA-256 6208b2f3e5e3f6e7e0f64b933481f1d43c6aa9c5c8f005be32c08c26079abbb2 (the clear value is not kept in the repository).
+Linked identifiers found: buyer_id 1, order_id 34, payment_id 1, address_id 2, review_id 17, session_id 1
+
+== Step 1-2. Bronze bucket gs://data-engineering-i1-group6/bronze/ : 316 objects (1.17 GB) downloaded in 56 s and scanned.
+Objects rewritten without the person's rows (same name, same codec, upload conditioned on the generation read):
+prefix                                   objects rows removed
+airbyte/customer                               1            1
+airbyte/customer_shipping                      1            2
+airbyte/order_items                            9          476
+airbyte/orders                                 7          238
+airbyte/payment_details                        1            1
+airbyte/product_reviews                        1           17
+airbyte/review                                 8          136
+airbyte/shipping_details                       9           15
+clickstream/v1                                 1            2
+legacy/buyer                                   1            1
+legacy/customer                                1            1
+legacy/customer_payment                        1            1
+legacy/customer_shipping                       1            2
+legacy/order_items                             1           56
+legacy/orders                                  1           34
+legacy/payment                                 1           34
+legacy/payment_details                         1            1
+legacy/product_reviews                         1           17
+legacy/review                                  1           17
+legacy/review_images                           1          258
+legacy/seller_reviews                          1           17
+legacy/shipment                                1           56
+legacy/shipping_details                        1            2
+manual/orders                                  2           34
+total                                         54         1419   (39 s)
+
+== Step 3. Native BigQuery tables: DELETE
+group6_bronze.orders_raw                        34 rows   job d2d5a537-47d4-4d11-bf4f-c1ee52e59782
+group6_bronze.order_items_raw                   56 rows   job 89d41fd7-0e99-4af1-8b33-01a5942d56bb
+group6_warehouse.orders                         34 rows   job c4bcc3b4-33b7-4c55-b0f2-c1e9b30065c5
+group6_warehouse.orders_untuned                 34 rows   job f5849bb5-a129-4678-823e-78c2f6b7d1d2
+group6_warehouse.order_items                    56 rows   job 62b7d393-e024-4f38-a9f4-09274fd0c4a8
+group6_warehouse.order_items_untuned            56 rows   job ca70846f-9829-4c9a-b829-9ad88f20d408
+group6_warehouse.order_items_day                56 rows   job 54890f77-9546-4d06-bf9e-fb49cdb23262
+group6_warehouse.review                         17 rows   job 85a135e0-e910-4aaa-b1fd-6bbb08385fe8
+group6_warehouse.review_untuned                 17 rows   job 26d5ff5b-81a9-4fff-8f9f-40b186a5680d
+group6_warehouse.product_reviews                17 rows   job 94f43530-e291-4f3e-9027-847451339d84
+group6_warehouse.product_reviews_untuned        17 rows   job 43deb624-e080-40c3-a8b8-c8922be438a6
+group6_warehouse.customer_shipping               2 rows   job 8f736caf-7fd6-464d-b08d-f94e173f66d3
+group6_warehouse.shipping_details                2 rows   job 145c04fd-7d7c-4f51-8aa8-f3d49a1f3f17
+(13 statements, 28 s)
+
+== Step 4. dbt build --profiles-dir . (silver views, gold tables): PASS=92 WARN=2 ERROR=0 SKIP=0, 37 s.
+The 2 warnings are known and unrelated: C12 (6 products without a name) and accepted_values on fct_order_items.country_code.
+
+== Step 5. Proof: matching rows per table, before -> after (tables with 0 before are omitted)
+group6_bronze.clickstream                            EXTERNAL     2 -> 0
+group6_bronze.customer_shipping                      EXTERNAL     2 -> 0
+group6_bronze.order_items                            EXTERNAL    56 -> 0
+group6_bronze.order_items_raw                        TABLE       56 -> 0
+group6_bronze.orders                                 EXTERNAL    34 -> 0
+group6_bronze.orders_raw                             TABLE       34 -> 0
+group6_bronze.product_reviews                        EXTERNAL    17 -> 0
+group6_bronze.review                                 EXTERNAL    17 -> 0
+group6_bronze.shipping_details                       EXTERNAL     2 -> 0
+group6_warehouse.customer_shipping                   TABLE        2 -> 0
+group6_warehouse.order_items                         TABLE       56 -> 0
+group6_warehouse.order_items_day                     TABLE       56 -> 0
+group6_warehouse.order_items_untuned                 TABLE       56 -> 0
+group6_warehouse.orders                              TABLE       34 -> 0
+group6_warehouse.orders_untuned                      TABLE       34 -> 0
+group6_warehouse.product_reviews                     TABLE       17 -> 0
+group6_warehouse.product_reviews_untuned             TABLE       17 -> 0
+group6_warehouse.review                              TABLE       17 -> 0
+group6_warehouse.review_untuned                      TABLE       17 -> 0
+group6_warehouse.shipping_details                    TABLE        2 -> 0
+group6_silver.int_orders__country                    VIEW        17 -> 0
+group6_silver.int_orders__deduplicated               VIEW        17 -> 0
+group6_silver.stg_customer_shipping                  VIEW         2 -> 0
+group6_silver.stg_order_items                        VIEW        56 -> 0
+group6_silver.stg_orders                             VIEW        34 -> 0
+group6_silver.stg_product_reviews                    VIEW        17 -> 0
+group6_silver.stg_review                             VIEW        17 -> 0
+group6_silver.stg_shipping_details                   VIEW         2 -> 0
+group6_gold.fct_order_items                          TABLE       28 -> 0
+group6_l07_bc_silver.int_orders__country             VIEW        17 -> 0
+group6_l07_bc_silver.int_orders__deduplicated        VIEW        17 -> 0
+group6_l07_bc_silver.stg_customer_shipping           VIEW         2 -> 0
+group6_l07_bc_silver.stg_order_items                 VIEW        56 -> 0
+group6_l07_bc_silver.stg_orders                      VIEW        34 -> 0
+group6_l07_bc_silver.stg_product_reviews             VIEW        17 -> 0
+group6_l07_bc_silver.stg_review                      VIEW        17 -> 0
+group6_l07_bc_silver.stg_shipping_details            VIEW         2 -> 0
+group6_l07_bc_gold.fct_order_items                   TABLE       28 -> 28
+l04_rabeau.customer_shipping                         TABLE        2 -> 2
+l04_rabeau.order_items                               TABLE       56 -> 56
+l04_rabeau.order_items_p                             TABLE       56 -> 56
+l04_rabeau.order_items_pc                            TABLE       56 -> 56
+l04_rabeau.order_items_raw                           TABLE       56 -> 56
+l04_rabeau.orders                                    TABLE       34 -> 34
+l04_rabeau.orders_p                                  TABLE       34 -> 34
+l04_rabeau.product_reviews                           TABLE       17 -> 17
+l04_rabeau.review                                    TABLE       17 -> 17
+l04_rabeau.shipping_details                          TABLE        2 -> 2
+l05_rabeau.fct_order_items                           TABLE       56 -> 56
+l05_rabeau.int_order_items                           VIEW        56 -> 56
+l05_rabeau.stg_order_items                           VIEW        56 -> 56
+l05_rabeau.stg_orders                                VIEW        34 -> 34
+l05_rabeau.stg_product_reviews                       VIEW        17 -> 17
+l05_rabeau.stg_review                                VIEW        17 -> 17
+l07_ex1_rabeau.order_items_raw                       TABLE       56 -> 56
+l07_rabeau.order_items_raw                           TABLE       56 -> 56
+rabeau_antoine.order_items_by_day                    EXTERNAL    56 -> 56
+Bucket rescan after erasure (316 objects): 0 object holds any of the identifiers.
+
+== What survives
+- GCS soft delete: the 54 previous generations are soft-deleted, restorable until 2026-11-27 09:38 UTC (hardDeleteTime). Bucket versioning is off.
+- BigQuery time travel (168 h on the 4 group datasets): at 2026-11-20 09:36:48 UTC, group6_warehouse.orders still returns the 34 orders. Then 7 days of fail-safe, not readable by us.
+- Personal and exercise datasets of members, not touched (their data): group6_l07_bc_gold (Benjamin, L07), l04_rabeau, l05_rabeau, l07_rabeau, l07_ex1_rabeau, rabeau_antoine (Antoine). Counts in the table above.
+- The source: Exercise/L02/legacy_csv.tar.gz on members' laptops and the Airbyte source database. Re-landing bronze from them brings the person back.
+- docs/evidence/l02-bronze-legacy-manifest.json still describes the files as landed on 2026-10-16 (row counts, hashes).
+- The local snapshot used for the scan was deleted at the end of the test.
