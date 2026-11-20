@@ -19,7 +19,7 @@ indiqués.
 | L08 — Compte de service | Lenny | Aucun compte de service adopté : sa création et ses permissions demandent des droits d'admin. | [infra.md](../../../infra.md) |
 | L09 — Budget | Anthony | Pas d'alerte budget : l'API des budgets est désactivée et l'activation a été refusée (`PERMISSION_DENIED`). Le budget Terraform reste désactivé. | [costs.md](../../../costs.md) |
 | CI | Anthony | Depuis le 10 novembre, GitHub ne démarre pas les jobs à cause d'un blocage de facturation. Le dernier run sur `main` (16 novembre) le montre encore. On joint les vérifications locales aux PR. | [ci-cd.md](../../../ci-cd.md) |
-| L10 | Tous | La gouvernance n'est pas commencée : aucun fichier L10 sur aucune branche. Voir la slide 13. | — |
+| L10 — Policy tags | Benjamin | Les tags sont posés mais ne refusent personne : le rôle étudiant donne `categoryFineGrainedReader` à tout le projet. Le compte qui a posé les tags lit toujours les 200 001 adresses et téléphones (test du 17 novembre). | [governance.md](../../../governance.md), lacune 1 ; [preuve](../../../evidence/l10/07-not-refused-student-key.txt) |
 
 ## À vérifier avant l'oral
 
