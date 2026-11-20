@@ -1,0 +1,11 @@
+L10 - enforcement test 1: the account that attached the tags (bcaujolle@albertschool.com), 2026-11-17
+Expected by the lesson: refused, like the project owner in the demo. Observed: NOT refused.
+Reason: the student role grants roles/datacatalog.categoryFineGrainedReader at project level (02-project-permissions.txt),
+which is the second key for every tag in the project. Lenny's account holds it too. See docs/governance.md, gap 1.
+
+2026-11-17T14:11:37Z
++-----------+-------------+------------+
+| rows_read | with_street | with_phone |
++-----------+-------------+------------+
+|    200001 |      200001 |     200001 |
++-----------+-------------+------------+

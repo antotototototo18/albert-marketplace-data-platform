@@ -23,13 +23,5 @@ import {
   id = "projects/data-engineering-i1/datasets/group6_gold"
 }
 
-import {
-  for_each = local.dataset_writers
-  to       = google_bigquery_dataset_iam_member.writer[each.key]
-  id       = "projects/data-engineering-i1/datasets/${each.value.dataset} roles/bigquery.dataEditor ${each.value.member}"
-}
-
-import {
-  to = google_bigquery_dataset_iam_member.bronze_reader_arabeau
-  id = "projects/data-engineering-i1/datasets/group6_bronze roles/bigquery.dataViewer user:arabeau@albertschool.com"
-}
+# The L08 import blocks of the dataEditor members were removed in L10: those grants
+# were narrowed to dataViewer (iam.tf) and are no longer in the configuration.
