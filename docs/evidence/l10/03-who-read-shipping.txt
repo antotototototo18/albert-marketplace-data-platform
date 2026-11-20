@@ -1,0 +1,30 @@
+L10 - who reads the group6 datasets? INFORMATION_SCHEMA.JOBS_BY_PROJECT (region-europe-west1), history available since 2026-10-08, queried 2026-11-16
+
++--------------------+----------------------------------------------+------+---------------------+---------------------+
+|     dataset_id     |                  user_email                  | jobs |     first_read      |      last_read      |
++--------------------+----------------------------------------------+------+---------------------+---------------------+
+| group6_bronze      | bcaujolle@albertschool.com                   | 1564 | 2026-10-26 12:35:33 | 2026-11-06 14:26:54 |
+| group6_bronze      | arabeau@albertschool.com                     |  113 | 2026-11-03 15:21:59 | 2026-11-06 15:28:45 |
+| group6_bronze      | arascle@albertschool.com                     |    2 | 2026-11-10 17:10:39 | 2026-11-10 17:12:57 |
+| group6_gold        | arabeau@albertschool.com                     |   48 | 2026-11-03 15:22:16 | 2026-11-06 15:28:48 |
+| group6_gold        | arascle@albertschool.com                     |    8 | 2026-11-10 17:06:36 | 2026-11-10 17:12:57 |
+| group6_l07_bc_gold | bcaujolle@albertschool.com                   |  457 | 2026-11-06 11:47:32 | 2026-11-06 14:26:54 |
+| group6_silver      | arabeau@albertschool.com                     |    6 | 2026-11-03 15:23:25 | 2026-11-06 15:28:47 |
+| group6_silver      | arascle@albertschool.com                     |    2 | 2026-11-10 17:10:39 | 2026-11-10 17:12:57 |
+| group6_warehouse   | bcaujolle@albertschool.com                   |  110 | 2026-10-26 12:37:35 | 2026-11-16 21:57:28 |
+| group6_warehouse   | bigquery-adminbot@system.gserviceaccount.com |    4 | 2026-10-26 12:40:56 | 2026-10-26 12:41:36 |
+| group6_warehouse   | arascle@albertschool.com                     |    2 | 2026-11-10 17:10:39 | 2026-11-10 17:12:57 |
+| group6_warehouse   | arabeau@albertschool.com                     |    1 | 2026-11-06 15:28:46 | 2026-11-06 15:28:46 |
++--------------------+----------------------------------------------+------+---------------------+---------------------+
+
+Reads of shipping_details (bronze external and warehouse), with the number of SELECT * queries:
++------------------+----------------------------+------+---------------------+---------------------+-------------+
+|    dataset_id    |         user_email         | jobs |     first_read      |      last_read      | select_star |
++------------------+----------------------------+------+---------------------+---------------------+-------------+
+| group6_bronze    | bcaujolle@albertschool.com |  187 | 2026-10-26 12:35:33 | 2026-11-06 14:26:11 |          13 |
+| group6_warehouse | bcaujolle@albertschool.com |    7 | 2026-10-26 12:40:53 | 2026-11-16 21:57:28 |           0 |
+| group6_bronze    | arabeau@albertschool.com   |   14 | 2026-11-03 15:22:00 | 2026-11-03 15:23:09 |           1 |
++------------------+----------------------------+------+---------------------+---------------------+-------------+
+
+Data Access log (exercise 1 step 4): gcloud logging read 'logName:"cloudaudit.googleapis.com%2Fdata_access" ...' returns no line:
+the account lacks logging.privateLogEntries.list, Data Access logs are private. JOBS_BY_PROJECT stands in as the read log.

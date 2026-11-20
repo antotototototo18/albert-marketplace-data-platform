@@ -1,0 +1,31 @@
+L10 - dataset access (2026-11-16): bq show --format=prettyjson <dataset>, fields access and labels
+
+== group6_bronze
+labels {'component': 'bronze', 'environment': 'course', 'pipeline': 'marketplace', 'team': 'group6'}
+{'role': 'WRITER', 'specialGroup': 'projectWriters'}
+{'role': 'WRITER', 'userByEmail': 'arabeau@albertschool.com'}
+{'role': 'WRITER', 'userByEmail': 'csibieude@albertschool.com'}
+{'role': 'OWNER', 'specialGroup': 'projectOwners'}
+{'role': 'OWNER', 'userByEmail': 'bcaujolle@albertschool.com'}
+{'role': 'READER', 'specialGroup': 'projectReaders'}
+{'role': 'READER', 'userByEmail': 'arabeau@albertschool.com'}
+== group6_warehouse
+labels {'component': 'warehouse', 'environment': 'course', 'pipeline': 'marketplace', 'team': 'group6'}
+{'role': 'WRITER', 'specialGroup': 'projectWriters'}
+{'role': 'WRITER', 'userByEmail': 'arabeau@albertschool.com'}
+{'role': 'WRITER', 'userByEmail': 'csibieude@albertschool.com'}
+{'role': 'OWNER', 'specialGroup': 'projectOwners'}
+{'role': 'OWNER', 'userByEmail': 'bcaujolle@albertschool.com'}
+{'role': 'READER', 'specialGroup': 'projectReaders'}
+== group6_silver
+labels {'component': 'silver', 'environment': 'course', 'pipeline': 'marketplace', 'team': 'group6'}
+{'role': 'WRITER', 'specialGroup': 'projectWriters'}
+{'role': 'OWNER', 'specialGroup': 'projectOwners'}
+{'role': 'OWNER', 'userByEmail': 'arabeau@albertschool.com'}
+{'role': 'READER', 'specialGroup': 'projectReaders'}
+== group6_gold
+labels {'component': 'gold', 'environment': 'course', 'pipeline': 'marketplace', 'team': 'group6'}
+{'role': 'WRITER', 'specialGroup': 'projectWriters'}
+{'role': 'OWNER', 'specialGroup': 'projectOwners'}
+{'role': 'OWNER', 'userByEmail': 'arabeau@albertschool.com'}
+{'role': 'READER', 'specialGroup': 'projectReaders'}
