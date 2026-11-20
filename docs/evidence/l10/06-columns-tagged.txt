@@ -1,0 +1,19 @@
+L10 - policy tags attached to group6_warehouse.shipping_details (2026-11-17)
+python scripts/apply_policy_tags.py tags.json --apply, then a second run to show it is idempotent, then the schema read back with bq show.
+
+group6_warehouse.shipping_details.street_address: untagged -> projects/data-engineering-i1/locations/europe-west1/taxonomies/5640954420488682850/policyTags/6121022196869229776
+group6_warehouse.shipping_details.city: untagged -> projects/data-engineering-i1/locations/europe-west1/taxonomies/5640954420488682850/policyTags/847800738422450171
+group6_warehouse.shipping_details.zip: untagged -> projects/data-engineering-i1/locations/europe-west1/taxonomies/5640954420488682850/policyTags/847800738422450171
+group6_warehouse.shipping_details.phone: untagged -> projects/data-engineering-i1/locations/europe-west1/taxonomies/5640954420488682850/policyTags/6121022196869229776
+group6_warehouse.shipping_details: schema updated
+second run: group6_warehouse.shipping_details: already tagged, nothing to do
+
+== schema after (column, policy tag)
+unnamed_0 None
+address_id None
+street_address ['projects/data-engineering-i1/locations/europe-west1/taxonomies/5640954420488682850/policyTags/6121022196869229776']
+city ['projects/data-engineering-i1/locations/europe-west1/taxonomies/5640954420488682850/policyTags/847800738422450171']
+state None
+zip ['projects/data-engineering-i1/locations/europe-west1/taxonomies/5640954420488682850/policyTags/847800738422450171']
+country None
+phone ['projects/data-engineering-i1/locations/europe-west1/taxonomies/5640954420488682850/policyTags/6121022196869229776']

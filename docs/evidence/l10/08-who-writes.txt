@@ -1,0 +1,17 @@
+L10 - who writes to group6_bronze and group6_warehouse? INFORMATION_SCHEMA.JOBS_BY_PROJECT, successful non-SELECT jobs whose destination is one of the two datasets, history since 2026-10-08, queried 2026-11-17
+arabeau@ and csibieude@ hold roles/bigquery.dataEditor on both datasets (L08 iam.tf) and appear nowhere below: the grant is broader than its use.
+
++----------------------------+------------------+--------------------------+----------+------+---------------------+---------------------+
+|         user_email         | written_dataset  |      statement_type      | job_type | jobs |        first        |        last         |
++----------------------------+------------------+--------------------------+----------+------+---------------------+---------------------+
+| bcaujolle@albertschool.com | group6_bronze    | DROP_TABLE               | QUERY    |   44 | 2026-11-06 12:15:25 | 2026-11-13 08:03:00 |
+| bcaujolle@albertschool.com | group6_bronze    | CREATE_EXTERNAL_TABLE    | QUERY    |    8 | 2026-10-26 12:35:08 | 2026-10-26 12:35:13 |
+| bcaujolle@albertschool.com | group6_bronze    | NULL                     | LOAD     |   30 | 2026-11-06 12:14:55 | 2026-11-06 14:24:39 |
+| bcaujolle@albertschool.com | group6_bronze    | MERGE                    | QUERY    |   36 | 2026-11-06 11:40:09 | 2026-11-06 14:24:44 |
+| bcaujolle@albertschool.com | group6_bronze    | CREATE_TABLE             | QUERY    |    6 | 2026-11-06 11:40:08 | 2026-11-06 13:47:51 |
+| bcaujolle@albertschool.com | group6_bronze    | INSERT                   | QUERY    |    2 | 2026-11-06 13:48:33 | 2026-11-06 14:09:54 |
+| bcaujolle@albertschool.com | group6_bronze    | ALTER_TABLE              | QUERY    |    2 | 2026-11-06 13:47:51 | 2026-11-06 13:47:51 |
+| bcaujolle@albertschool.com | group6_bronze    | DELETE                   | QUERY    |    4 | 2026-11-06 13:30:39 | 2026-11-06 14:24:13 |
+| bcaujolle@albertschool.com | group6_warehouse | CREATE_TABLE_AS_SELECT   | QUERY    |   19 | 2026-10-26 12:37:32 | 2026-10-26 12:38:51 |
+| bcaujolle@albertschool.com | group6_warehouse | CREATE_MATERIALIZED_VIEW | QUERY    |    2 | 2026-10-26 12:40:56 | 2026-10-26 12:41:36 |
++----------------------------+------------------+--------------------------+----------+------+---------------------+---------------------+
