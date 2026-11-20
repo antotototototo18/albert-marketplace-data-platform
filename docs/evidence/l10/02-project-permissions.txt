@@ -1,0 +1,13 @@
+L10 - who may do what, measured with testIamPermissions on the project (2026-11-16, account bcaujolle@albertschool.com)
+gcloud projects get-iam-policy is denied (resourcemanager.projects.getIamPolicy missing): a student cannot read the project IAM policy.
+
+Granted at project level, among the permissions tested:
+  bigquery.tables.getData, bigquery.tables.list, bigquery.datasets.get/create, bigquery.tables.create/delete
+  storage.objects.get/list/create/delete, storage.buckets.create
+  datacatalog.categories.fineGrainedGet   <- the second key of every tagged column in the project (role roles/datacatalog.categoryFineGrainedReader)
+  datacatalog.taxonomies.create/update/delete/setIamPolicy, bigquery.tables.setCategory, bigquery.datasets.setIamPolicy, storage.buckets.setIamPolicy
+  bigquery.jobs.listAll, logging.logEntries.list
+
+Denied: resourcemanager.projects.getIamPolicy, iam.roles.list, iam.serviceAccounts.create/list, logging.privateLogEntries.list, compute.instances.list
+
+Same test run by Lenny (lsantus@albertschool.com) on 2026-11-17: bigquery.tables.getData and datacatalog.categories.fineGrainedGet both granted.

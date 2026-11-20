@@ -1,0 +1,42 @@
+L10 - every table and column of the four group6 datasets, from INFORMATION_SCHEMA.COLUMNS and TABLES (2026-11-17)
+Each line: dataset,table,type,columns in order. docs/governance.md classifies every column listed here.
+
+group6_bronze,clickstream,EXTERNAL,schema_version event_id event_type event_time emitted_at session_id buyer_id p_id price qty order_id payment_method amount currency items raw_event _kafka_topic _kafka_partition _kafka_offset _ingested_at dt
+group6_bronze,customer_shipping,EXTERNAL,unnamed_0 address_id c_id is_default
+group6_bronze,order_items,EXTERNAL,order_id p_id qty price_at_purchase
+group6_bronze,order_items_raw,BASE TABLE,order_id p_id qty price_at_purchase _loaded_at
+group6_bronze,orders,EXTERNAL,unnamed_0 order_id buyer_id discount_id payment_id order_date
+group6_bronze,orders_raw,BASE TABLE,order_id buyer_id discount_id payment_id order_date unnamed_0 _loaded_at
+group6_bronze,product,EXTERNAL,unnamed_0 p_id p_name p_desc price qty category_id
+group6_bronze,product_reviews,EXTERNAL,unnamed_0 p_id review_id
+group6_bronze,review,EXTERNAL,unnamed_0 review_id buyer_id r_desc title rating seller_product_flag
+group6_bronze,shipping_details,EXTERNAL,unnamed_0 address_id street_address city state zip country phone
+group6_warehouse,customer_shipping,BASE TABLE,unnamed_0 address_id c_id is_default
+group6_warehouse,daily_demand,MATERIALIZED VIEW,p_id order_date units revenue order_lines
+group6_warehouse,order_items,BASE TABLE,order_id p_id qty price_at_purchase order_date
+group6_warehouse,order_items_day,BASE TABLE,order_id p_id qty price_at_purchase order_date
+group6_warehouse,order_items_untuned,BASE TABLE,order_id p_id qty price_at_purchase order_date
+group6_warehouse,orders,BASE TABLE,unnamed_0 order_id buyer_id discount_id payment_id order_date
+group6_warehouse,orders_untuned,BASE TABLE,unnamed_0 order_id buyer_id discount_id payment_id order_date
+group6_warehouse,product,BASE TABLE,unnamed_0 p_id p_name p_desc price qty category_id
+group6_warehouse,product_reviews,BASE TABLE,unnamed_0 p_id review_id
+group6_warehouse,product_reviews_untuned,BASE TABLE,unnamed_0 p_id review_id
+group6_warehouse,review,BASE TABLE,unnamed_0 review_id buyer_id r_desc title rating seller_product_flag
+group6_warehouse,review_untuned,BASE TABLE,unnamed_0 review_id buyer_id r_desc title rating seller_product_flag
+group6_warehouse,shipping_details,BASE TABLE,unnamed_0 address_id street_address city state zip country phone
+group6_silver,int_orders__country,VIEW,order_id order_date country_code
+group6_silver,int_orders__deduplicated,VIEW,order_id buyer_id payment_id order_date
+group6_silver,int_product__ratings,VIEW,p_id review_count avg_rating reviews_with_text
+group6_silver,stg_clickstream,VIEW,event_id event_type event_time emitted_at session_id buyer_id p_id price qty order_id payment_method amount currency ingested_at event_date
+group6_silver,stg_customer_shipping,VIEW,address_id c_id is_default
+group6_silver,stg_order_items,VIEW,order_id p_id qty price_at_purchase
+group6_silver,stg_orders,VIEW,order_id buyer_id payment_id order_date
+group6_silver,stg_product,VIEW,p_id p_name p_desc catalogue_price stock_qty category_id
+group6_silver,stg_product_reviews,VIEW,p_id review_id
+group6_silver,stg_review,VIEW,review_id buyer_id review_text review_title rating
+group6_silver,stg_shipping_details,VIEW,address_id state country_name country_code
+group6_gold,dim_country,BASE TABLE,country_code country_name
+group6_gold,dim_date,BASE TABLE,date_day year quarter month day_of_month iso_week iso_day_of_week is_weekend
+group6_gold,dim_product,BASE TABLE,p_id p_name category_id catalogue_price review_count avg_rating
+group6_gold,fct_daily_demand,BASE TABLE,p_id country_code order_date units_sold revenue order_count
+group6_gold,fct_order_items,BASE TABLE,order_id p_id order_date country_code qty price_at_purchase line_amount
