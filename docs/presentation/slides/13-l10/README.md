@@ -1,12 +1,13 @@
 # Slide 13 — L10, gouvernance
 
-**Qui parle :** Benjamin, puis Colin et Anthony · **Durée :** 1 min 45
+**Qui parle :** Benjamin, puis Anthony · **Durée :** 1 min 45
 
 ## Message clé
 
-Chaque colonne a une classe et un propriétaire, et quatre colonnes ont un
-policy tag. Mais le tag ne refuse personne : le rôle étudiant donne déjà la
-seconde clé. Le runbook d'effacement et l'ADR-0010 restent à faire.
+Chaque colonne a une classe et un propriétaire, une personne peut être
+effacée, et l'ADR-0010 explique le choix. Mais le tag ne refuse personne :
+le rôle étudiant donne déjà la seconde clé. Le droit réduit n'est pas encore
+appliqué.
 
 ## À dire
 
@@ -22,25 +23,39 @@ seconde clé. Le runbook d'effacement et l'ADR-0010 restent à faire.
     200 001 adresses et téléphones. Le rôle étudiant contient
     `categoryFineGrainedReader` au niveau du projet. On ne peut pas le changer.
   - Droit réduit : `dataEditor` remplacé par `dataViewer` sur bronze et
-    warehouse, car seul le membre qui lance les chargements y écrit.
-- **Colin (20 s) :** le runbook d'effacement, à tester une fois sur un vrai
-  identifiant.
-- **Anthony (20 s) :** l'ADR-0010, qui explique pourquoi on donne l'accès par
-  classe plutôt que par table.
+    warehouse dans `iam.tf`. **Pas encore appliqué** : le 20 novembre, Antoine
+    et Colin avaient encore `WRITER`. Il manque leur accord, puis un
+    `terraform apply`.
+- **Anthony (45 s) :**
+  - Effacement testé le 20 novembre sur un vrai acheteur : 54 fichiers bronze
+    réécrits (1 419 lignes), 13 tables natives, gold reconstruit. 0 ligne
+    restante dans tout ce que le groupe possède.
+  - Ce qui survit : 7 jours de soft delete et de time travel, les datasets
+    personnels des membres, et la source. Un rechargement depuis la source
+    ramène la personne.
+  - ADR-0010 : accès par classe plutôt qu'une vue par consommateur ou un
+    dataset par niveau. dbt reste la première barrière : gold n'a aucune
+    colonne personnelle.
 
 ## Sources
 
 - PR #16, fusionnée le 20 novembre
 - [governance.md](../../../governance.md) (classes, matrice, 7 lacunes)
 - [governance.tf](../../../../infra/terraform/governance.tf),
-  [apply_policy_tags.py](../../../../scripts/apply_policy_tags.py)
+  [apply_policy_tags.py](../../../../scripts/apply_policy_tags.py),
+  [iam.tf](../../../../infra/terraform/iam.tf)
 - Preuves : [colonnes taggées](../../../evidence/l10/06-columns-tagged.txt),
   [pas de refus](../../../evidence/l10/07-not-refused-student-key.txt),
-  [qui écrit](../../../evidence/l10/08-who-writes.txt)
+  [qui écrit](../../../evidence/l10/08-who-writes.txt),
+  [effacement](../../../evidence/l10/09-erasure-test.txt)
+- [Runbook d'effacement](../../../runbooks/erasure.md),
+  [erase_person.py](../../../../scripts/erase_person.py),
+  [ADR-0010](../../../adr/0010-data-classification.md)
 
 ## Points à confirmer
 
-- D'après Git, les trois commits L10 sont de Benjamin. Si Lenny ou Antoine ont
-  contribué à la classification ou à la matrice, corriger les noms ici.
-- Le runbook et l'ADR n'existent pas encore. Mettre cette slide à jour dès
-  qu'ils sont fusionnés.
+- D'après Git, les trois commits de classification, matrice et tags sont de
+  Benjamin. Si Lenny ou Antoine y ont contribué, corriger les noms ici.
+- Le runbook était prévu pour Colin ; Anthony l'a écrit et testé. Colin le
+  relit.
+- Mettre « Apply pending » à jour dès que `terraform apply` est fait.
