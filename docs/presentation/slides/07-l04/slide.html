@@ -1,0 +1,21 @@
+<section id="l04" class="dark">
+<div class="topbar"><p class="logo">group 6</p><p>Page 7 of 14</p></div>
+<p class="eyebrow">L04 · Warehouse</p>
+<h2 class="head">Load BigQuery and make queries cheap,<br><b>led by <span class="hl">Benjamin</span>.</b></h2>
+<div class="split">
+<div class="done-col">
+<p class="lbl">Result</p>
+<p class="quote">“Monthly partitions cut a one-day scan of order_items 78×.”</p>
+<p class="meta"><b>Guardrail</b> 1 GiB cap per query, seen failing</p>
+<p class="meta"><b>Decision</b> ADR-0004</p>
+</div>
+<div class="rows">
+<div class="pill-row"><x-icon name="Code"></x-icon><p class="pill">docs/warehouse-tuning.md</p></div>
+<div class="row"><div class="chip c1"><p>1</p></div><p class="t">7 native typed tables in group6_warehouse</p></div>
+<div class="row"><div class="chip c2"><p>2</p></div><p class="t">Every layout measured with the cache off</p></div>
+<div class="row"><div class="chip c3"><p>3</p></div><p class="t">daily_demand materialized view</p></div>
+<div class="row"><div class="chip c4"><p>4</p></div><p class="t">Slow-query runbook</p></div>
+</div>
+</div>
+<aside>On-demand pricing kept. 78.49× on one day of order_items, 26.96× on 28 days of orders. A project-level cap was not possible with our rights.</aside>
+</section>

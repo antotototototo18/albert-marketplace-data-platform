@@ -1,0 +1,14 @@
+<section id="gaps" class="light">
+<div class="topbar"><p class="logo">group 6</p><p>Page 14 of 14</p></div>
+<p class="eyebrow">Open gaps</p>
+<h2 class="head">What did not work is written down,<br><b>not hidden.</b></h2>
+<div class="card">
+<div class="row"><div class="chip ca"><x-icon name="Warning"></x-icon></div><p class="t">Airbyte sync incomplete: source killed out of memory, Docker had 7.7 GB</p><p class="tag">L03</p></div>
+<div class="row"><div class="chip ca"><x-icon name="Warning"></x-icon></div><p class="t">No project-wide query quota: shared project, our accounts lack the right</p><p class="tag">L04</p></div>
+<div class="row"><div class="chip ca"><x-icon name="Warning"></x-icon></div><p class="t">No service account: creating one needs project admin rights</p><p class="tag">L08</p></div>
+<div class="row"><div class="chip ca"><x-icon name="Warning"></x-icon></div><p class="t">No budget alert: budgets API disabled, enabling it was refused</p><p class="tag">L09</p></div>
+<div class="row"><div class="chip ca"><x-icon name="Warning"></x-icon></div><p class="t">CI jobs do not start: GitHub Actions billing blocked since 10 Nov</p><p class="tag">CI</p></div>
+<div class="row last"><div class="chip ca"><x-icon name="Warning"></x-icon></div><p class="t">Policy tags refuse nobody: every student holds the fine-grained reader role</p><p class="tag">L10</p></div>
+</div>
+<aside>Sources, all checked on 20 Nov 2026. L03: docs/ingestion-failure-modes.md — OOMKilled (code 137) on syncs 1 and 2 on 16 Oct; 12 GB proposed. L04: docs/warehouse-tuning.md and ADR-0004 — the per-query 1 GiB cap is in place; only the project-level daily quota is missing. L08: docs/infra.md — “Lacune : aucun compte adopté”. L09: docs/costs.md — billingbudgets API disabled, PERMISSION_DENIED on enable; Terraform budget kept off. CI: docs/ci-cd.md, and the last run on main (16 Nov) still says the job was not started for billing reasons. L10: docs/governance.md, gap 1, and evidence/l10/07 — the account that attached the tags still read every street and phone on 17 Nov.</aside>
+</section>

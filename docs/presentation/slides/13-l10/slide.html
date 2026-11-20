@@ -1,0 +1,14 @@
+<section id="l10" class="dark">
+<div class="topbar"><p class="logo">group 6</p><p>Page 13 of 14</p></div>
+<p class="eyebrow">L10 · Governance · 5 deliverables written, 1 grant still to apply</p>
+<h2 class="head">Classified and erasable,<br><b>but the tag <span class="hl">refuses nobody</span> yet.</b></h2>
+<div class="people three">
+<div class="person"><div class="ring"><div class="dot d1"></div></div><div><p class="name">Classes</p><p class="task">Every column: class, owner, reason</p><p class="rev">Done · Benjamin</p></div></div>
+<div class="person"><div class="ring"><div class="dot d2"></div></div><div><p class="name">Access matrix</p><p class="task">Role by class, a route for each “no”</p><p class="rev">Done · Benjamin</p></div></div>
+<div class="person"><div class="ring"><div class="dot d3"></div></div><div><p class="name">Enforcement</p><p class="task">4 columns tagged; grant narrowed in code</p><p class="rev">Apply pending · Benjamin</p></div></div>
+<div class="person"><div class="ring"><div class="dot d4"></div></div><div><p class="name">Erasure runbook</p><p class="task">Run on a real buyer: 0 rows left</p><p class="rev">Done · Anthony</p></div></div>
+<div class="person"><div class="ring"><div class="dot d5"></div></div><div><p class="name">ADR-0010</p><p class="task">Why grant by class, not by table</p><p class="rev">Done · Anthony</p></div></div>
+</div>
+<p class="note">Erasure on 20 Nov: 54 bronze files rewritten, 13 tables, gold rebuilt · 7 days of soft delete and time travel survive</p>
+<aside>Sources: PR #16 (merged 20 Nov) — docs/governance.md; governance.tf and apply_policy_tags.py tag street_address and phone (pii-contact), city and zip (pii-location-coarse); not refused, evidence/l10/07. The dataEditor to dataViewer change is in iam.tf (commit 95fca38) but not applied: on 20 Nov arabeau and csibieude still had WRITER on group6_bronze and group6_warehouse; Antoine and Colin confirm first. Erasure: docs/runbooks/erasure.md, scripts/erase_person.py, evidence/l10/09 — 1,419 rows out of 54 bronze objects, 13 DELETEs, dbt build PASS=92 WARN=2; members' personal datasets and the source archive still hold the person. ADR-0010: docs/adr/0010-data-classification.md.</aside>
+</section>

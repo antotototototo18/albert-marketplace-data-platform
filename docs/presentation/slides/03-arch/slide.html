@@ -1,0 +1,16 @@
+<section id="arch" class="dark">
+<div class="topbar"><p class="logo">group 6</p><p>Page 3 of 14</p></div>
+<p class="eyebrow">Architecture</p>
+<h2 class="head">Two tiers on GCP, in europe-west1:<br><b>Cloud Storage bronze, BigQuery for the rest.</b></h2>
+<div class="flow">
+<div class="stage"><h3>Sources</h3><p>PostgreSQL shop database</p><p>Kafka clickstream</p><p>Legacy CSV archive</p></div>
+<x-shape kind="arrow-right"></x-shape>
+<div class="stage s2"><h3>Bronze · GCS</h3><p>27 legacy tables in Parquet</p><p>Airbyte, extractor, clickstream</p><p>DLQ and cursor state</p></div>
+<x-shape kind="arrow-right"></x-shape>
+<div class="stage s3"><h3>BigQuery</h3><p>7 native typed tables</p><p>Silver views from dbt</p><p>Gold star schema tables</p></div>
+<x-shape kind="arrow-right"></x-shape>
+<div class="stage s4"><h3>Run and govern</h3><p>Airflow daily DAG</p><p>Docker images</p><p>Terraform and labels</p></div>
+</div>
+<p class="note">Secrets (pwd, card_no, cvv) never reach bronze · decided in ADR-0001</p>
+<aside>Two-tier: object storage for replayable bronze, BigQuery native tables for silver and gold. Full diagram in docs/architecture.md.</aside>
+</section>
