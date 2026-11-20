@@ -1,0 +1,17 @@
+L10 - ungoverned read of group6_warehouse.shipping_details (2026-11-16, account bcaujolle@albertschool.com, before any tag)
+Values masked on export: only the first 3 characters are kept in this file.
+
++---------------+-------------+------------+
+| rows_readable | with_street | with_phone |
++---------------+-------------+------------+
+|        200001 |      200001 |     200001 |
++---------------+-------------+------------+
++------------+----------------+---------------------+-------+----------+
+| address_id | street_address |        city         |  zip  |  phone   |
++------------+----------------+---------------------+-------+----------+
+|      58191 | Bor***         | Cerqueto Del Tronto | 64010 | 312***** |
+|       7701 | Rot***         | Torricella Sicura   | 64010 | 387***** |
+|      17320 | Con***         | Santo Stefano       | 64010 | 396***** |
+|      96453 | Vic***         | Leofara             | 64010 | 336***** |
+|      95379 | Inc***         | Pascellata          | 64010 | 347***** |
++------------+----------------+---------------------+-------+----------+
