@@ -1,0 +1,23 @@
+<section id="decision-access" class="light">
+<div class="topbar"><p class="logo">group 6</p><p>4 / 6</p></div>
+<p class="eyebrow">Decision 2 · Who can read personal data · Anthony</p>
+<h2 class="head">Protect each sensitive column with a label,<br><b>not each table one by one.</b></h2>
+<div class="split">
+<div class="done-col">
+<p class="lbl">Why</p>
+<p class="quote">“Street, phone, city, zip: 4 sensitive columns, all in 1 table. The label follows the column.”</p>
+<p class="meta"><b>Built</b> 2 labels, set by a script</p>
+<p class="meta"><b>Also</b> cleaning drops street and phone</p>
+<p class="meta"><b>Safety net</b> a test fails if they reach gold</p>
+</div>
+<div class="card">
+<div class="row"><div class="chip c1"><p>1</p></div><p class="t">A filtered view per user: one more to maintain</p><p class="tag">Option</p></div>
+<div class="row"><div class="chip c2"><p>2</p></div><p class="t">Separate datasets: the same data stored twice</p><p class="tag">Option</p></div>
+<div class="row"><div class="chip ca"><x-icon name="Warning"></x-icon></div><p class="t">A table rebuild wipes the labels, silently</p><p class="tag">Cost</p></div>
+<div class="row"><div class="chip ca"><x-icon name="Warning"></x-icon></div><p class="t">They block nobody yet: students hold the key</p><p class="tag">Cost</p></div>
+<div class="row last"><div class="chip c3"><p>?</p></div><p class="t">Labels keep getting lost: use separate datasets</p><p class="tag">Change if</p></div>
+</div>
+</div>
+<p class="note">Label = a BigQuery “policy tag”: only people with its key can read the column · dataset = a folder of tables · ADR-0010</p>
+<aside>ANTHONY, 2 min. Our data has four sensitive columns: street, phone, city and zip code. They all sit in one table, the shipping details. We decided to protect them by type of data, not table by table. Concretely, we put a label on each sensitive column. BigQuery calls it a policy tag. Only people who hold that label's key can read the column. And the label follows the column: if a new table gets a phone column, it is protected as soon as we label it. We had two other options. One filtered view per user: but that is one more view to maintain for every new use. Or separate datasets, which are folders of tables, by level of sensitivity: but then the same data is stored twice and must stay in sync. The label is not our only protection. Our cleaning step drops street and phone before the business tables, and a test fails if personal data ever reaches gold. Now the costs, honestly. One: when the table is rebuilt, the labels disappear, with no error. We have to run a script again each time. Two: today the labels block nobody. We tested it. The course gives every student the key to every label on the project, and we cannot remove it. The other options hit the same wall, because the same student access reads every table anyway. What would change our mind: if labels keep getting lost, separate datasets are harder to get wrong. HANDOVER: Not everything went to plan. Benjamin.</aside>
+</section>
