@@ -1,0 +1,21 @@
+<section id="l08" class="dark">
+<div class="topbar"><p class="logo">group 6</p><p>Backup A9</p></div>
+<p class="eyebrow">L08 · Terraform</p>
+<h2 class="head">Declare the platform as code,<br><b>led by <span class="hl">Lenny</span>.</b></h2>
+<div class="split">
+<div class="done-col">
+<p class="lbl">Result</p>
+<p class="quote">“Ten resources under Terraform, none recreated. Plan: no changes.”</p>
+<p class="meta"><b>With</b> Antoine (bucket and dataset)</p>
+<p class="meta"><b>Decision</b> ADR-0008</p>
+</div>
+<div class="rows">
+<div class="pill-row"><x-icon name="Code"></x-icon><p class="pill">infra/terraform/</p></div>
+<div class="row"><div class="chip c1"><p>1</p></div><p class="t">Remote state in a versioned GCS bucket</p></div>
+<div class="row"><div class="chip c2"><p>2</p></div><p class="t">Drift caused on purpose, then recovered</p></div>
+<div class="row"><div class="chip c3"><p>3</p></div><p class="t">fmt and validate in CI, no cloud keys</p></div>
+<div class="row"><div class="chip c4"><p>4</p></div><p class="t">State kept out of Git</p></div>
+</div>
+</div>
+<aside>No service account was adopted: creating one and its project permissions still need admin rights. Documented as a gap in docs/infra.md.</aside>
+</section>
