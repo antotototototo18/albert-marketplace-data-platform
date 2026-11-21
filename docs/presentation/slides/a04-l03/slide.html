@@ -1,0 +1,23 @@
+<section id="l03" class="light">
+<div class="topbar"><p class="logo">group 6</p><p>Backup A4</p></div>
+<p class="eyebrow">L03 · Ingestion</p>
+<h2 class="head">Three ways in, each one tested,<br><b>led by <span class="hl">Anthony</span>.</b></h2>
+<div class="split">
+<div class="done-col">
+<p class="lbl">Result</p>
+<p class="quote">“A bad event lands in the DLQ, and the stream keeps going.”</p>
+<p class="meta"><b>Open</b> Airbyte sync partial (Docker memory)</p>
+<p class="meta"><b>Decision</b> ADR-0003</p>
+</div>
+<div class="rows">
+<div class="pill-row"><x-icon name="Code"></x-icon><p class="pill">ingestion/</p></div>
+<div class="card">
+<div class="row"><div class="chip c1"><p>1</p></div><p class="t">Airbyte connector, secrets excluded</p></div>
+<div class="row"><div class="chip c2"><p>2</p></div><p class="t">Orders extractor: durable cursor, retries</p></div>
+<div class="row"><div class="chip c3"><p>3</p></div><p class="t">Kafka clickstream checked by JSON Schema v1</p></div>
+<div class="row last"><div class="chip c4"><p>4</p></div><p class="t">Failure modes written down and tested</p></div>
+</div>
+</div>
+</div>
+<aside>The full Airbyte sync needs about 12 GB of Docker memory; we documented the partial run instead of hiding it.</aside>
+</section>

@@ -116,3 +116,26 @@ h1, h2, h3, p { margin: 0; }
 .stage p { font-size: 24px; line-height: 1.35; color: #C9C9D3; }
 .flow x-shape { width: 48px; height: 24px; background: #4A4A55; flex-shrink: 0; }
 .note { font-size: 24px; color: var(--grey-d); margin-top: 48px; text-align: center; }
+
+/* pitch additions: two-column failure slide, light diagram, cover footer */
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 96px; align-items: start; }
+.light .stage { background: var(--white); box-shadow: 0 12px 40px rgba(23,23,28,0.08); }
+.light .stage h3 { color: var(--ink); }
+.light .stage p { color: var(--grey-l); }
+.light .flow x-shape { background: #C9C9D3; }
+.light .note { color: var(--grey-l); }
+.cover-body + .note { margin-left: 560px; }
+.legend { margin-top: 48px; display: flex; flex-direction: column; gap: 10px; }
+.legend p { font-size: 24px; line-height: 1.4; text-align: center; }
+.light .legend p { color: var(--grey-l); }
+.light .legend b { color: var(--ink); }
+.dark .legend p { color: var(--grey-d); }
+.dark .legend b { color: var(--white); }
+
+/* glossary */
+.gloss { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 80px; }
+.gloss .term { font-size: 26px; line-height: 1.35; }
+.dark .gloss .term { color: var(--grey-d); }
+.dark .gloss .term b { color: var(--white); }
+.light .gloss .term { color: var(--grey-l); }
+.light .gloss .term b { color: var(--ink); }

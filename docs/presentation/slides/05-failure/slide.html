@@ -1,0 +1,23 @@
+<section id="failure" class="dark">
+<div class="topbar"><p class="logo">group 6</p><p>5 / 6</p></div>
+<p class="eyebrow">What went wrong · Benjamin</p>
+<h2 class="head">Two things broke in our daily pipeline,<br><b>and what we changed.</b></h2>
+<div class="duo">
+<div class="done-col">
+<p class="lbl">1 · Re-loading past days skipped one</p>
+<p class="quote">“We expected +468 orders. We got +208: 15 September was missing.”</p>
+<p class="meta"><b>Cause</b> an old test run already held that date</p>
+<p class="meta"><b>Fix</b> deleted it, ran again: +468</p>
+<p class="meta"><b>Proof</b> a second run added 0 rows</p>
+</div>
+<div class="done-col">
+<p class="lbl">2 · A bad row reached gold</p>
+<p class="quote">“We built first, tested after: gold showed 10 units and €87.90 too many.”</p>
+<p class="meta"><b>Drill</b> one duplicate row, planted on purpose</p>
+<p class="meta"><b>Fix</b> test each table right after building it</p>
+<p class="meta"><b>Result</b> gold kept 1,201 units, €32,802.35</p>
+</div>
+</div>
+<p class="note">Back-fill = re-running the pipeline for past days · runbook = our step-by-step incident guide, where both lessons now live</p>
+<aside>BENJAMIN, 2 min. Two things broke in our daily pipeline. First: re-loading past days. We call it a back-fill. We wanted to load the 15th and the 16th of September. Before running it, we wrote down our prediction: 468 new orders. We got 208. The 15th was missing. Why? A test run already existed for the 15th, but it covered the 14th. Airflow keeps one run per date, so it reused it and loaded the 14th again. We deleted that old run and ran again: 468, as predicted. Then we ran it a second time: zero new rows. That is what we want: running the same day twice changes nothing. Second: a bad row reached gold. This one was a drill: we planted one duplicate row on purpose. Our first design, the one from the course, built all the tables first and tested them after. So for a moment, gold showed 10 units and 87 euros 90 too many. The test caught it, but too late: an alarm, not a lock. We changed it. Now each table is tested right after it is built, and everything that depends on a failed test is skipped: 38 steps were skipped. Gold kept the right numbers: 1,201 units and 32,802 euros. Both lessons are now in our runbook, our incident guide. HANDOVER: Lenny closes with what we would do next.</aside>
+</section>

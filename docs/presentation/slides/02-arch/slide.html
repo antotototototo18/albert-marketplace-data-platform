@@ -1,0 +1,19 @@
+<section id="arch" class="light">
+<div class="topbar"><p class="logo">group 6</p><p>2 / 6</p></div>
+<p class="eyebrow">What we built</p>
+<h2 class="head">One pipeline that runs every day,<br><b>from the shop to tables you can trust.</b></h2>
+<div class="flow">
+<div class="stage"><h3>1 · Sources</h3><p>Shop database</p><p>Clicks on the website</p><p>Old export, 27 tables</p></div>
+<x-shape kind="arrow-right"></x-shape>
+<div class="stage s2"><h3>2 · Raw copy</h3><p>“Bronze”: as it arrived</p><p>No passwords, no cards</p><p>Broken events set aside</p></div>
+<x-shape kind="arrow-right"></x-shape>
+<div class="stage s3"><h3>3 · Clean tables</h3><p>“Silver”: cleaned</p><p>“Gold”: ready for business</p><p>Each order counted once</p></div>
+<x-shape kind="arrow-right"></x-shape>
+<div class="stage s4"><h3>4 · Run it</h3><p>Runs every day</p><p>Setup written as code</p><p>Columns labelled by risk</p></div>
+</div>
+<div class="legend">
+<p><b>Google Cloud Storage</b> stores the raw files · <b>BigQuery</b> is Google’s database for analysis</p>
+<p><b>dbt</b> builds and tests the tables in SQL · <b>Airflow</b> runs the steps on schedule · <b>Terraform</b> writes the cloud setup as code</p>
+</div>
+<aside>COLIN, 2 min. Here is the platform, from left to right. One: where the data comes from. The shop database, the clicks on the website, and an old export of 27 tables. Two: the raw copy. We call it bronze. It is the data exactly as it arrived, stored as files in Google Cloud Storage. We keep it so we can always rebuild everything from it. Two rules apply here: passwords and card numbers never get in, and broken click events are put aside in a separate folder instead of stopping the pipeline. Three: the clean tables, in BigQuery, Google's database for analysis. A tool called dbt cleans the data, that's silver, and then builds gold, the tables the business reads. Gold includes the daily table for the data science team. This is also where each order is finally counted once, so revenue is right. Four: running it. Airflow runs the whole pipeline every day. Terraform describes our cloud setup as code, so we can rebuild it. And every column has a label that says how sensitive it is. Behind each step there is a short written decision. We call it an ADR, an architecture decision record. We wrote ten. We will not go through all of them: we picked two. HANDOVER: Benjamin, the first one: how we pay for BigQuery.</aside>
+</section>
