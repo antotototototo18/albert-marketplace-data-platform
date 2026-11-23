@@ -6,6 +6,35 @@ travail est chargé dans BigQuery (L04) ; dbt construit silver et gold (L05) ;
 un DAG Airflow alimente chaque jour les commandes de bronze et relance dbt
 (L07). Le reste du diagramme est la **cible proposée** en L01, à relire par le groupe.
 
+## Overview
+
+The platform in one picture. The detailed diagram, with every path and lesson,
+is in [Architecture: built and target](#architecture-built-and-target).
+
+```mermaid
+flowchart LR
+  shopdb[("Shop database<br/>PostgreSQL")]
+  web["Website clicks<br/>Kafka"]
+  export["Old export<br/>CSV archive"]
+
+  subgraph gcp["Google Cloud: GCS and BigQuery"]
+    bronze[("Bronze<br/>raw copy, as it arrived")]
+    silver[("Silver<br/>cleaned, deduplicated")]
+    gold[("Gold<br/>facts, daily demand")]
+  end
+
+  analysts["Analysts<br/>one correct revenue figure"]
+  datasci["Data science<br/>units per product, country, day"]
+
+  shopdb -->|"Airflow, every day"| bronze
+  web --> bronze
+  export --> bronze
+  bronze -->|"dbt + tests"| silver
+  silver -->|"dbt + tests"| gold
+  gold --> analysts
+  gold --> datasci
+```
+
 ## Context
 
 La boutique et les analystes interrogent aujourd'hui la même base PostgreSQL,
