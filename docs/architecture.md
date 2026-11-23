@@ -42,7 +42,7 @@ flowchart LR
       legacy[("bronze/legacy/table/ingested_date=2026-10-16 / 27 Parquet zstd, 62 Mo / L02")]
       airbyte[("bronze/airbyte/stream / 9 streams + colonnes _airbyte_* / L03, synchro partielle")]
       manual[("bronze/manual/orders/ingested_date= / L03")]
-      click[("bronze/clickstream/v1/dt= / date UTC de event_time / L03")]
+      clickstream[("bronze/clickstream/v1/dt= / date UTC de event_time / L03")]
       dlq[("bronze/_dlq/clickstream / ligne, motif, heure / L03")]
       state[("bronze/_state / curseur de l'extracteur / L03")]
     end
@@ -63,7 +63,7 @@ flowchart LR
     end
     airflow -->|"MERGE sur la cle / L07"| raw
     legacy -->|"7 tables / L04"| ext
-    click -->|"partition dt / L04"| ext
+    clickstream -->|"partition dt / L04"| ext
     airbyte -.->|"une source par table, L05"| silver
     manual -.->|"une source par table, L05"| silver
   end
@@ -72,7 +72,7 @@ flowchart LR
   connector --> airbyte
   extract --> manual
   extract --> state
-  consumer -->|"Evenements valides"| click
+  consumer -->|"Evenements valides"| clickstream
   consumer -->|"Evenements invalides"| dlq
   readers["Lecteurs actuels du bucket : proprietaires, editeurs et lecteurs du projet (liaisons par defaut)"] --- bucket
   gold -.-> bi["Analystes et rapports / acces autorises"]
