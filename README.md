@@ -12,6 +12,14 @@ the end of the course it holds the platform your group defends orally:
 - infrastructure as code
 - cost controls and a security baseline
 
+## Demo video
+
+[Watch the project demo (step 11)](https://thelio-my.sharepoint.com/:v:/r/personal/benjamin_caujolle_thelio_fr/_layouts/15/stream.aspx?id=%2Fpersonal%2Fbenjamin_caujolle_thelio_fr%2FDocuments%2FEnregistrements%2FPr%C3%A9sentation%20data%20engineering-20261123_175018-Enregistrement%20de%20la%20r%C3%A9union.mp4&share=cQqxXf-hBFaWSqlYU5o3H7H1EgUDbnyoKRgFpzLjHJ8fyYqtNg&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
+
+The whole group backfills the missing day (16 September) with the Airflow DAG,
+checks the new rows in BigQuery, then shows the daily report, the security
+baseline and the Terraform plan.
+
 ## Team
 
 | Name | GitHub | Role |
