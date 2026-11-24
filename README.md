@@ -51,26 +51,36 @@ Accept the GitHub repository invitation, then follow [CONTRIBUTING.md](CONTRIBUT
 to clone the project, create a branch and open your first pull request.
 
 Pull requests to `main` and pushes to `main` or `antho` run the repository checks
-in GitHub Actions, including the group-only contributor policy.
+in GitHub Actions, including the group-only contributor policy. Since
+10 November the jobs no longer start because of a GitHub Actions billing block;
+the same checks can be run locally.
 See [CI and deployment](docs/ci-cd.md) for the checks, local commands and the
-deployment steps to add when the GCP platform is ready.
+deployment steps.
+
+## Oral defence
+
+Everything for the defence is in [docs/presentation/](docs/presentation/README.md):
+the deck ([PPTX](docs/presentation/group6-pitch.pptx), [PDF](docs/presentation/group6-pitch.pdf)),
+the [speaker script](docs/presentation/SCRIPT.md) with who answers which question,
+and the [demo video guide](docs/presentation/VIDEO.md).
 
 ## Project progress
 
-L01 deliverables: [data flows](docs/data-flows.md), [architecture decision](docs/adr/0001-target-architecture.md),
-[target diagram](docs/architecture.md) and [daily-demand model](docs/model/star-daily-demand.md).
-Proposed designs are distinguished from verified resources.
+Proposed designs are distinguished from verified resources. Each step links to
+its decision record and its evidence.
 
-L03 ingestion writes into the group bucket `gs://data-engineering-i1-group6/bronze`:
-see [ingestion/README.md](ingestion/README.md), the
-[ingestion decision](docs/adr/0003-ingestion-modes.md) and the
-[failure modes](docs/ingestion-failure-modes.md).
-
-The L04 warehouse loads the working set into BigQuery (`group6_warehouse`):
-see [warehouse/README.md](warehouse/README.md), the measured
-[tuning and costs](docs/warehouse-tuning.md), the
-[pricing decision](docs/adr/0004-warehouse-pricing.md) and the
-[slow-query runbook](docs/runbooks/slow-query.md).
+| Lesson | Result | Read |
+|---|---|---|
+| L01 | Two-tier target: Cloud Storage for bronze, BigQuery for silver and gold | [data flows](docs/data-flows.md), [architecture](docs/architecture.md), [ADR-0001](docs/adr/0001-target-architecture.md), [daily-demand model](docs/model/star-daily-demand.md) |
+| L02 | Legacy export landed in bronze as Parquet; secrets excluded at the source | [data dictionary](docs/data-dictionary.md), [ADR-0002](docs/adr/0002-bronze-layout.md) |
+| L03 | Batch, incremental and Kafka ingestion into `gs://data-engineering-i1-group6/bronze`; full Airbyte sync still partial | [ingestion/](ingestion/README.md), [ADR-0003](docs/adr/0003-ingestion-modes.md), [failure modes](docs/ingestion-failure-modes.md) |
+| L04 | BigQuery warehouse `group6_warehouse`, measured partitioning, 1 GiB cap per query | [warehouse/](warehouse/README.md), [tuning and costs](docs/warehouse-tuning.md), [ADR-0004](docs/adr/0004-warehouse-pricing.md), [slow-query runbook](docs/runbooks/slow-query.md) |
+| L05 | dbt silver views and gold tables, tested | [transform/](transform/README.md), [ADR-0005](docs/adr/0005-materialisations.md), [lineage](docs/lineage.md), [acceptance criteria](docs/acceptance-criteria.md) |
+| L06 | Two private images, reproduction checked after delete and pull | [reproduce](docs/reproduce.md), [ADR-0006](docs/adr/0006-image-tags.md) |
+| L07 | Daily Airflow DAG, idempotent writes, quality gate, back-fill | [orchestration](docs/orchestration.md), [ADR-0007](docs/adr/0007-idempotency.md), [failed-run runbook](docs/runbooks/failed-run.md) |
+| L08 | Platform as code with remote state; drift detected and recovered | [infra/](infra/README.md), [infra notes](docs/infra.md), [ADR-0008](docs/adr/0008-remote-state.md) |
+| L09 | Cost labels and one measured optimisation; budget alert written but not active (billing budgets API disabled) | [costs](docs/costs.md), [ADR-0009](docs/adr/0009-cost-attribution.md) |
+| L10 | Data classification, policy tags, tested erasure; narrower access written in Terraform, not yet applied | [governance](docs/governance.md), [ADR-0010](docs/adr/0010-data-classification.md), [erasure runbook](docs/runbooks/erasure.md) |
 
 ## L06 — Run the images on a new machine
 
@@ -175,13 +185,13 @@ group remains to be performed and recorded.
 | L01 · Architecture decision frame | Data-flow matrix, first ADR, architecture diagram v1, star schema sketch | `docs/` |
 | L02 · Object storage foundations | Bronze layer on Cloud Storage, data dictionary v1 | `docs/` |
 | L03 · Batch, streaming, CDC | Ingestion pipelines | `ingestion/` |
-| L04 · SQL warehouses | Warehouse tables, three costed queries | `docs/` |
-| L05 · dbt and the medallion pattern | Silver and gold models, tests | `transform/` (planned) |
+| L04 · SQL warehouses | Warehouse tables, three costed queries | `warehouse/`, `docs/` |
+| L05 · dbt and the medallion pattern | Silver and gold models, tests | `transform/` |
 | L06 · Packaging data jobs | Two published images and ingestion reproduction; retention deletion blocked by IAM | `ingestion/`, `transform/`, [evidence](docs/reproduce.md) |
 | L07 · Airflow | A daily DAG: extract a day, merge into bronze, dbt; alert, quality gate, back-fill | `orchestration/`, [docs](docs/orchestration.md) |
 | L08 · Terraform | The platform as code, format and validation in CI, local plan | `infra/`, `.github/workflows/` |
-| L09 · FinOps | Labels, a budget alert, one measured optimisation | `infra/`, `docs/` |
-| L10 · Security and governance | Least-privilege access, PII redaction, data classification | `infra/`, `transform/`, `docs/` |
+| L09 · FinOps | Labels and one measured optimisation; budget alert written, not active | `infra/`, `docs/` |
+| L10 · Security and governance | PII redaction, data classification, erasure; least-privilege grant written, not yet applied | `infra/`, `transform/`, `docs/` |
 
 Starter files for later lessons arrive as **pull requests** opened by the
 teaching team. Review and merge them like any other change.
@@ -218,6 +228,7 @@ orchestration/       from L07: the Airflow DAG
 infra/               from L08: Terraform, IAM, lifecycle
 scripts/             measurement, loading and governance scripts
 tests/               unit tests run in CI
+.github/             CI workflows, pull request and issue templates
 ```
 
 ## Data
