@@ -16,6 +16,12 @@ deck comme **slides de secours** (A1 à A12), pour les questions.
   slides.
 - **Par slide :** un `README.md` donne qui parle, le message clé et où trouver
   la preuve si on nous la demande.
+- **PowerPoint et PDF :** [export/group6-pitch.pptx](export/group6-pitch.pptx)
+  et [export/group6-pitch.pdf](export/group6-pitch.pdf), avec les notes de
+  l'orateur dans le PPTX. Pour les refaire après un changement de slide :
+  `npm install pptxgenjs@3.12.0 cheerio@1.0.0`, puis
+  `node docs/presentation/export/build.js docs/presentation docs/presentation/export/group6-pitch.pptx`,
+  et exporter le PDF depuis PowerPoint.
 - **Glossaire :** une slide de secours juste après le pitch, à montrer si un mot
   bloque pendant les questions.
 
@@ -29,7 +35,7 @@ Proposition à valider en PR.
 | 2 | [Ce qu'on a construit](slides/02-arch/README.md) | Colin | 2 min | 3:00 |
 | 3 | [Décision 1 : payer à la requête (ADR-0004)](slides/03-decision-pricing/README.md) | Benjamin | 2 min | 5:00 |
 | 4 | [Décision 2 : l'accès par classe (ADR-0010)](slides/04-decision-access/README.md) | Anthony | 2 min | 7:00 |
-| 5 | [Ce qui a mal tourné (L07)](slides/05-failure/README.md) | Benjamin | 2 min | 9:00 |
+| 5 | [Ce qui a mal tourné (L07)](slides/05-failure/README.md) | Benjamin (back-fill), puis Antoine (gate dbt) | 1 + 1 min | 9:00 |
 | 6 | [Ce qu'on ferait ensuite](slides/06-next/README.md) | Lenny | 1 min | 10:00 |
 
 Viser 9 min 30 au chrono, pour garder une marge.
@@ -51,7 +57,8 @@ pitch.
 | Colin → Benjamin | "Benjamin, the first one: how we pay for BigQuery." |
 | Benjamin → Anthony | "Anthony takes the second decision: who can read what." |
 | Anthony → Benjamin | "Not everything went to plan. Benjamin." |
-| Benjamin → Lenny | "Lenny closes with what we would do next." |
+| Benjamin → Antoine | "The second one was in dbt. Antoine." |
+| Antoine → Lenny | "Lenny closes with what we would do next." |
 
 Une seule personne tient l'ordinateur pendant tout le pitch : pas d'échange de
 laptop.
