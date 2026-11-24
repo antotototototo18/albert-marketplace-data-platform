@@ -74,11 +74,9 @@ deployment steps to add when the GCP platform is ready.
 
 ## Project progress
 
-The first L01 deliverables are drafted for group review:
-[data flows](docs/data-flows.md), [architecture decision](docs/adr/0001-target-architecture.md),
+L01 deliverables: [data flows](docs/data-flows.md), [architecture decision](docs/adr/0001-target-architecture.md),
 [target diagram](docs/architecture.md) and [daily-demand model](docs/model/star-daily-demand.md).
-The [project plan](docs/project-plan.md) tracks the course requirements and the
-evidence still needed. Proposed designs are distinguished from verified resources.
+Proposed designs are distinguished from verified resources.
 
 L03 ingestion writes into the group bucket `gs://data-engineering-i1-group6/bronze`:
 see [ingestion/README.md](ingestion/README.md), the
@@ -224,13 +222,19 @@ teaching team. Review and merge them like any other change.
 docs/
   architecture.md    target architecture and medallion layers
   data-flows.md      data-flow matrix
-  adr/               architecture decision records
+  adr/               architecture decision records (0001 to 0010)
   model/             dimensional model sketches
+  runbooks/          failed run, slow query, erasure
+  evidence/          logs and measurements, one folder per lesson
+  presentation/      oral defence: deck (PPTX, PDF), script, demo video guide
 ingestion/           from L03
-transform/           planned for L05, as required by the project steps
+warehouse/           from L04: BigQuery DDL and costed queries
+transform/           from L05: the dbt project, as required by the project steps
 dbt/                 template note pointing to transform/
-orchestration/       from L07
-infra/               from L08
+orchestration/       from L07: the Airflow DAG
+infra/               from L08: Terraform, IAM, lifecycle
+scripts/             measurement, loading and governance scripts
+tests/               unit tests run in CI
 ```
 
 ## Data
