@@ -1,6 +1,7 @@
 # Slide 5 — Ce qui a mal tourné
 
-**Qui parle :** Benjamin · **Durée :** 2 min
+**Qui parle :** Benjamin (le back-fill, 1 min), puis Antoine (la gate dbt,
+1 min) · **Durée :** 2 min
 
 ## Message clé
 
