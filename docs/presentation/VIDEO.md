@@ -3,6 +3,26 @@
 Le guide est en français, le texte à dire est en anglais. La vidéo dure entre
 5 et 8 minutes. On vise **7 minutes**.
 
+> **Enregistrée le 23 novembre 2026 à 17 h 50, 7 min 22.** Le lien est dans le
+> [README principal](../../README.md), section « Demo video ».
+>
+> Ce qui s'est passé à l'écran, par rapport à ce guide :
+>
+> - L'ordre a été suivi : Antoine, Colin, Benjamin, Colin, Anthony, Lenny.
+> - Pendant que le back-fill tournait, Benjamin a commenté dans Airflow le run
+>   de la préparation (`manual__2026-11-23T16:46`), qui avait reconstruit gold
+>   sans le 16 septembre, et non le back-fill lancé à l'écran.
+> - La première requête « après » de Colin montrait encore 0 en gold, parce
+>   que `dbt_build` n'avait pas fini. Relancée une minute plus tard, elle
+>   affiche **208 / 364 / 1 201**. On l'a gardé.
+> - `terraform plan` affiche **« 3 to add, 0 to change, 4 to destroy »** : la
+>   réduction des droits d'Antoine et Colin est dans le code mais pas encore
+>   appliquée.
+>
+> Les réponses à ces trois points sont dans [SCRIPT.md](SCRIPT.md), section
+> « About the video ». Ce guide reste tel qu'il a servi à préparer
+> l'enregistrement.
+
 ## Ce que le prof exige
 
 D'après la consigne de l'étape 11 (`videotask.md`) :
@@ -388,6 +408,8 @@ relancer l'enregistrement.
   **32 802,35 €** pour la journée.
 - L'étiquette est posée sur `street_address`, `city`, `zip` et `phone` dans
   `group6_warehouse.shipping_details`.
-- **Pas encore vérifié :** la durée du run chez Benjamin, ses droits d'écriture
-  sur `group6_silver` et `group6_gold`, et le résultat de `terraform plan` chez
-  Lenny. C'est le rôle de la répétition.
+- **Vu à l'enregistrement :** le back-fill et `dbt_build` passent chez
+  Benjamin, `dbt_build` avec 2 avertissements connus. Gold a reçu le 16 septembre
+  (requête de Colin, puis rapport d'Anthony). `terraform plan` affiche
+  « 3 to add, 0 to change, 4 to destroy », c'est-à-dire la réduction des droits
+  qui n'est pas encore appliquée.

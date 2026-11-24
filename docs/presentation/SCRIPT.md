@@ -22,8 +22,10 @@ About 1,250 words: at a calm pace, 9 min 30. Keep that margin.
 - One person holds the laptop for the whole pitch. Nobody swaps computers.
 - Do not read the slides out loud. The slide shows the numbers; you tell the
   story.
-- No live demo. If someone wants to see it running, show the video or a
-  screenshot.
+- No live demo. If someone wants to see it running, open the video from the
+  "Demo video" link at the top of the repository's `README.md` (7 min 22,
+  recorded on 23 November). The questions it can raise are answered in
+  "About the video", below.
 - The **handover sentence** ends each part. Say it, then step back.
 
 ---
@@ -319,6 +321,48 @@ Source: ADR-0003.
 > bronze. BigQuery is where people query.
 
 Source: ADR-0001.
+
+### About the video
+
+The examiner may have watched it. What it shows, and what it says on screen:
+16 September goes from **0 → 208** orders in bronze, **0 → 364** lines and
+**0 → 1,201** units in gold; the report gives **1,201 units, €32,802.35**,
+Germany first with 336 units; `terraform plan` ends with
+**"3 to add, 0 to change, 4 to destroy"**.
+
+**"You removed the day before recording. Is that a real run?"** — Colin, then
+Benjamin
+
+> Yes. The shop database stops on the 16th of September, so there is no new
+> day to load. We removed the 16th from bronze and rebuilt gold without it, so
+> you could watch it come back. The back-fill you see is launched on camera,
+> and the rows appear in the query after it.
+
+**"In Airflow you walked through an older run. Which one did you launch?"** —
+Benjamin
+
+> The back-fill was launched on camera. It was still running, so to explain
+> the five tasks I opened the run from our preparation, a few minutes earlier:
+> the one that rebuilt gold without the 16th. The proof that the new run
+> worked is Colin's query right after: 208 orders, 364 lines, 1,201 units.
+
+**"Colin's first query still showed zero in gold. Why?"** — Colin, then
+Benjamin
+
+> It ran before dbt build had finished. Bronze already had the 208 orders,
+> but gold is only replaced at the end of dbt build, once its tests pass. We
+> ran it again a minute later and all three numbers were there. We kept it in
+> the video on purpose.
+
+**"Your plan is not empty: 3 to add, 4 to destroy. You said nobody changed
+anything by hand."** — Lenny, then Benjamin
+
+> "0 to change" is the part that says nobody changed anything in the console.
+> The 3 adds and 4 destroys are our own change, written in the code: two
+> members go from write to read-only on bronze and the warehouse. It is merged
+> but not applied yet, because we are waiting for their OK. Applying it is the
+> first thing on our "next" slide, and after that the plan will show no
+> changes.
 
 ### When you don't know
 
