@@ -20,11 +20,11 @@ Proposition à valider en PR.
 
 | # | Slide | Qui parle | Durée | Fin à |
 |---|---|---|---|---|
-| 1 | Le problème | Antoine | 1 min | 1:00 |
+| 1 | Le problème | Colin | 1 min | 1:00 |
 | 2 | Ce qu'on a construit | Colin | 2 min | 3:00 |
 | 3 | Décision 1 : payer à la requête (ADR-0004) | Benjamin | 2 min | 5:00 |
 | 4 | Décision 2 : l'accès par classe (ADR-0010) | Anthony | 2 min | 7:00 |
-| 5 | Ce qui a mal tourné (L07) | Benjamin (back-fill), puis Antoine (gate dbt) | 1 + 1 min | 9:00 |
+| 5 | Ce qui a mal tourné (L07) | Antoine | 2 min | 9:00 |
 | 6 | Ce qu'on ferait ensuite | Lenny | 1 min | 10:00 |
 
 Viser 9 min 30 au chrono, pour garder une marge.
@@ -42,11 +42,9 @@ pitch.
 
 | De → à | Phrase |
 |---|---|
-| Antoine → Colin | "Colin will show you what we built to fix this." |
 | Colin → Benjamin | "Benjamin, the first one: how we pay for BigQuery." |
 | Benjamin → Anthony | "Anthony takes the second decision: who can read what." |
-| Anthony → Benjamin | "Not everything went to plan. Benjamin." |
-| Benjamin → Antoine | "The second one was in dbt. Antoine." |
+| Anthony → Antoine | "Not everything went to plan. Antoine." |
 | Antoine → Lenny | "Lenny closes with what we would do next." |
 
 Une seule personne tient l'ordinateur pendant tout le pitch : pas d'échange de

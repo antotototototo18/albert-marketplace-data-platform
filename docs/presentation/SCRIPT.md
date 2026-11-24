@@ -8,12 +8,11 @@ The same text is in the speaker notes of each slide.
 
 | # | Slide | Who | Time | Ends at |
 |---|---|---|---|---|
-| 1 | The problem | Antoine | 1 min | 1:00 |
+| 1 | The problem | Colin | 1 min | 1:00 |
 | 2 | What we built | Colin | 2 min | 3:00 |
 | 3 | Decision 1: how we pay for BigQuery | Benjamin | 2 min | 5:00 |
 | 4 | Decision 2: who can read personal data | Anthony | 2 min | 7:00 |
-| 5a | What went wrong: the back-fill | Benjamin | 1 min | 8:00 |
-| 5b | What went wrong: the bad row in gold | Antoine | 1 min | 9:00 |
+| 5 | What went wrong | Antoine | 2 min | 9:00 |
 | 6 | What we would do next | Lenny | 1 min | 10:00 |
 
 About 1,250 words: at a calm pace, 9 min 30. Keep that margin.
@@ -29,7 +28,7 @@ About 1,250 words: at a calm pace, 9 min 30. Keep that margin.
 
 ---
 
-## Slide 1 — The problem · Antoine · 1 min
+## Slide 1 — The problem · Colin · 1 min
 
 > Good morning. We are group 6, and we built a data platform for Albert's
 > Marketplace, an online shop.
@@ -49,7 +48,7 @@ About 1,250 words: at a calm pace, 9 min 30. Keep that margin.
 > And on our shared cloud project, anyone could read **200,001** customer
 > phone numbers. Nobody had decided that, it just happened.
 
-**Handover:** "Colin will show you what we built to fix this."
+**Transition** (Colin keeps going): "Here is what we built to fix this."
 
 ---
 
@@ -146,13 +145,11 @@ About 1,250 words: at a calm pace, 9 min 30. Keep that margin.
 > What would change our mind: if labels keep getting lost, separate datasets
 > are harder to get wrong.
 
-**Handover:** "Not everything went to plan. Benjamin."
+**Handover:** "Not everything went to plan. Antoine."
 
 ---
 
-## Slide 5 — What went wrong · Benjamin, then Antoine · 2 min
-
-### Benjamin · 1 min
+## Slide 5 — What went wrong · Antoine · 2 min
 
 > Two things broke in our daily pipeline.
 >
@@ -166,11 +163,7 @@ About 1,250 words: at a calm pace, 9 min 30. Keep that margin.
 > We deleted that old run and ran again: 468, as predicted. Then we ran it a
 > second time: **zero** new rows. That is what we want: running the same day
 > twice changes nothing.
-
-**Handover:** "The second one was in dbt. Antoine."
-
-### Antoine · 1 min
-
+>
 > **Second: a bad row reached gold.** This one was a drill: we planted one
 > duplicate row on purpose. Our first design, the one from the course, built
 > all the tables first and tested them after. So for a moment, gold showed
