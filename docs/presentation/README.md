@@ -5,23 +5,14 @@ Pitch de 10 minutes en 6 slides, construit sur les consignes du prof
 profondeur**, un échec, la suite. Les anciennes slides L01 à L10 restent dans le
 deck comme **slides de secours** (A1 à A12), pour les questions.
 
-- **Sources :** `deck.json` (ordre des slides), `deck.css` (style commun) et
-  `slides/<dossier>/slide.html`. Les notes de l'orateur sont dans le `<aside>`
-  de chaque slide.
+- **Le deck :** [group6-pitch.pptx](group6-pitch.pptx) (avec les notes de
+  l'orateur) et [group6-pitch.pdf](group6-pitch.pdf). Le glossaire est la
+  première slide de secours, juste après le pitch.
 - **Script oral, en anglais :** [SCRIPT.md](SCRIPT.md). Le texte mot à mot de
   chaque slide, les réponses courtes aux questions probables (avec qui répond)
-  et un glossaire de tous les sigles. Le même texte est dans les notes des
-  slides.
-- **Par slide :** un `README.md` donne qui parle, le message clé et où trouver
-  la preuve si on nous la demande.
-- **PowerPoint et PDF :** [export/group6-pitch.pptx](export/group6-pitch.pptx)
-  et [export/group6-pitch.pdf](export/group6-pitch.pdf), avec les notes de
-  l'orateur dans le PPTX. Pour les refaire après un changement de slide :
-  `npm install pptxgenjs@3.12.0 cheerio@1.0.0`, puis
-  `node docs/presentation/export/build.js docs/presentation docs/presentation/export/group6-pitch.pptx`,
-  et exporter le PDF depuis PowerPoint.
-- **Glossaire :** une slide de secours juste après le pitch, à montrer si un mot
-  bloque pendant les questions.
+  et un glossaire de tous les sigles. Le même texte est dans les notes du PPTX.
+- **Vidéo de démo :** [VIDEO.md](VIDEO.md) pour le déroulé et le texte, et une
+  fiche par personne dans [video/](video/).
 
 ## Le pitch : 10 minutes
 
@@ -29,12 +20,12 @@ Proposition à valider en PR.
 
 | # | Slide | Qui parle | Durée | Fin à |
 |---|---|---|---|---|
-| 1 | [Le problème](slides/01-cover/README.md) | Antoine | 1 min | 1:00 |
-| 2 | [Ce qu'on a construit](slides/02-arch/README.md) | Colin | 2 min | 3:00 |
-| 3 | [Décision 1 : payer à la requête (ADR-0004)](slides/03-decision-pricing/README.md) | Benjamin | 2 min | 5:00 |
-| 4 | [Décision 2 : l'accès par classe (ADR-0010)](slides/04-decision-access/README.md) | Anthony | 2 min | 7:00 |
-| 5 | [Ce qui a mal tourné (L07)](slides/05-failure/README.md) | Benjamin (back-fill), puis Antoine (gate dbt) | 1 + 1 min | 9:00 |
-| 6 | [Ce qu'on ferait ensuite](slides/06-next/README.md) | Lenny | 1 min | 10:00 |
+| 1 | Le problème | Antoine | 1 min | 1:00 |
+| 2 | Ce qu'on a construit | Colin | 2 min | 3:00 |
+| 3 | Décision 1 : payer à la requête (ADR-0004) | Benjamin | 2 min | 5:00 |
+| 4 | Décision 2 : l'accès par classe (ADR-0010) | Anthony | 2 min | 7:00 |
+| 5 | Ce qui a mal tourné (L07) | Benjamin (back-fill), puis Antoine (gate dbt) | 1 + 1 min | 9:00 |
+| 6 | Ce qu'on ferait ensuite | Lenny | 1 min | 10:00 |
 
 Viser 9 min 30 au chrono, pour garder une marge.
 
@@ -123,7 +114,7 @@ principal n'a pas de lien vers elle. Il faut décider qui l'enregistre.
 
 ## Règle pour les chiffres
 
-Chaque chiffre affiché vient d'un fichier du dépôt, cité dans le README de la
-slide et dans ses notes. Si un chiffre change, corriger d'abord le document
+Chaque chiffre affiché vient d'un fichier du dépôt, cité dans le script et
+dans les notes du PPTX. Si un chiffre change, corriger d'abord le document
 source, puis la slide. Les chiffres du pitch et des réponses ont été vérifiés le 21 novembre
 2026.

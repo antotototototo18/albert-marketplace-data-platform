@@ -163,5 +163,4 @@ zone publique : un événement rejeté peut contenir des données personnelles.
 | 2026-11-10 | L09 | Labels appliqués, registre daté et analyse des pics de jobs ; sonde mensuelle à résultats identiques avec 98,79 % de scan en moins, minimum facturé inchangé. Budget à activer avec l'administrateur. |
 
 Mettre cette page à jour à la fin de chaque étape, en remplaçant les intentions
-par les ressources et garanties réellement vérifiées. Le [suivi du projet](project-plan.md)
-recense les preuves attendues avant de déclarer une étape terminée.
+par les ressources et garanties réellement vérifiées.

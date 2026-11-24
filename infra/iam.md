@@ -51,7 +51,7 @@ dispose de tous les droits testés (`storage.buckets.get`, `update`,
   - les membres du groupe en `roles/storage.objectAdmin` sur le bucket ;
   - le retrait des liaisons `legacy*` héritées du projet.
 - **Ce qui manque pour y arriver :** la création de comptes de service n'est
-  pas autorisée à nos comptes (voir le [suivi du projet](../docs/project-plan.md)).
+  pas autorisée à nos comptes (voir [infra.md](../docs/infra.md)).
   Il faut la demander à l'enseignant. C'est l'objet de L10.
 
 ## Vérifier
