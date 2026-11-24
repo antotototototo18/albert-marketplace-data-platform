@@ -62,7 +62,7 @@ Une personne commence. Les autres n'ajoutent quelque chose que si c'est utile.
 | Warehouse, partitions, coût des requêtes | Benjamin (ADR-0004) | 3, A5 |
 | dbt, vues ou tables, doublons, tests | Antoine (ADR-0005) | A6 |
 | Images Docker, tags | Lenny (ADR-0006) | A7 |
-| Airflow, idempotence, back-fill | Benjamin (ADR-0007) | 5, A8 |
+| Airflow, idempotence, back-fill | Antoine (il présente la slide 5), puis Benjamin (ADR-0007) | 5, A8 |
 | Terraform, state distant | Lenny (ADR-0008) | A9 |
 | Coûts, labels | Anthony (ADR-0009) | A10 |
 | Classes, tags, droits d'accès | Benjamin, puis Anthony (ADR-0010) | 4, A11 |

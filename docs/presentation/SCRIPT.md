@@ -209,7 +209,7 @@ answer below is short on purpose: give it, then stop.
 
 ### Announced by the course
 
-**"What happens if the same day runs twice?"** — Benjamin, then Colin
+**"What happens if the same day runs twice?"** — Antoine, then Benjamin
 
 > Nothing changes. Each step that writes is safe to repeat. Files are named by
 > date, so a rerun overwrites its own file. Loads use a MERGE on the order
