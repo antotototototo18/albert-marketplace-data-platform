@@ -96,11 +96,25 @@ a choisi cette approche. »
 À éviter : une réponse inventée sur un ton sûr. La question suivante portera
 sur le même sujet.
 
-## Pas de démo en direct
+## Pas de démo en direct : la vidéo
 
 Le prof demande de montrer une vidéo enregistrée ou une capture, pas une démo
-en direct. **La vidéo n'existe pas encore dans le dépôt**, et le README
-principal n'a pas de lien vers elle. Il faut décider qui l'enregistre.
+en direct. La vidéo a été enregistrée le 23 novembre (7 min 22). Le lien est en
+haut du [README principal](../../README.md), section « Demo video », avec qui
+parle à quel moment.
+
+Les chiffres à l'écran sont ceux du deck : le 16 septembre passe de 0 à
+**208** commandes en bronze, et de 0 à **364** lignes et **1 201** unités en
+gold. Le rapport donne **32 802,35 €**. Quatre choses peuvent amener une
+question. Les réponses sont dans [SCRIPT.md](SCRIPT.md), section « About the
+video » :
+
+| Ce qu'on voit | Répond |
+|---|---|
+| On a retiré le 16 septembre avant l'enregistrement | Colin, puis Benjamin |
+| Dans Airflow, le run commenté est celui de la préparation, pas le back-fill lancé à l'écran | Benjamin |
+| La première requête « après » de Colin montre encore 0 en gold | Colin, puis Benjamin |
+| `terraform plan` affiche « 3 to add, 0 to change, 4 to destroy », pas « No changes » | Lenny, puis Benjamin |
 
 ## La veille
 
@@ -108,7 +122,9 @@ principal n'a pas de lien vers elle. Il faut décider qui l'enregistre.
 - [ ] Chaque affirmation du pitch a un chiffre (déjà le cas sur les 6 slides).
 - [ ] Tout le monde sait qui répond à quoi (tableau ci-dessus).
 - [ ] La vidéo se lance depuis le lien du README, sur une machine qui ne l'a pas
-      enregistrée.
+      enregistrée, **dans une fenêtre privée, sans être connecté à un compte
+      Thelio** : c'est un lien SharePoint, il doit s'ouvrir pour quelqu'un de
+      l'extérieur.
 - [ ] Chacun a lu l'ADR sur lequel il sera interrogé, et au moins un qu'il n'a
       pas écrit.
 - [ ] Quelqu'un a relu le dépôt avec la checklist du cours.

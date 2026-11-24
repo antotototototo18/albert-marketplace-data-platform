@@ -14,11 +14,20 @@ the end of the course it holds the platform your group defends orally:
 
 ## Demo video
 
-[Watch the project demo (step 11)](https://thelio-my.sharepoint.com/:v:/r/personal/benjamin_caujolle_thelio_fr/_layouts/15/stream.aspx?id=%2Fpersonal%2Fbenjamin_caujolle_thelio_fr%2FDocuments%2FEnregistrements%2FPr%C3%A9sentation%20data%20engineering-20261123_175018-Enregistrement%20de%20la%20r%C3%A9union.mp4&share=cQqxXf-hBFaWSqlYU5o3H7H1EgUDbnyoKRgFpzLjHJ8fyYqtNg&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
+[Watch the project demo (step 11, 7 min 22, recorded on 23 November 2026)](https://thelio-my.sharepoint.com/:v:/r/personal/benjamin_caujolle_thelio_fr/_layouts/15/stream.aspx?id=%2Fpersonal%2Fbenjamin_caujolle_thelio_fr%2FDocuments%2FEnregistrements%2FPr%C3%A9sentation%20data%20engineering-20261123_175018-Enregistrement%20de%20la%20r%C3%A9union.mp4&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&share=cQqxXf-hBFaWSqlYU5o3H7H1EgUDbnyoKRgFpzLjHJ8fyYqtNg)
 
 The whole group backfills the missing day (16 September) with the Airflow DAG,
 checks the new rows in BigQuery, then shows the daily report, the security
 baseline and the Terraform plan.
+
+| Time | Who | On screen |
+|---|---|---|
+| 0:00 | Antoine | The architecture diagram ([architecture.md](docs/architecture.md)) |
+| 1:02 | Colin | 16 September before the run: 0 orders in bronze, 0 lines and 0 units in gold |
+| 1:54 | Benjamin | The back-fill launched, then the DAG's five tasks and the dbt build log in Airflow |
+| 3:07 | Colin | After the run: 208 orders in bronze, 364 lines and 1,201 units in gold; the raw files in the bronze bucket |
+| 4:28 | Anthony | The daily report per country (1,201 units, €32,802.35) and the policy tags on `shipping_details` |
+| 5:54 | Lenny | What we would do with one more month, then `terraform plan` |
 
 ## Team
 
