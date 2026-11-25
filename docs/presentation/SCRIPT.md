@@ -10,11 +10,10 @@ The same text is in the speaker notes of each slide.
 |---|---|---|---|---|
 | 1 | The problem | Colin | 1 min | 1:00 |
 | 2 | What we built | Colin | 2 min | 3:00 |
-| 3 | Under the hood (shown, not presented) | Colin | a few seconds, inside the 2 min | 3:00 |
-| 4 | Decision 1: how we pay for BigQuery | Benjamin | 2 min | 5:00 |
-| 5 | Decision 2: who can read personal data | Anthony | 2 min | 7:00 |
-| 6 | What went wrong | Antoine | 2 min | 9:00 |
-| 7 | What we would do next | Lenny | 1 min | 10:00 |
+| 3 | Decision 1: how we pay for BigQuery | Benjamin | 2 min | 5:00 |
+| 4 | Decision 2: who can read personal data | Anthony | 2 min | 7:00 |
+| 5 | What went wrong | Antoine | 2 min | 9:00 |
+| 6 | What we would do next | Lenny | 1 min | 10:00 |
 
 About 1,250 words: at a calm pace, 9 min 30. Keep that margin.
 
@@ -80,20 +79,11 @@ About 1,250 words: at a calm pace, 9 min 30. Keep that margin.
 > an architecture decision record. We wrote ten. We will not go through all of
 > them: we picked two.
 
----
-
-## Slide 3 — Under the hood · Colin · a few seconds
-
-Not presented. Show it, say one sentence, move on:
-
-> Here is the same pipeline with the real names: buckets, datasets, the daily
-> DAG. We can come back to it during the questions.
-
 **Handover:** "Benjamin, the first one: how we pay for BigQuery."
 
 ---
 
-## Slide 4 — Decision 1: how we pay for BigQuery · Benjamin · 2 min
+## Slide 3 — Decision 1: how we pay for BigQuery · Benjamin · 2 min
 
 > BigQuery can be paid in two ways. Like a **taxi meter**: you pay for the data
 > each query reads. Or like a **rent**: you reserve computing power, and you
@@ -125,7 +115,7 @@ Not presented. Show it, say one sentence, move on:
 
 ---
 
-## Slide 5 — Decision 2: who can read personal data · Anthony · 2 min
+## Slide 4 — Decision 2: who can read personal data · Anthony · 2 min
 
 > Our data has four sensitive columns: street, phone, city and zip code. They
 > all sit in one table, the shipping details.
@@ -159,7 +149,7 @@ Not presented. Show it, say one sentence, move on:
 
 ---
 
-## Slide 6 — What went wrong · Antoine · 2 min
+## Slide 5 — What went wrong · Antoine · 2 min
 
 > Two things broke in our daily pipeline.
 >
@@ -190,7 +180,7 @@ Not presented. Show it, say one sentence, move on:
 
 ---
 
-## Slide 7 — What we would do next · Lenny · 1 min
+## Slide 6 — What we would do next · Lenny · 1 min
 
 > Four things are left, in the order we would do them.
 >
@@ -210,7 +200,7 @@ Not presented. Show it, say one sentence, move on:
 >
 > That's our platform. Thank you, we are happy to take your questions.
 
-On "Thank you", move to slide 8, the thank-you slide, and stay there during
+On "Thank you", move to slide 7, the thank-you slide, and stay there during
 the questions. The backup slides come right after it.
 
 ---
