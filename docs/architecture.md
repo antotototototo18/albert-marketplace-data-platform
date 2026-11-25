@@ -35,7 +35,7 @@ flowchart LR
   pg -->|"1. Xmin, toutes les 24 h"| connector["Connecteur Airbyte local / sans pwd, card_no, cvv / L03"]
   pg -->|"2. order_id > curseur"| extract["ingestion/extract_orders.py / retries, curseur durable / L03"]
   kafka -->|"3. au moins une fois"| consumer["ingestion/consume_clickstream.py / JSON Schema v1 / L03"]
-  pg -->|"4. une journee par run, periode du run"| airflow["Airflow local / DAG group6_marketplace_daily, quotidien UTC, alerte e-mail / L07"]
+  pg -->|"4. une journee par run, periode du run"| airflow["Airflow local / DAG group6_marketplace_daily, quotidien UTC / extract_orders, extract_order_items, load (MERGE), dbt_build, drop_staging / alerte e-mail / L07"]
 
   subgraph gcp["Projet data-engineering-i1 / europe-west1"]
     subgraph bucket["gs://data-engineering-i1-group6 / Standard, acces uniforme, public bloque"]
@@ -51,8 +51,10 @@ flowchart LR
       raw[("group6_bronze.orders_raw, order_items_raw / natives, legacy + extraits du DAG / L07")]
       loaded[("group6_warehouse / 7 tables natives typees, orders et order_items partitionnees par mois / L04")]
       mv[("daily_demand / vue materialisee produit x jour / L04")]
-      silver[("Silver / types, deduplication, jointures")]
-      gold[("Gold / faits, dimensions, demande quotidienne")]
+      silver[("group6_silver / 11 vues dbt : staging et intermediate / types, deduplication, jointures / L05")]
+      gold[("group6_gold / 5 tables : dim_country, dim_date, dim_product, fct_order_items, fct_daily_demand / test : aucune colonne personnelle / L05, L10")]
+      tags["Policy tags pii-contact, pii-location-coarse / 4 colonnes de group6_warehouse.shipping_details / L10"]
+      tags -.- loaded
       ext -->|"CREATE TABLE AS SELECT / L04"| loaded
       loaded --> mv
       loaded -.->|"dbt"| silver
@@ -74,6 +76,16 @@ flowchart LR
   extract --> state
   consumer -->|"Evenements valides"| click
   consumer -->|"Evenements invalides"| dlq
+  subgraph ops["Exploitation / L06, L08-L10"]
+    registry["Artifact Registry dataeng / images group6-ingestion, group6-transform / L06"]
+    tf["Terraform / etat distant gs://data-engineering-i1-group6-tfstate / bucket, 4 datasets, tags, labels / L08"]
+    labels["4 labels de cout : team, environment, pipeline, component / L09"]
+    erase["scripts/erase_person.py / effacement RGPD teste / L10"]
+    pending["Ecrit, pas applique : lecture seule pour 2 membres, alerte budget"]
+  end
+  registry -->|"images lancees par le DAG"| airflow
+  tf -.-> pending
+  erase -.-> bucket
   readers["Lecteurs actuels du bucket : proprietaires, editeurs et lecteurs du projet (liaisons par defaut)"] --- bucket
   gold -.-> bi["Analystes et rapports / acces autorises"]
   gold -.-> ml["ML / produit, pays, jour"]
