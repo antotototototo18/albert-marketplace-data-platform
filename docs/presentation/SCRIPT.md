@@ -200,6 +200,9 @@ About 1,250 words: at a calm pace, 9 min 30. Keep that margin.
 >
 > That's our platform. Thank you, we are happy to take your questions.
 
+On "Thank you", move to slide 7, the thank-you slide, and stay there during
+the questions. The backup slides come right after it.
+
 ---
 
 ## Questions: who answers, and what to say

@@ -27,6 +27,9 @@ Proposition à valider en PR.
 | 5 | Ce qui a mal tourné (L07) | Antoine | 2 min | 9:00 |
 | 6 | Ce qu'on ferait ensuite | Lenny | 1 min | 10:00 |
 
+Après la slide 6, la slide 7 « Thank you » reste affichée pendant les
+questions. Les slides de secours viennent juste après.
+
 Viser 9 min 30 au chrono, pour garder une marge.
 
 **Pourquoi ces deux décisions :** ce sont celles qui ont les chiffres les plus
